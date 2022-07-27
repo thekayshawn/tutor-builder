@@ -73,7 +73,7 @@ class BuilderControl extends Component {
     
             this.obj.loadSnippets(this.props.snippetFile); // Load snippet file
     
-            // this.obj.loadHtml(this.state.html);
+            this.obj.loadHtml(this.state.html);
 
             this.props.ref = this;
 
