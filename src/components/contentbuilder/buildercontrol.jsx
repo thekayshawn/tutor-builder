@@ -9,7 +9,6 @@ import $ from 'jquery';
 class BuilderControl extends Component {
     constructor(props) {
         super(props);
-        console.log('BuilderControl this.props',this.props);
         this.state = {
             html: this.props.initialHtml,
             creates:[],
@@ -22,7 +21,6 @@ class BuilderControl extends Component {
     }
 
     componentDidMount() {
-        console.log('compnent loaded',this.state.html);
         // Load language file first
         this.loadLanguageFile(this.props.languageFile, ()=>{
             // Then init the ContentBuilder
@@ -75,7 +73,7 @@ class BuilderControl extends Component {
     
             this.obj.loadSnippets(this.props.snippetFile); // Load snippet file
     
-            this.obj.loadHtml(this.state.html);
+            // this.obj.loadHtml(this.state.html);
 
             this.props.ref = this;
 

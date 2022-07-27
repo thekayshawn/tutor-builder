@@ -40,7 +40,7 @@ function Dashboard(props) {
   return (
     <>
       <div className="">
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{display:"none"}}>
           <div className="container">
             <a className="navbar-brand-tutor" href="/">
               <img src="assets/minimalist-blocks/preview/Navigation.png" alt="learner-img" />

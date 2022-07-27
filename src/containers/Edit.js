@@ -388,8 +388,6 @@ export default class Edit extends Component {
     const result1 = await authAxios.get(url);
 
     if (result1.data.status == false) {
-      console.error('Fetch poges error')
-
       // window.location = '/';
       // return '';
     }
@@ -540,7 +538,6 @@ export default class Edit extends Component {
 
 
   tutorCreate = async (e) => {
-    console.log("hahahahahahahha");
     e.preventDefault();
     if (this.state.title == '' || this.state.description == '' || this.state.selectedFile == '' || this.state.selectedFile === null) {
       toast.error("Please fill all fields.", { position: "bottom-right" });
@@ -726,8 +723,8 @@ export default class Edit extends Component {
     return <>
 
       <div id="overlay">
-        <div class="cv-spinner">
-          <span class="spinner"></span>
+        <div className="cv-spinner">
+          <span className="spinner"></span>
         </div>
       </div>
       <div className="html_showPart">
@@ -739,7 +736,7 @@ export default class Edit extends Component {
         <img src="../assets/minimalist-blocks/preview/Logo.svg" alt="logo-img" />
       </div>
       <div className="back_round"></div>
-      <div className="is-ui ui_save_content" style={{ "position": "fixed", "top": "20px", "right": "35px", "display": "flex", "justify-content": "flex-end" }}>
+      <div className="is-ui ui_save_content" style={{ "position": "fixed", "top": "20px", "right": "35px", "display": "flex", "justifyContent": "flex-end" }}>
         <img src="../assets/minimalist-blocks/preview/icon/add_page.svg" id="add_current" className="tutor-content-modal" />
         <img src="../assets/minimalist-blocks/preview/icon/delete_page.svg" className="add-contenting" id="delete_current" />
         <button type="button" className="save-contenting" onClick={() => this.callSave()}>Save</button>
@@ -748,7 +745,7 @@ export default class Edit extends Component {
         {/* <button type="button" className="save-contenting" onClick={() => this.closeBuilder()} style={{"width":"85px"}}>Close</button> */}
       </div>
 
-      <div id="confirmModal" className="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div id="confirmModal" className="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div className="modal-dialog confirm_dialog">
           <div className="modal-content confirm-content">
             <div className="modal-body">
@@ -775,8 +772,6 @@ export default class Edit extends Component {
         imageSelect={"images.html"}
         snippetFile={"/assets/minimalist-blocks/content.js"}
         languageFile={"/contentbuilder/lang/en.js"} />
-
-      {console.log("console html", this.state.html)}
       {
 
         this.state.mydata.length > 0 ? this.state.mydata.map((item, index) => {
@@ -791,23 +786,23 @@ export default class Edit extends Component {
       }
 
 
-      <div id="tutor_add_page_modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog tutor-adding-page-modal">
-          <div class="modal-content tutor_modal">
-            <div class="modal-header tutor-modal-header">
+      <div id="tutor_add_page_modal" className="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div className="modal-dialog tutor-adding-page-modal">
+          <div className="modal-content tutor_modal">
+            <div className="modal-header tutor-modal-header">
               <div className="title_modal-add modal-title h4" id="contained-modal-title-vcenter">Please Enter The Page Properties</div>
-              <button type="button" id="tutor_close_page" class="close" data-dismiss="modal">&times;</button>
+              <button type="button" id="tutor_close_page" className="close" data-dismiss="modal">&times;</button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <form onSubmit={this.tutorCreate} encType="multipart/form-data" id="tutor_add_page_modal_form">
                 <div className="row">
                   <div className="col-lg-3 col-md-3 col-sm-12">
-                    <div class="control-group file-upload" id="file-upload1">
-                      <div class="image-box text-center">
-                        <span class="iconify tutor-iconifing" data-icon="clarity:plus-line"></span>
+                    <div className="control-group file-upload" id="file-upload1">
+                      <div className="image-box text-center">
+                        <span className="iconify tutor-iconifing" data-icon="clarity:plus-line"></span>
                         <img src="" id="image-thumbnail" />
                       </div>
-                      <div class="controls" style={{ "display": "none" }}>
+                      <div className="controls" style={{ "display": "none" }}>
                         <input type="file" name="thumbnail" onChange={this.handleInputChange} />
                       </div>
                     </div>
@@ -831,24 +826,24 @@ export default class Edit extends Component {
         </div>
       </div>
 
-      <div id="tutor_edit_page_modal" class="edit-prop-model modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog tutor-adding-page-modal">
-          <div class="modal-content tutor_modal">
-            <div class="modal-header tutor-modal-header">
+      <div id="tutor_edit_page_modal" className="edit-prop-model modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div className="modal-dialog tutor-adding-page-modal">
+          <div className="modal-content tutor_modal">
+            <div className="modal-header tutor-modal-header">
               <div className="title_modal-add modal-title h4" id="contained-modal-title-vcenter">Please Edit The Page Properties</div>
-              <button type="button" id="tutor_closing_page" class="close" data-dismiss="modal">&times;</button>
+              <button type="button" id="tutor_closing_page" className="close" data-dismiss="modal">&times;</button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <form encType="multipart/form-data">
                 <div className="row">
                   <div className="col-lg-3 col-md-3 col-sm-12">
-                    <div class="control-group file-upload" id="file-upload1">
-                      <div class="image-box text-center">
-                        <span class="iconify tutor-iconifing" data-icon="clarity:plus-line"></span>
+                    <div className="control-group file-upload" id="file-upload1">
+                      <div className="image-box text-center">
+                        <span className="iconify tutor-iconifing" data-icon="clarity:plus-line"></span>
 
                         <img src={this.state.selectedFile_edit ? this.state.selectedFile_edit : ''} alt="img-tutor" className={this.state.selectedFile_edit ? 'page-thumb' : 'page-no-thumb'} />
                       </div>
-                      <div class="controls" style={{ "display": "none" }}>
+                      <div className="controls" style={{ "display": "none" }}>
                         <input type="file" name="selectedFile_edit" onChange={this.handleInputChangeUpdate} />
                       </div>
                     </div>
@@ -897,7 +892,7 @@ export default class Edit extends Component {
           <ul>
             <li className="menu" id="dropMenu">
               <div className="drop-boxes" data-backdrop="static" data-keyboard="false">
-                <a className="drop-textes" href="javascript:void(0)">
+                <a className="drop-textes" href="#">
                   <img src="../assets/minimalist-blocks/preview/icon/house.svg" alt="full-icon" />
                 </a>
               </div>
@@ -916,7 +911,7 @@ export default class Edit extends Component {
                     Dashboard</Link>
                 </li>
                 <li className="setting-02">
-                  <a href="javascript:void(0)">
+                  <a href="#">
                     <div className="blue-box"></div>
                     Help</a>
                 </li>
@@ -928,39 +923,39 @@ export default class Edit extends Component {
           <ul>
             <li className="menu" id="dropMenu">
               <div className="drop-box" data-backdrop="static" data-keyboard="false">
-                <a className="drop-text" href="javascript:void(0)">
+                <a className="drop-text" href="#">
                   <img src="../assets/minimalist-blocks/preview/icon/power_normal.svg" alt="full-icon" />
                 </a>
               </div>
               <ul id="tutor_ul" className="setting_empower">
                 <li className="home">
                   <div className="arrow"></div>
-                  <a href="javascript:void(0)">
+                  <a href="#">
                     <div className="blue-box"></div>
                     Setting</a>
                 </li>
                 <li className="setting-01">
-                  <a href="javascript:void(0)">
+                  <a href="#">
                     <div className="blue-box"></div>
                     Setting 01</a>
                 </li>
                 <li className="setting-02">
-                  <a href="javascript:void(0)">
+                  <a href="#">
                     <div className="blue-box"></div>
                     Setting 02</a>
                 </li>
                 <li className="creator">
-                  <a href="javascript:void(0)">
+                  <a href="#">
                     <div className="blue-box"></div>
                     Creator Type</a>
                 </li>
                 <li className="settings">
-                  <a href="javascript:void(0)" className="change_individual" title="minimal" id="pre-minimal" data-value="power" value="Power">
+                  <a href="#" className="change_individual" title="minimal" id="pre-minimal" data-value="power" value="Power">
                     <div className="blue-box"></div>
                     Power</a>
                 </li>
                 <li className="messages">
-                  <a href="javascript:void(0)" className="change_individual" id="default" data-value="normal" value="Normal">
+                  <a href="#" className="change_individual" id="default" data-value="normal" value="Normal">
                     <div className="blue-box"></div>
                     Normal</a></li>
               </ul>
@@ -971,7 +966,7 @@ export default class Edit extends Component {
           <ul>
             <li className="menu" id="dropMenu">
               <div className="drop-boxies" data-backdrop="static" data-keyboard="false">
-                <a className="drop-texties" href="javascript:void(0)">
+                <a className="drop-texties" href="#">
                   <img src="../assets/minimalist-blocks/preview/icon/text.svg" alt="full-icon" />
                 </a>
               </div>
