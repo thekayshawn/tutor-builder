@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import Pagination from "react-js-pagination";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { HiOutlinePencil } from "react-icons/hi";
 import axios from 'axios';
 import { api_host } from '../constants';
 import { api_hosting, user_token, DASHBOARD_URL } from '../constants';
@@ -15,7 +16,7 @@ export default class Edit extends Component {
     super(props);
     this.state = {
       // see Home.js where localStorage is set first as a sample/initial content
-      html: "new page",
+      html: 'new page',
       visible: false,
       title: '',
       description: '',
@@ -46,6 +47,7 @@ export default class Edit extends Component {
       contectData: [],
       page_id: 0,
       page_meta_title: '',
+      newpage_done:'',
     };
     this.history = props.history;
     this.handleOnSave = this.handleOnSave.bind(this);
@@ -73,6 +75,7 @@ export default class Edit extends Component {
   }
 
   handleOnSave = async (html, pageNumber) => {
+      console.log("check handleOnSave page when new page create");
     const builderHTML = this.contentBuilderRef.current.getHTML()
     var quizes = [];
     var quiz_questionnaire = document.querySelectorAll('.quiz-questionnaire');
@@ -280,8 +283,8 @@ export default class Edit extends Component {
         page_id = this.state.learning_material[0].id;
       }
     }
-
-    let id = this.state.mydata.length > 0 ? this.state.mydata[0]._id : '';
+    console.log("check data",this.state.mydata);
+    let id = this.state.mydata.length > 0 ? this.state.mydata[0]?.data?._id : '';
     let has_form = html.includes('<form');
 
     const pathName = window.location.pathname;
@@ -290,6 +293,7 @@ export default class Edit extends Component {
     // var content_id = this.props.match.params.id;
 
     //Add Quiz
+   
     if (has_form) {
       const myJSONquizes = JSON.stringify(quizes);
       const params = new URLSearchParams()
@@ -315,7 +319,9 @@ export default class Edit extends Component {
 
       }
     }
+   
     //Add Quiz
+    console.log("idddddddd" ,id);
     if (id == '' || id == null) {
       const params = new URLSearchParams()
       params.append('content_id', content_id);
@@ -328,8 +334,9 @@ export default class Edit extends Component {
       }
       //.catch(err => console.log(err))
       const resp = await axios.post(`${api_host}/learning-material/create/`, params, config);
+
       this.setState({
-        html: html,
+        html: builderHTML,
         loading: true,
         content_id: content_id,
         page_id: page_id,
@@ -347,13 +354,13 @@ export default class Edit extends Component {
     else {
       const params = new URLSearchParams()
       params.append('page_id', page_id);
-      params.append('html', html);
+      params.append('html', builderHTML);
       const config = {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }
-      const resp = await axios.post(`${api_host}/learning-material/update/`, params, config);
+     const resp = await axios.post(`${api_host}/learning-material/update/`, params, config);
       this.setState({
-        html: html,
+        html: builderHTML,
         loading: true,
         content_id: content_id,
         page_id: page_id,
@@ -373,25 +380,35 @@ export default class Edit extends Component {
 
   async componentDidMount() {
     //Fetch Pages Start
+  //   console.log("page",this.state.number_of_pages);
+  //   console.log("content_id",this.state.newpage_done);
+    // if(localStorage.getItem('first')!='created'){
+    //   console.log("create page first");
+    //   this.addFirstpage();
+    // }
+    
+  //   console.log("total page",this.state.number_of_pages);
     let user = JSON.parse(localStorage.getItem("user"));
     const authAxios = axios.create({
       headers: {
         "X-Auth-Token": `${user.access_token}`
       }
-    })
+    });
     const pathName = window.location.pathname;
     const lm_id = pathName.split('/', 2);
     var id1 = lm_id[1];
-
-    // var id1 = this.props.match.params.id;
+   /// var id1 = this.props.match.params.id;
     let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
+    console.log(url);
     const result1 = await authAxios.get(url);
-
+    console.log(result1);
     if (result1.data.status == false) {
-      // window.location = '/';
-      // return '';
-    }
-    var response = result1.data.data;
+      this.addFirstpage();
+      let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
+      console.log("iffff",url);
+      const result1 = await authAxios.get(url);
+      var response = result1.data.data;
+    console.log("response-runing page iffff",response);
     this.setState({
       learning_material: [response],
       page_meta_title: response[0].title,
@@ -399,22 +416,36 @@ export default class Edit extends Component {
       description_edit: response[0].description,
       selectedFile_edit: response[0].thumbnail,
     });
+    }
+    else{
+      let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
+      console.log("else",url);
+      const result1 = await authAxios.get(url);
+      var response = result1.data.data;
+      this.setState({
+        learning_material: [response],
+        page_meta_title: response[0].title,
+        title_edit: response[0].title,
+        description_edit: response[0].description,
+        selectedFile_edit: response[0].thumbnail,
+      });
+    }
+  //   //Fetch Pages Ends
+     var id_content = this.state.learning_material[0][0].id;
+      console.log("testing done",id_content)
+     const myresp = await axios.get(`${api_host}/learning-material/fetch-page-content/${id_content}`)
+  //     .catch(err => console.log(err));
 
-    //Fetch Pages Ends
-    var id_content = this.state.learning_material[0][0].id;
-    const myresp = await axios.get(`${api_host}/learning-material/fetch-page-content/${id_content}`)
-      .catch(err => console.log(err));
-
-
-    var myrespdata = (myresp?.data) ? [myresp.data] : [];
-
+     var myrespdata = (myresp?.data) ? [myresp.data] : [];
+      console.log("runing page myrespdata",myrespdata);
     var content_Id = lm_id[1];
-    // var content_Id = this.props.match.params.id;
-    if (myrespdata.length < 1)
+    //var content_Id = this.props.match.params.id;
+    if (myrespdata.length < 1){
       myrespdata = [{ '_id': '', content_id: content_Id, html: '', page_id: '' }];
     this.setState({ mydata: myrespdata, contectData: myrespdata, });
-
+    }
     var currentPage = this.state.currentPage;
+    console.log("page current_1",currentPage);
     const result = await authAxios.get(`${api_hosting}/tutor/learning-material/fetch?order=ASC`);
     const data = result.data.data;
     this.setState({
@@ -431,11 +462,12 @@ export default class Edit extends Component {
       .catch(err => '');
     var responsed = myresponse.data.data;
     this.setState({ learning_material: responsed, page_id: page_id, title: data[0].title, description: data[0].description });
-    this.fetchThePagination(this.state.currentPage);
-  }
+    console.log("content_page_2",this.state.currentPage);  
+     this.fetchThePagination(this.state.currentPage);
+   }
 
   paginationPageContent = async (pageNumber) => {
-    //Fetch Pages Start
+  //   //Fetch Pages Start
     let user = JSON.parse(localStorage.getItem("user"));
     const authAxios = axios.create({
       headers: { "X-Auth-Token": `${user.access_token}` }
@@ -444,31 +476,40 @@ export default class Edit extends Component {
     const pathName = window.location.pathname;
     const lm_id = pathName.split('/', 2);
     var id1 = lm_id[1];
+  
+    //  // var id1 = this.props.match.params.id; /// not use
+     let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
+     const result1 = await authAxios.get(url);
+     let response = result1.data.data;
 
-    // var id1 = this.props.match.params.id;
-    let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
-    const result1 = await authAxios.get(url);
-    var response = result1.data.data;
     this.setState({
       page_meta_title: response[pageNumber].title,
       title_edit: response[pageNumber].title,
       description_edit: response[pageNumber].description,
-      selectedFile_edit: response[pageNumber].thumbnail,
+      selectedFile_edit: response[pageNumber]?.thumbnail,
     });
+    
+   let id_content = response[pageNumber].id;
+   // let id_content = lm_id[1];
+     console.log("contentid",id_content);
+     const myresp = await axios.get(`${api_host}/learning-material/fetch-page-content/${id_content}`);
 
-    var id_content = response[pageNumber].id;
-    const myresp = await axios.get(`${api_host}/learning-material/fetch-page-content/${id_content}`).catch(err => '');
-    var myrespdata = (myresp?.data) ? [myresp.data] : [];
-    var content_Id_One = lm_id[1];
-    // var content_Id_One = this.props.match.params.id;
+     let myrespdata = (myresp?.data) ? [myresp.data] : [];
+     console.log("page content details",myrespdata);
+     //// checking completed//////
+     let content_Id_One = lm_id[1];
+
     if (myrespdata.length < 1) {
+     
       myrespdata = [{ '_id': '', content_id: content_Id_One, html: '', page_id: '' }];
     }
-
-    this.setState({ mydata: myrespdata, contectData: myrespdata, });
-
-    var currentPage = this.state.currentPage;
-    const result = await authAxios.get(`${api_hosting}/tutor/learning-material/fetch`);
+    
+     this.setState({ mydata: myrespdata, contectData: myrespdata, });
+   
+     var currentPage = this.state.currentPage;
+     
+     const result = await authAxios.get(`${api_hosting}/tutor/learning-material/fetch`);
+     ////checkec code done
     var number_of_pages = this.state.number_of_pages;
     var currentPage = this.state.currentPage;
 
@@ -476,6 +517,8 @@ export default class Edit extends Component {
 
     // var id = this.props.match.params.id;
     const data = result.data.data;
+  
+ 
     this.setState({
       /* creates:data, learning_material:data,*/
       number_of_pages: number_of_pages,
@@ -484,32 +527,38 @@ export default class Edit extends Component {
       content_id: id,
       currentPage: currentPage,
     });
-    this.fetchThePagination(this.state.currentPage);
-    return;
+   //  this.fetchThePagination(this.state.currentPage);
+   ///return;  
   }
 
   fetchThePagination = async (pageNumber) => {
-
-    this.paginationPageContent(pageNumber - 1);
-    // const config = 'eyJpdiI6InhocUtXTTNWMWNaNnBYeTZOY0d0ekE9PSIsInZhbHVlIjoiZkk1ZlFmTzBTa0pYMnRyMkY3WVJiZ3FGMjhHTHl6Um9BYUNvcVRRNzR0c3c1YTkxaVBTcTRNRC9TUUhBd3NIMlNFSklxZFZKSHQvT1BScDF6TFZwVDRVd25IWndBeHZSOTNYUy8xcEVYTE1TV2FoKzZrYVhzaWYyVXpzQ29wYTJ3NEx0UmpaeU5RT1Nkb3NJdnFNekg1bWNJbXViLzdqSUg1R0UwaWxWYUZweXNFbnd5ZmRleGNUUVN3VmhzUm41ZGJxVnlTdzZoUWJXU01iTHdvbU53czIya2FsK3Uzb004OHZYZm9xeWM2S1FyN0psaEFZa2pnd0dwRnEvZHJ3OWVEYUFmZFJ0bVNQVUwrV0ZKdVBIUFVDVDN3TVdwWEVLamRFQjVZOHIzckU4UmpWQlNzTWpJem1TaWUrYkJpa3RQRzE1OXlJTEpMcFMzOC91T1EwQ2VRdmdJQ1BFN085c3pFcEgvRzh6YklZTjlia1VQNVQvRGkyTHZQakRESlZtZm5naW1BNmFybS9mNVZYZURoS0NGQ3l4SFQ4L3Uwa2lPdDd4Wm5DemhhUnNCT1FCbzBpbm00R29sbXA5bjAwWVBvVVlOTEpMby80OUpWdHA3aEU4OFJGbGdlZUpRRjZWcW1lWTh4UnN5NTU4RFVtSUJzU2NBeEo3SW8zdUZ2UlB4T0dXNkFUN0dGZWs1NmVRT08wRm12c2N0eVVYUEZyYWFuMWJzbWVrN1o3ZklhL2dxSHg2dFhNZXRrTGlxSDJWUkxsMFd4Rk9xREx2OWFxbk9tVlZ5enMvdGdzU0ZoRUZkcXpzNFV2cExQWT0iLCJtYWMiOiJkMzM1NWM1Nzg1ZmRkM2MwYWIxYzcwMzBiODM2NTljNTg4MzAwODVmZGIxY2FjMDBlMjdhMDg5YTljNTg4MDMwIiwidGFnIjoiIn0=';
+    // // const config = 'eyJpdiI6InhocUtXTTNWMWNaNnBYeTZOY0d0ekE9PSIsInZhbHVlIjoiZkk1ZlFmTzBTa0pYMnRyMkY3WVJiZ3FGMjhHTHl6Um9BYUNvcVRRNzR0c3c1YTkxaVBTcTRNRC9TUUhBd3NIMlNFSklxZFZKSHQvT1BScDF6TFZwVDRVd25IWndBeHZSOTNYUy8xcEVYTE1TV2FoKzZrYVhzaWYyVXpzQ29wYTJ3NEx0UmpaeU5RT1Nkb3NJdnFNekg1bWNJbXViLzdqSUg1R0UwaWxWYUZweXNFbnd5ZmRleGNUUVN3VmhzUm41ZGJxVnlTdzZoUWJXU01iTHdvbU53czIya2FsK3Uzb004OHZYZm9xeWM2S1FyN0psaEFZa2pnd0dwRnEvZHJ3OWVEYUFmZFJ0bVNQVUwrV0ZKdVBIUFVDVDN3TVdwWEVLamRFQjVZOHIzckU4UmpWQlNzTWpJem1TaWUrYkJpa3RQRzE1OXlJTEpMcFMzOC91T1EwQ2VRdmdJQ1BFN085c3pFcEgvRzh6YklZTjlia1VQNVQvRGkyTHZQakRESlZtZm5naW1BNmFybS9mNVZYZURoS0NGQ3l4SFQ4L3Uwa2lPdDd4Wm5DemhhUnNCT1FCbzBpbm00R29sbXA5bjAwWVBvVVlOTEpMby80OUpWdHA3aEU4OFJGbGdlZUpRRjZWcW1lWTh4UnN5NTU4RFVtSUJzU2NBeEo3SW8zdUZ2UlB4T0dXNkFUN0dGZWs1NmVRT08wRm12c2N0eVVYUEZyYWFuMWJzbWVrN1o3ZklhL2dxSHg2dFhNZXRrTGlxSDJWUkxsMFd4Rk9xREx2OWFxbk9tVlZ5enMvdGdzU0ZoRUZkcXpzNFV2cExQWT0iLCJtYWMiOiJkMzM1NWM1Nzg1ZmRkM2MwYWIxYzcwMzBiODM2NTljNTg4MzAwODVmZGIxY2FjMDBlMjdhMDg5YTljNTg4MDMwIiwidGFnIjoiIn0=';
     let user = JSON.parse(localStorage.getItem("user"));
     const authAxios = axios.create({
       headers: { "X-Auth-Token": `${user.access_token}` }
     })
+    console.log("contentid",this.state.content_id);
     let url = `${api_hosting}/learning-material/fetch-pages/${this.state.content_id}?page=${pageNumber}&limit=1&order=ASC`;
+    
     const resp = await authAxios.get(url);
     let data = resp.data.data;
+    console.log("mydata",data);
+    // const id = this.props.match?.params?.id; //// not use
 
-    const id = this.props.match.params.id;
     const number_of_pages = resp.data.number_of_pages ? resp.data.number_of_pages : this.state.number_of_pages;
+    console.log("this my pages",number_of_pages)
     this.setState({
       learning_material: data,
       number_of_pages: number_of_pages,
       currentPage: pageNumber,
-      title_edit: data[0].title,
-      description_edit: data[0].description,
-      selectedFile_edit: data[0].thumbnail,
+      title_edit: data[0]?.title,
+      description_edit: data[0]?.description,
+      selectedFile_edit: data[0]?.thumbnail,
     });
+
+
+      this.paginationPageContent(pageNumber-1);
+
   }
 
   closeBuilder = () => {
@@ -520,9 +569,10 @@ export default class Edit extends Component {
 
   openModal() { this.setState({ visible: true }); }
   closeModal() { this.setState({ visible: false }); }
-  changeContent = (html) => {
+  changeContent =(html) => {
+    
     if (html == 'undefined' || this.state.html == html) return;
-    this.setState({ html: html });
+    this.setState({ html:html});
   }
 
   handlesInput = (e) => {
@@ -535,7 +585,42 @@ export default class Edit extends Component {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   }
-
+  addFirstpage=async()=>{
+    console.log("add page is runing");
+      const pathName = window.location.pathname;
+      const lm_id = pathName.split('/', 3);
+      const title=lm_id[2];
+      const description_demo="no description";
+      const formData = new FormData()
+      formData.append('content_id', lm_id[1]);
+      formData.append('title',title );
+      formData.append('description', description_demo);
+      formData.append('thumbnail', '');
+      let user = JSON.parse(localStorage.getItem("user"));
+      const authAxios = axios.create({
+        headers: { "X-Auth-Token": `${user.access_token}` }
+      })
+      const res = await authAxios.post(`${api_hosting}/learning-material/add-page`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+        
+      });
+      console.log("page added response",res);
+      if(res.status==200){
+        localStorage.setItem("first","created");
+        
+        console.log("ohhh page is created");
+        this.setState({
+          page_meta_title: title,
+          number_of_pages:1,
+          currentPage:1
+        });
+        toast.success("Page Added Successfull!", {
+          position: "bottom-right"
+        });
+      }
+  }
 
   tutorCreate = async (e) => {
     e.preventDefault();
@@ -546,7 +631,6 @@ export default class Edit extends Component {
 
     const pathName = window.location.pathname;
     const lm_id = pathName.split('/', 2);
-
     const formData = new FormData()
     formData.append('content_id', lm_id[1]);
     formData.append('title', this.state.title);
@@ -561,7 +645,6 @@ export default class Edit extends Component {
         'Content-Type': 'multipart/form-data'
       }
     });
-
     if (res.status === 200) {
       $("#tutor_add_page_modal button.close").trigger('click');
       this.closeModal();
@@ -588,6 +671,7 @@ export default class Edit extends Component {
   }
 
   pageDelete = async () => {
+    console.log("delete page now ");
     var contet_id = this.state.content_id;
     if (this.state.currentPage == 1) {
       toast.error("This page can't be Delete!", {
@@ -688,8 +772,9 @@ export default class Edit extends Component {
   }
 
   saveAndContinue() {
+    localStorage.removeItem("first");
     this.callSave()
-    setTimeout(() => {
+    setTimeout(() => { 
       window.location.replace(`${DASHBOARD_URL}/auth/tutor-dashboard/content-builder/PricingPlan?planId=${localStorage.getItem('planId')}`)
       localStorage.removeItem('planId')
     }, 3000)
@@ -697,8 +782,10 @@ export default class Edit extends Component {
 
 
   render() {
-    // let pageData = this.state.learning_material.find( (page) => page.id == this.state.page_id );
-    const mydata = this.state.mydata.length > 0 ? this.state.mydata[0]._id : 0;
+    //let pageData = this.state.learning_material.find( (page) => page.id == this.state.page_id );
+   
+    //const mydata = this.state.mydata.length > 0 ? this.state.mydata[0]._id : 0;
+    //console.log("ansab data",this.state.mydata);
     var MYDATA = this.state.mydata;
     var content_url_id = this.state.content_id;
     //var url_id = "http://localhost:3000/#/showdata/"+content_url_id;
@@ -710,7 +797,11 @@ export default class Edit extends Component {
           <li key={index} className="home setting-01">
             <div className="arrow"></div>
             <div className="blue-box"></div>
-            {this.state.page_meta_title}<img id="edit_current" className="tutor-page-edit" src="../assets/minimalist-blocks/preview/edit-pencil.svg" alt="edit-img" />
+            {this.state.page_meta_title}
+            {/* <HiOutlinePencil id="edit_current" className="tutor-page-edit"/> */}
+            <img id="edit_current"
+             className="tutor-page-edit"
+              src="../assets/minimalist-blocks/preview/pencil-edit.svg" alt="edit-img"/>
           </li>
           {/* <li key={index} className="setting-01"><Link to="#"><div className="blue-box"></div>{item.title}</Link></li>  */}
           {/*                 <li><h5 id="edit_current" className="tutor-page-edit"><img src="../assets/minimalist-blocks/preview/edit-pencil.svg" alt="edit-img"/></h5></li>  */}
@@ -729,9 +820,7 @@ export default class Edit extends Component {
       </div>
       <div className="html_showPart">
       </div>
-      <div className="first_data_showPart">
-        {/* {this.state.creates.page_title} */}
-      </div>
+      
       <div className="logo_tutor">
         <img src="../assets/minimalist-blocks/preview/Logo.svg" alt="logo-img" />
       </div>
@@ -759,13 +848,13 @@ export default class Edit extends Component {
           </div>
         </div>
       </div>
-
+      
       <BuilderControl
         ref={this.contentBuilderRef}
         history={this.history}
         initialHtml={this.state.html}
         onSave={this.handleOnSave}
-        doSave={f => this.callSave = f} /* https://stackoverflow.com/questions/37949981/call-child-method-from-parent */
+        doSave={f => this.callSave = f} 
         doDestroy={f => this.callDestroy = f}
         base64Handler={"/upload"}
         largerImageHandler={"/upload"}
@@ -773,9 +862,12 @@ export default class Edit extends Component {
         snippetFile={"/assets/minimalist-blocks/content.js"}
         languageFile={"/contentbuilder/lang/en.js"} />
       {
+        /* https://stackoverflow.com/questions/37949981/call-child-method-from-parent */
 
-        this.state.mydata.length > 0 ? this.state.mydata.map((item, index) => {
-          var text = item.html !== "" ? item.html : '';
+        // console.log("irfan data",this.state.mydata)
+        this.state.mydata?.length > 0 ? this.state?.mydata.map((item, index) => {
+          
+          var text = item?.data?.html !== "" ? item?.data?.html : '';
           return (
             <>
               <div key={index}>{this.changeContent(text)}</div>
@@ -876,7 +968,7 @@ export default class Edit extends Component {
         itemsCountPerPage={1}
         totalItemsCount={this.state.number_of_pages}
         pageRangeDisplayed={this.state.id}
-        onChange={this.fetchThePagination}
+        onChange={this.fetchThePagination.bind(this)}
         itemClass="page-item"
         linkClass="page-link" />
 

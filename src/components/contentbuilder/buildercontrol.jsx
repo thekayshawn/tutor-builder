@@ -72,7 +72,6 @@ class BuilderControl extends Component {
             });
     
             this.obj.loadSnippets(this.props.snippetFile); // Load snippet file
-    
             this.obj.loadHtml(this.state.html);
 
             this.props.ref = this;
@@ -94,8 +93,8 @@ class BuilderControl extends Component {
     }
    
     setHtml = (html) => {
-        console.log(html)
-        this.obj.loadHtml(html);
+        
+        this.obj.loadHtml(html,document.getElementById("main_content"));
     }
     loadLanguageFile = (languageFile, callback) => {
         if(!this.isScriptAlreadyIncluded(languageFile)) {
@@ -352,4 +351,3 @@ BuilderControl.defaultProps = {
 };
 
 export default BuilderControl;
-

@@ -81,7 +81,8 @@ class LearnerShowPages extends Component
 render ()
 {
     
-    var page_content = this.state.mydata.length > 0 ? this.state.mydata[0].html : '';
+    var page_content = this.state.mydata.length > 0 ? this.state.mydata[0]?.html : '';
+    
     page_content = page_content.replace(/checked="checked"/gi,'');
      let pageId = this.state.mydata.length > 0 ? this.state.mydata[0].page_id : '';
     localStorage.setItem('pageId',pageId);

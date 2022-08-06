@@ -64,7 +64,7 @@ function MyVerticallyCenteredModal(props) {
               headers:{
                      "X-Auth-Token": `${config}`
               }
-            })
+            });
                const res_pages = await authAxios.post(`${api_hosting}/learning-material/add-page`, formData, {
                 headers: {
                   'Content-Type': 'multipart/form-data'
