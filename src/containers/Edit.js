@@ -47,7 +47,7 @@ export default class Edit extends Component {
       contectData: [],
       page_id: 0,
       page_meta_title: '',
-      newpage_done:'',
+      newpage_done: '',
     };
     this.history = props.history;
     this.handleOnSave = this.handleOnSave.bind(this);
@@ -75,7 +75,7 @@ export default class Edit extends Component {
   }
 
   handleOnSave = async (html, pageNumber) => {
-      console.log("check handleOnSave page when new page create");
+    console.log("check handleOnSave page when new page create");
     const builderHTML = this.contentBuilderRef.current.getHTML()
     var quizes = [];
     var quiz_questionnaire = document.querySelectorAll('.quiz-questionnaire');
@@ -283,7 +283,7 @@ export default class Edit extends Component {
         page_id = this.state.learning_material[0].id;
       }
     }
-    console.log("check data",this.state.mydata);
+    console.log("check data", this.state.mydata);
     let id = this.state.mydata.length > 0 ? this.state.mydata[0]?.data?._id : '';
     let has_form = html.includes('<form');
 
@@ -293,7 +293,7 @@ export default class Edit extends Component {
     // var content_id = this.props.match.params.id;
 
     //Add Quiz
-   
+
     if (has_form) {
       const myJSONquizes = JSON.stringify(quizes);
       const params = new URLSearchParams()
@@ -319,9 +319,9 @@ export default class Edit extends Component {
 
       }
     }
-   
+
     //Add Quiz
-    console.log("idddddddd" ,id);
+    console.log("idddddddd", id);
     if (id == '' || id == null) {
       const params = new URLSearchParams()
       params.append('content_id', content_id);
@@ -358,7 +358,7 @@ export default class Edit extends Component {
       const config = {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }
-     const resp = await axios.post(`${api_host}/learning-material/update/`, params, config);
+      const resp = await axios.post(`${api_host}/learning-material/update/`, params, config);
       this.setState({
         html: builderHTML,
         loading: true,
@@ -380,14 +380,14 @@ export default class Edit extends Component {
 
   async componentDidMount() {
     //Fetch Pages Start
-  //   console.log("page",this.state.number_of_pages);
-  //   console.log("content_id",this.state.newpage_done);
+    //   console.log("page",this.state.number_of_pages);
+    //   console.log("content_id",this.state.newpage_done);
     // if(localStorage.getItem('first')!='created'){
     //   console.log("create page first");
     //   this.addFirstpage();
     // }
-    
-  //   console.log("total page",this.state.number_of_pages);
+
+    //   console.log("total page",this.state.number_of_pages);
     let user = JSON.parse(localStorage.getItem("user"));
     const authAxios = axios.create({
       headers: {
@@ -397,7 +397,7 @@ export default class Edit extends Component {
     const pathName = window.location.pathname;
     const lm_id = pathName.split('/', 2);
     var id1 = lm_id[1];
-   /// var id1 = this.props.match.params.id;
+    /// var id1 = this.props.match.params.id;
     let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
     console.log(url);
     const result1 = await authAxios.get(url);
@@ -405,21 +405,21 @@ export default class Edit extends Component {
     if (result1.data.status == false) {
       this.addFirstpage();
       let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
-      console.log("iffff",url);
+      console.log("iffff", url);
       const result1 = await authAxios.get(url);
       var response = result1.data.data;
-    console.log("response-runing page iffff",response);
-    this.setState({
-      learning_material: [response],
-      page_meta_title: response[0].title,
-      title_edit: response[0].title,
-      description_edit: response[0].description,
-      selectedFile_edit: response[0].thumbnail,
-    });
+      console.log("response-runing page iffff", response);
+      this.setState({
+        learning_material: [response],
+        page_meta_title: response[0].title,
+        title_edit: response[0].title,
+        description_edit: response[0].description,
+        selectedFile_edit: response[0].thumbnail,
+      });
     }
-    else{
+    else {
       let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
-      console.log("else",url);
+      console.log("else", url);
       const result1 = await authAxios.get(url);
       var response = result1.data.data;
       this.setState({
@@ -430,22 +430,22 @@ export default class Edit extends Component {
         selectedFile_edit: response[0].thumbnail,
       });
     }
-  //   //Fetch Pages Ends
-     var id_content = this.state.learning_material[0][0].id;
-      console.log("testing done",id_content)
-     const myresp = await axios.get(`${api_host}/learning-material/fetch-page-content/${id_content}`)
-  //     .catch(err => console.log(err));
+    //   //Fetch Pages Ends
+    var id_content = this.state.learning_material[0][0].id;
+    console.log("testing done", id_content)
+    const myresp = await axios.get(`${api_host}/learning-material/fetch-page-content/${id_content}`)
+    //     .catch(err => console.log(err));
 
-     var myrespdata = (myresp?.data) ? [myresp.data] : [];
-      console.log("runing page myrespdata",myrespdata);
+    var myrespdata = (myresp?.data) ? [myresp.data] : [];
+    console.log("runing page myrespdata", myrespdata);
     var content_Id = lm_id[1];
     //var content_Id = this.props.match.params.id;
-    if (myrespdata.length < 1){
+    if (myrespdata.length < 1) {
       myrespdata = [{ '_id': '', content_id: content_Id, html: '', page_id: '' }];
-    this.setState({ mydata: myrespdata, contectData: myrespdata, });
+      this.setState({ mydata: myrespdata, contectData: myrespdata, });
     }
     var currentPage = this.state.currentPage;
-    console.log("page current_1",currentPage);
+    console.log("page current_1", currentPage);
     const result = await authAxios.get(`${api_hosting}/tutor/learning-material/fetch?order=ASC`);
     const data = result.data.data;
     this.setState({
@@ -462,12 +462,12 @@ export default class Edit extends Component {
       .catch(err => '');
     var responsed = myresponse.data.data;
     this.setState({ learning_material: responsed, page_id: page_id, title: data[0].title, description: data[0].description });
-    console.log("content_page_2",this.state.currentPage);  
-     this.fetchThePagination(this.state.currentPage);
-   }
+    console.log("content_page_2", this.state.currentPage);
+    this.fetchThePagination(this.state.currentPage);
+  }
 
   paginationPageContent = async (pageNumber) => {
-  //   //Fetch Pages Start
+    //   //Fetch Pages Start
     let user = JSON.parse(localStorage.getItem("user"));
     const authAxios = axios.create({
       headers: { "X-Auth-Token": `${user.access_token}` }
@@ -476,11 +476,11 @@ export default class Edit extends Component {
     const pathName = window.location.pathname;
     const lm_id = pathName.split('/', 2);
     var id1 = lm_id[1];
-  
+
     //  // var id1 = this.props.match.params.id; /// not use
-     let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
-     const result1 = await authAxios.get(url);
-     let response = result1.data.data;
+    let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
+    const result1 = await authAxios.get(url);
+    let response = result1.data.data;
 
     this.setState({
       page_meta_title: response[pageNumber].title,
@@ -488,28 +488,28 @@ export default class Edit extends Component {
       description_edit: response[pageNumber].description,
       selectedFile_edit: response[pageNumber]?.thumbnail,
     });
-    
-   let id_content = response[pageNumber].id;
-   // let id_content = lm_id[1];
-     console.log("contentid",id_content);
-     const myresp = await axios.get(`${api_host}/learning-material/fetch-page-content/${id_content}`);
 
-     let myrespdata = (myresp?.data) ? [myresp.data] : [];
-     console.log("page content details",myrespdata);
-     //// checking completed//////
-     let content_Id_One = lm_id[1];
+    let id_content = response[pageNumber].id;
+    // let id_content = lm_id[1];
+    console.log("contentid", id_content);
+    const myresp = await axios.get(`${api_host}/learning-material/fetch-page-content/${id_content}`);
+
+    let myrespdata = (myresp?.data) ? [myresp.data] : [];
+    console.log("page content details", myrespdata);
+    //// checking completed//////
+    let content_Id_One = lm_id[1];
 
     if (myrespdata.length < 1) {
-     
+
       myrespdata = [{ '_id': '', content_id: content_Id_One, html: '', page_id: '' }];
     }
-    
-     this.setState({ mydata: myrespdata, contectData: myrespdata, });
-   
-     var currentPage = this.state.currentPage;
-     
-     const result = await authAxios.get(`${api_hosting}/tutor/learning-material/fetch`);
-     ////checkec code done
+
+    this.setState({ mydata: myrespdata, contectData: myrespdata, });
+
+    var currentPage = this.state.currentPage;
+
+    const result = await authAxios.get(`${api_hosting}/tutor/learning-material/fetch`);
+    ////checkec code done
     var number_of_pages = this.state.number_of_pages;
     var currentPage = this.state.currentPage;
 
@@ -517,8 +517,8 @@ export default class Edit extends Component {
 
     // var id = this.props.match.params.id;
     const data = result.data.data;
-  
- 
+
+
     this.setState({
       /* creates:data, learning_material:data,*/
       number_of_pages: number_of_pages,
@@ -527,8 +527,8 @@ export default class Edit extends Component {
       content_id: id,
       currentPage: currentPage,
     });
-   //  this.fetchThePagination(this.state.currentPage);
-   ///return;  
+    //  this.fetchThePagination(this.state.currentPage);
+    ///return;  
   }
 
   fetchThePagination = async (pageNumber) => {
@@ -537,16 +537,16 @@ export default class Edit extends Component {
     const authAxios = axios.create({
       headers: { "X-Auth-Token": `${user.access_token}` }
     })
-    console.log("contentid",this.state.content_id);
+    console.log("contentid", this.state.content_id);
     let url = `${api_hosting}/learning-material/fetch-pages/${this.state.content_id}?page=${pageNumber}&limit=1&order=ASC`;
-    
+
     const resp = await authAxios.get(url);
     let data = resp.data.data;
-    console.log("mydata",data);
+    console.log("mydata", data);
     // const id = this.props.match?.params?.id; //// not use
 
     const number_of_pages = resp.data.number_of_pages ? resp.data.number_of_pages : this.state.number_of_pages;
-    console.log("this my pages",number_of_pages)
+    console.log("this my pages", number_of_pages)
     this.setState({
       learning_material: data,
       number_of_pages: number_of_pages,
@@ -557,7 +557,7 @@ export default class Edit extends Component {
     });
 
 
-      this.paginationPageContent(pageNumber-1);
+    this.paginationPageContent(pageNumber - 1);
 
   }
 
@@ -569,10 +569,10 @@ export default class Edit extends Component {
 
   openModal() { this.setState({ visible: true }); }
   closeModal() { this.setState({ visible: false }); }
-  changeContent =(html) => {
-    
+  changeContent = (html) => {
+
     if (html == 'undefined' || this.state.html == html) return;
-    this.setState({ html:html});
+    this.setState({ html: html });
   }
 
   handlesInput = (e) => {
@@ -585,41 +585,41 @@ export default class Edit extends Component {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   }
-  addFirstpage=async()=>{
+  addFirstpage = async () => {
     console.log("add page is runing");
-      const pathName = window.location.pathname;
-      const lm_id = pathName.split('/', 3);
-      const title=lm_id[2];
-      const description_demo="no description";
-      const formData = new FormData()
-      formData.append('content_id', lm_id[1]);
-      formData.append('title',title );
-      formData.append('description', description_demo);
-      formData.append('thumbnail', '');
-      let user = JSON.parse(localStorage.getItem("user"));
-      const authAxios = axios.create({
-        headers: { "X-Auth-Token": `${user.access_token}` }
-      })
-      const res = await authAxios.post(`${api_hosting}/learning-material/add-page`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-        
-      });
-      console.log("page added response",res);
-      if(res.status==200){
-        localStorage.setItem("first","created");
-        
-        console.log("ohhh page is created");
-        this.setState({
-          page_meta_title: title,
-          number_of_pages:1,
-          currentPage:1
-        });
-        toast.success("Page Added Successfull!", {
-          position: "bottom-right"
-        });
+    const pathName = window.location.pathname;
+    const lm_id = pathName.split('/', 3);
+    const title = lm_id[2];
+    const description_demo = "no description";
+    const formData = new FormData()
+    formData.append('content_id', lm_id[1]);
+    formData.append('title', title);
+    formData.append('description', description_demo);
+    formData.append('thumbnail', '');
+    let user = JSON.parse(localStorage.getItem("user"));
+    const authAxios = axios.create({
+      headers: { "X-Auth-Token": `${user.access_token}` }
+    })
+    const res = await authAxios.post(`${api_hosting}/learning-material/add-page`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
       }
+
+    });
+    console.log("page added response", res);
+    if (res.status == 200) {
+      localStorage.setItem("first", "created");
+
+      console.log("ohhh page is created");
+      this.setState({
+        page_meta_title: title,
+        number_of_pages: 1,
+        currentPage: 1
+      });
+      toast.success("Page Added Successfull!", {
+        position: "bottom-right"
+      });
+    }
   }
 
   tutorCreate = async (e) => {
@@ -774,7 +774,7 @@ export default class Edit extends Component {
   saveAndContinue() {
     localStorage.removeItem("first");
     this.callSave()
-    setTimeout(() => { 
+    setTimeout(() => {
       window.location.replace(`${DASHBOARD_URL}/auth/tutor-dashboard/content-builder/PricingPlan?planId=${localStorage.getItem('planId')}`)
       localStorage.removeItem('planId')
     }, 3000)
@@ -783,7 +783,7 @@ export default class Edit extends Component {
 
   render() {
     //let pageData = this.state.learning_material.find( (page) => page.id == this.state.page_id );
-   
+
     //const mydata = this.state.mydata.length > 0 ? this.state.mydata[0]._id : 0;
     //console.log("ansab data",this.state.mydata);
     var MYDATA = this.state.mydata;
@@ -794,14 +794,15 @@ export default class Edit extends Component {
 
       return (
         <>
-          <li key={index} className="home setting-01">
-            <div className="arrow"></div>
-            <div className="blue-box"></div>
-            {this.state.page_meta_title}
+          <li key={index} className="home setting-01" style={{ width: "250px", display: "flex", flexDirection: "row", marginLeft: "2px" }}>
+
+            <span style={{ marginLeft: "5px" }}>{this.state.currentPage}</span>
+
+            <span style={{ marginLeft: "5px" }}> {this.state.page_meta_title}</span>
             {/* <HiOutlinePencil id="edit_current" className="tutor-page-edit"/> */}
             <img id="edit_current"
-             className="tutor-page-edit"
-              src="../assets/minimalist-blocks/preview/pencil-edit.svg" alt="edit-img"/>
+              className="tutor-page-edit"
+              src="../assets/minimalist-blocks/preview/pencil-edit.svg" alt="edit-img" />
           </li>
           {/* <li key={index} className="setting-01"><Link to="#"><div className="blue-box"></div>{item.title}</Link></li>  */}
           {/*                 <li><h5 id="edit_current" className="tutor-page-edit"><img src="../assets/minimalist-blocks/preview/edit-pencil.svg" alt="edit-img"/></h5></li>  */}
@@ -820,7 +821,7 @@ export default class Edit extends Component {
       </div>
       <div className="html_showPart">
       </div>
-      
+
       <div className="logo_tutor">
         <img src="../assets/minimalist-blocks/preview/Logo.svg" alt="logo-img" />
       </div>
@@ -848,13 +849,13 @@ export default class Edit extends Component {
           </div>
         </div>
       </div>
-      
+
       <BuilderControl
         ref={this.contentBuilderRef}
         history={this.history}
         initialHtml={this.state.html}
         onSave={this.handleOnSave}
-        doSave={f => this.callSave = f} 
+        doSave={f => this.callSave = f}
         doDestroy={f => this.callDestroy = f}
         base64Handler={"/upload"}
         largerImageHandler={"/upload"}
@@ -866,7 +867,7 @@ export default class Edit extends Component {
 
         // console.log("irfan data",this.state.mydata)
         this.state.mydata?.length > 0 ? this.state?.mydata.map((item, index) => {
-          
+
           var text = item?.data?.html !== "" ? item?.data?.html : '';
           return (
             <>
@@ -1019,7 +1020,7 @@ export default class Edit extends Component {
                   <img src="../assets/minimalist-blocks/preview/icon/power_normal.svg" alt="full-icon" />
                 </a>
               </div>
-              <ul id="tutor_ul" className="setting_empower">
+              {/* <ul id="tutor_ul" className="setting_empower">
                 <li className="home">
                   <div className="arrow"></div>
                   <a href="#">
@@ -1050,7 +1051,7 @@ export default class Edit extends Component {
                   <a href="#" className="change_individual" id="default" data-value="normal" value="Normal">
                     <div className="blue-box"></div>
                     Normal</a></li>
-              </ul>
+              </ul> */}
             </li>
           </ul>
         </nav>
