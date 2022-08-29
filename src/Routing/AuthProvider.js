@@ -1,1 +1,0 @@
-export const AUTH_PROVIDER = process.env.REACT_APP_WEBSITE_URL;

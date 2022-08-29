@@ -1,0 +1,39 @@
+  /* BS override. */
+:root {
+  --bs-secondary-rgb: 5, 56, 107;
+  --bs-secondary: rgb(var(--bs-secondary-rgb));
+}
+
+.btn-secondary {
+  color: white !important;
+  border: 1px solid var(--bs-secondary);
+  background-color: var(--bs-secondary);
+}
+
+.btn-secondary:is(:hover, :focus) {
+  border-color: rgb(3, 36, 70);
+  background-color: rgb(3, 36, 70);
+}
+
+.btn-outline-secondary:is(:hover, :focus) {
+  color: white !important;
+  border-color: var(--bs-secondary);
+  background-color: var(--bs-secondary);
+}
+
+/* Basic Utilities. */
+.cursor-pointer {
+    cursor: pointer;
+  }
+
+.bg-blue {
+    background-color: #3e6d9c;
+  }
+
+.text-blue {
+    color: #3e6d9c;
+  }
+
+.z-100 {
+  z-index: 10000000000 !important;
+}
