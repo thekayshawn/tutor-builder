@@ -9,18 +9,14 @@ import EditContent from "./containers/EditContent";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CoursesAvailble from "./containers/CoursesAvailble";
 import LearnerShowPages from "./containers/LearnerShowPages";
-import { BrowserRouter, Route, useHistory } from "react-router-dom";
+import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
 
 export default function Routes() {
   const history = useHistory();
+
   return (
     <BrowserRouter history={history}>
-      <Route path="/">
-        <Route exact path="/home">
-          <Home />
-        </Route>
-
-        {/* Tutor Routes */}
+      <Switch>
         <ProtectedRoute
           exact
           path="/addpage"
@@ -71,7 +67,10 @@ export default function Routes() {
           component={Dashboard}
           role={"tutor"}
         ></Route>
-      </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
     </BrowserRouter>
   );
 }

@@ -1,9 +1,9 @@
 /* eslint-disable eqeqeq */
-export const api_host = "https://server.content.thetutor.me/api";
+export const api_host = "https://dev-api.thetutor.me/contentbuilder";
 export const api_hosting = "https://dev-api.thetutor.me/contentbuilder";
 export const api_hosting_main = "https://api.thetutor.me";
 
-export const DASHBOARD_URL = process.env.REACT_APP_DASHBOARD_URL;
+export const DASHBOARD_URL = process.env.REACT_APP_URL_DASHBOARD;
 
 export const user = JSON.parse(localStorage.getItem("user"));
 let userToken =

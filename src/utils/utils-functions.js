@@ -1,9 +1,11 @@
+import { URL_LOGOUT } from "../env";
+
 /**
  * Get the headers required for an authorized request.
  * @param {string} token the Authentication token.
  * @returns {Object} The required headers.
  */
-export const getAuthHeaders = (token = localStorage.getItem("token")) => ({
+export const getAuthHeaders = (token) => ({
   "X-Auth-Token": token,
   Accept: "application/json",
   "Content-Type": "application/json",
@@ -19,3 +21,8 @@ export const isObjectValid = (object) =>
   object &&
   Object.keys(object).length > 0 &&
   Object.getPrototypeOf(object) === Object.prototype;
+
+export function logout() {
+  localStorage.removeItem("user");
+  window.open(URL_LOGOUT);
+}

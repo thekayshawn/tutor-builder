@@ -9,14 +9,24 @@ import { Error403, Error500 } from "./components/error";
 
 function App() {
   const [state, setState] = React.useState("loading");
+
+  // Either the stored user or nothing.
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const { search } = useLocation();
+
+  // Either the token from URL or the stored one.
   const token =
     React.useMemo(() => new URLSearchParams(search), [search]).get("token") ||
     localStorage.getItem("token");
 
   React.useEffect(() => {
+    // A previous session exists.
+    if (isObjectValid(user)) {
+      setState("authenticated");
+      return;
+    }
+
     // Neither a token is provided nor a previous session is saved.
     if (!token && !isObjectValid(user)) {
       setState("unauthenticated");
@@ -29,11 +39,11 @@ function App() {
         headers: getAuthHeaders(token),
         url: `${USER_SERVICE_URL}/validate-token`,
         onFailure: () => setState("erred"),
-        onSuccess: (data) => {
+        onSuccess: ({ data }) => {
           localStorage.setItem(
             "user",
             JSON.stringify({
-              ...data.data.data,
+              ...data.data,
               access_token: token,
               isAuthenticated: true,
             })
@@ -42,12 +52,6 @@ function App() {
         },
       });
 
-      return;
-    }
-
-    // A previous session exists.
-    if (isObjectValid(user)) {
-      setState("authenticated");
       return;
     }
 

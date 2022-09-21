@@ -1,21 +1,33 @@
 import React, { Component } from "react";
-import BuilderControl from "../components/contentbuilder/buildercontrol";
-import "./Home.css";
+
+// Components.
 import { Link } from "react-router-dom";
 import Pagination from "react-js-pagination";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
-import { api_host, api_hosting, DASHBOARD_URL } from "../constants";
-import { URL_DASHBOARD_PRICING } from "../config";
+import BuilderControl from "../components/contentbuilder/buildercontrol";
+
+// Utils.
 import qs from "qs";
 import $ from "jquery";
+import axios from "axios";
+import { apiService } from "../service";
+import { getAuthHeaders } from "../utils";
+import { URL_DASHBOARD_PRICING } from "../config";
+import { URL_DASHBOARD_CONTENT_BUILDER, URL_USER_SERVICE } from "../env";
+
+// Static.
+import "./Home.css";
+import "react-toastify/dist/ReactToastify.css";
 
 export default class Edit extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      // see Home.js where localStorage is set first as a sample/initial content
+      contentMeta: {
+        data: [],
+        state: "loading",
+      },
       html: "new page",
       visible: false,
       title: "",
@@ -70,7 +82,7 @@ export default class Edit extends Component {
 
   fullScreenPage = () => {
     var el = document.getElementById("main_content");
-    el.requestFullscreen();
+    el?.requestFullscreen();
   };
 
   handleOnSave = async (html, pageNumber) => {
@@ -410,7 +422,11 @@ export default class Edit extends Component {
       };
       var error = "";
       const resp = await axios
-        .post(`${api_host}/learning-material-quiz/create-quiz`, params, config)
+        .post(
+          `${URL_USER_SERVICE}/learning-material-quiz/create-quiz`,
+          params,
+          config
+        )
         .catch((err) => (error = err.response.data.message));
       this.fetchThePagination(this.state.number_of_pages + 1);
 
@@ -437,7 +453,7 @@ export default class Edit extends Component {
       };
       //.catch(err => console.log(err))
       const resp = await axios.post(
-        `${api_host}/learning-material/create/`,
+        `${URL_USER_SERVICE}/learning-material/create/`,
         params,
         config
       );
@@ -465,7 +481,7 @@ export default class Edit extends Component {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       };
       const resp = await axios.post(
-        `${api_host}/learning-material/update/`,
+        `${URL_USER_SERVICE}/learning-material/update/`,
         params,
         config
       );
@@ -496,53 +512,70 @@ export default class Edit extends Component {
     //   this.addFirstpage();
     // }
 
-    //   console.log("total page",this.state.number_of_pages);
-    let user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("user"));
+    const contentId = window.location.pathname.split("/")[1];
+
+    // Request the metadata for the current set of learning materials.
+    apiService.get({
+      headers: getAuthHeaders(user.access_token),
+      url: `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${contentId}?order=ASC`,
+      onSuccess: ({ data }) =>
+        this.setState({
+          ...this.state,
+          contentMeta: { data, state: "loaded" },
+        }),
+      onFailure: (error) =>
+        this.setState({
+          ...this.state,
+          contentMeta: { state: "erred" },
+        }),
+    });
+
+    const pathName = window.location.pathname;
+    const lm_id = pathName.split("/", 2);
+    var id1 = lm_id[1];
     const authAxios = axios.create({
       headers: {
         "X-Auth-Token": `${user.access_token}`,
       },
     });
-    const pathName = window.location.pathname;
-    const lm_id = pathName.split("/", 2);
-    var id1 = lm_id[1];
     /// var id1 = this.props.match.params.id;
-    let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
-    console.log(url);
-    const result1 = await authAxios.get(url);
-    console.log(result1);
-    if (result1.data.status == false) {
-      this.addFirstpage();
-      let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
-      console.log("iffff", url);
-      const result1 = await authAxios.get(url);
-      var response = result1.data.data;
-      console.log("response-runing page iffff", response);
-      this.setState({
-        learning_material: [response],
-        page_meta_title: response[0].title,
-        title_edit: response[0].title,
-        description_edit: response[0].description,
-        selectedFile_edit: response[0].thumbnail,
-      });
-    } else {
-      let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
-      console.log("else", url);
-      const result1 = await authAxios.get(url);
-      var response = result1.data.data;
-      this.setState({
-        learning_material: [response],
-        page_meta_title: response[0].title,
-        title_edit: response[0].title,
-        description_edit: response[0].description,
-        selectedFile_edit: response[0].thumbnail,
-      });
-    }
+    // let url = `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id1}?order=ASC`;
+    // console.log(url);
+    // const result1 = await authAxios.get(url);
+    // console.log(result1);
+    // if (result1.data.status == false) {
+    //   this.addFirstpage();
+    //   let url = `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id1}?order=ASC`;
+    //   console.log("iffff", url);
+    //   const result1 = await authAxios.get(url);
+    //   var response = result1.data.data;
+    //   console.log("response-runing page iffff", response);
+    //   this.setState({
+    //     learning_material: [response],
+    //     page_meta_title: response[0].title,
+    //     title_edit: response[0].title,
+    //     description_edit: response[0].description,
+    //     selectedFile_edit: response[0].thumbnail,
+    //   });
+    // } else {
+    //   let url = `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id1}?order=ASC`;
+    //   console.log("else", url);
+    //   const result1 = await authAxios.get(url);
+    //   var response = result1.data.data;
+    //   this.setState({
+    //     learning_material: [response],
+    //     page_meta_title: response[0].title,
+    //     title_edit: response[0].title,
+    //     description_edit: response[0].description,
+    //     selectedFile_edit: response[0].thumbnail,
+    //   });
+    // }
     //   //Fetch Pages Ends
     var id_content = this.state.learning_material[0][0].id;
     console.log("testing done", id_content);
     const myresp = await axios.get(
-      `${api_host}/learning-material/fetch-page-content/${id_content}`
+      `${URL_USER_SERVICE}/learning-material/fetch-page-content/${id_content}`
     );
     //     .catch(err => console.log(err));
 
@@ -557,7 +590,7 @@ export default class Edit extends Component {
     var currentPage = this.state.currentPage;
     console.log("page current_1", currentPage);
     const result = await authAxios.get(
-      `${api_hosting}/tutor/learning-material/fetch?order=ASC`
+      `${URL_USER_SERVICE}/tutor/learning-material/fetch?order=ASC`
     );
     const data = result.data.data;
     this.setState({
@@ -571,7 +604,7 @@ export default class Edit extends Component {
 
     var page_id = this.state.learning_material[0].id;
     const myresponse = await authAxios
-      .get(`${api_hosting}/learning-material/fetch-page-detail/${page_id}`)
+      .get(`${URL_USER_SERVICE}/learning-material/fetch-page-detail/${page_id}`)
       .catch((err) => "");
     var responsed = myresponse.data.data;
     this.setState({
@@ -596,7 +629,7 @@ export default class Edit extends Component {
     var id1 = lm_id[1];
 
     //  // var id1 = this.props.match.params.id; /// not use
-    let url = `${api_hosting}/learning-material/fetch-pages/${id1}?order=ASC`;
+    let url = `${URL_USER_SERVICE}/learning-material/fetch-pages/${id1}?order=ASC`;
     const result1 = await authAxios.get(url);
     let response = result1.data.data;
 
@@ -611,7 +644,7 @@ export default class Edit extends Component {
     // let id_content = lm_id[1];
     console.log("contentid", id_content);
     const myresp = await axios.get(
-      `${api_host}/learning-material/fetch-page-content/${id_content}`
+      `${URL_USER_SERVICE}/learning-material/fetch-page-content/${id_content}`
     );
 
     let myrespdata = myresp?.data ? [myresp.data] : [];
@@ -630,7 +663,7 @@ export default class Edit extends Component {
     var currentPage = this.state.currentPage;
 
     const result = await authAxios.get(
-      `${api_hosting}/tutor/learning-material/fetch`
+      `${URL_USER_SERVICE}/tutor/learning-material/fetch`
     );
     ////checkec code done
     var number_of_pages = this.state.number_of_pages;
@@ -660,7 +693,7 @@ export default class Edit extends Component {
       headers: { "X-Auth-Token": `${user.access_token}` },
     });
     console.log("contentid", this.state.content_id);
-    let url = `${api_hosting}/learning-material/fetch-pages/${this.state.content_id}?page=${pageNumber}&limit=1&order=ASC`;
+    let url = `${URL_USER_SERVICE}/learning-material/fetch-pages/${this.state.content_id}?page=${pageNumber}&limit=1&order=ASC`;
 
     const resp = await authAxios.get(url);
     let data = resp.data.data;
@@ -725,7 +758,7 @@ export default class Edit extends Component {
       headers: { "X-Auth-Token": `${user.access_token}` },
     });
     const res = await authAxios.post(
-      `${api_hosting}/learning-material/add-page`,
+      `${URL_USER_SERVICE}/learning-material/add-page`,
       formData,
       {
         headers: {
@@ -777,7 +810,7 @@ export default class Edit extends Component {
       headers: { "X-Auth-Token": `${user.access_token}` },
     });
     const res = await authAxios.post(
-      `${api_hosting}/learning-material/add-page`,
+      `${URL_USER_SERVICE}/learning-material/add-page`,
       formData,
       {
         headers: {
@@ -829,7 +862,7 @@ export default class Edit extends Component {
       });
 
       await authAxios
-        .delete(`${api_hosting}/learning-material/delete-page/${pageId}`, {
+        .delete(`${URL_USER_SERVICE}/learning-material/delete-page/${pageId}`, {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
@@ -893,7 +926,7 @@ export default class Edit extends Component {
     });
 
     await authAxios
-      .post(`${api_hosting}/learning-material/update-page`, formData, {
+      .post(`${URL_USER_SERVICE}/learning-material/update-page`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -1337,9 +1370,7 @@ export default class Edit extends Component {
                   <li className="setting-01">
                     <Link
                       onClick={() => {
-                        window.location.replace(
-                          `${DASHBOARD_URL}/auth/tutor-dashboard/content-builder`
-                        );
+                        window.location.replace(URL_DASHBOARD_CONTENT_BUILDER);
                       }}
                     >
                       <div className="blue-box"></div>
