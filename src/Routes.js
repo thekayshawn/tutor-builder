@@ -10,13 +10,11 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import CoursesAvailble from "./containers/CoursesAvailble";
 import LearnerShowPages from "./containers/LearnerShowPages";
 import OldDashboard from "./containers/OldDashboard";
-import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 export default function Routes() {
-  const history = useHistory();
-
   return (
-    <BrowserRouter history={history}>
+    <BrowserRouter>
       <Switch>
         <ProtectedRoute
           exact
@@ -62,17 +60,17 @@ export default function Routes() {
           component={LearnerShowPages}
           role={"learner"}
         ></ProtectedRoute>
-        <Route exact path="/:id/:title" component={Dashboard} role={"tutor"} />
         <Route
           exact
           path="/edit/:id/:title"
           component={OldDashboard}
           role={"tutor"}
         />
-        <Route exact path="/:id/:title" component={Dashboard} role={"tutor"} />
+        {/* New Dashboard. */}
+        <Route exact path="/:id" component={Dashboard} role={"tutor"} />
         <Route
           exact
-          path="/:id/:title/page/:page"
+          path="/:id/page/:page"
           component={Dashboard}
           role={"tutor"}
         />

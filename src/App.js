@@ -7,6 +7,10 @@ import { useLocation } from "react-router-dom";
 import { getAuthHeaders, isObjectValid } from "./utils";
 import { Error403, Error500 } from "./components/error";
 
+// Static.
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
 function App() {
   const [state, setState] = React.useState("loading");
 
@@ -59,12 +63,15 @@ function App() {
   }, [token, user]);
 
   return (
-    {
-      erred: <Error500 />,
-      loading: <Loader />,
-      authenticated: <Routes />,
-      unauthenticated: <Error403 />,
-    }[state] || <Error500 />
+    <>
+      <ToastContainer />
+      {{
+        erred: <Error500 />,
+        loading: <Loader />,
+        authenticated: <Routes />,
+        unauthenticated: <Error403 />,
+      }[state] || <Error500 />}
+    </>
   );
 }
 

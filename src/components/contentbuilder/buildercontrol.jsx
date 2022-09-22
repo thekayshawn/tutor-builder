@@ -215,8 +215,8 @@ BuilderControl.defaultProps = {
   sidePanel: "left",
   snippetDisplay: "visible",
   toolbarAddSnippetButton: true,
-  snippetPath: "../assets/minimalist-blocks/",
-  snippetUrl: "../assets/minimalist-blocks/content.js", // Snippet file
+  snippetPath: "/assets/minimalist-blocks/",
+  snippetUrl: "/assets/minimalist-blocks/content.js", // Snippet file
   // snippetCategories: [
   //     [120,'Basic'],
   //     [118,'Article'],
@@ -247,55 +247,55 @@ BuilderControl.defaultProps = {
     [
       101,
       '<p id="closed_collaped" class="closed_collaped">' +
-        '<img src="../assets/minimalist-blocks/preview/icon/Heading.svg" alt="svg-icon"/><span>Title</span>' +
+        '<img src="/assets/minimalist-blocks/preview/icon/Heading.svg" alt="svg-icon"/><span>Title</span>' +
         "</p>",
     ],
     [
       118,
       '<p id="closed_collaped" class="closed_collaped">' +
-        '<img src="../assets/minimalist-blocks/preview/icon/Body.svg" alt="svg-icon"/><span>Body</span>' +
+        '<img src="/assets/minimalist-blocks/preview/icon/Body.svg" alt="svg-icon"/><span>Body</span>' +
         "</p>",
     ],
     [
       122,
       '<p id="tutor_image_collapse">' +
-        '<img src="../assets/minimalist-blocks/preview/icon/Images.svg" alt="svg-icon"/><span>Image</span>' +
+        '<img src="/assets/minimalist-blocks/preview/icon/Images.svg" alt="svg-icon"/><span>Image</span>' +
         "</p>",
     ],
     [
       120,
       '<p id="closed_collaped" class="closed_collaped">' +
-        '<img src="../assets/minimalist-blocks/preview/icon/Video.svg" alt="svg-icon"/><span>Video</span>' +
+        '<img src="/assets/minimalist-blocks/preview/icon/Video.svg" alt="svg-icon"/><span>Video</span>' +
         "</p>",
     ],
     [
       126,
       '<p id="closed_collaped" class="closed_collaped">' +
-        '<img src="../assets/minimalist-blocks/preview/icon/Books.svg" alt="svg-icon"/><span>Quiz</span>' +
+        '<img src="/assets/minimalist-blocks/preview/icon/Books.svg" alt="svg-icon"/><span>Quiz</span>' +
         "</p>",
     ],
     [
       115,
       '<p id="closed_collaped" class="closed_collaped">' +
-        '<img src="../assets/minimalist-blocks/preview/icon/Questions.svg" alt="svg-icon"/><span>FAQ</span>' +
+        '<img src="/assets/minimalist-blocks/preview/icon/Questions.svg" alt="svg-icon"/><span>FAQ</span>' +
         "</p>",
     ],
     [
       108,
       '<p id="tutor_qoutes_collapse">' +
-        '<img src="../assets/minimalist-blocks/preview/icon/Quote.svg" alt="svg-icon"/><span>Quotes</span>' +
+        '<img src="/assets/minimalist-blocks/preview/icon/Quote.svg" alt="svg-icon"/><span>Quotes</span>' +
         "</p>",
     ],
     [
       106,
       '<p id="closed_collaped" class="closed_collaped">' +
-        '<img src="../assets/minimalist-blocks/preview/icon/Subtask.svg" alt="svg-icon"/><span>Process</span>' +
+        '<img src="/assets/minimalist-blocks/preview/icon/Subtask.svg" alt="svg-icon"/><span>Process</span>' +
         "</p>",
     ],
     [
       119,
       '<p id="closed_collaped" class="closed_collaped">' +
-        '<img src="../assets/minimalist-blocks/preview/icon/Button.svg" alt="svg-icon"/><span>Button</span>' +
+        '<img src="/assets/minimalist-blocks/preview/icon/Button.svg" alt="svg-icon"/><span>Button</span>' +
         "</p>",
     ],
   ],

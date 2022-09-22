@@ -5,11 +5,33 @@ import { URL_LOGOUT } from "../env";
  * @param {string} token the Authentication token.
  * @returns {Object} The required headers.
  */
-export const getAuthHeaders = (token) => ({
-  "X-Auth-Token": token,
-  Accept: "application/json",
-  "Content-Type": "application/json",
-});
+export const getAuthHeaders = (token) => {
+  return {
+    "X-Auth-Token":
+      token || JSON.parse(localStorage.getItem("user") || "{}").access_token,
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+};
+
+/**
+ * Generates a formData instance based on the key-value
+ * pairs of an object.
+ *
+ * @param {Object} object
+ *
+ * @returns {FormData}
+ */
+export function getFormDataFromObject(object) {
+  if (!isObjectValid(object))
+    throw new Error("😑 What a mess. This object isn't even a valid object");
+
+  const formData = new FormData();
+
+  Object.entries(object).forEach(([key, value]) => formData.append(key, value));
+
+  return formData;
+}
 
 /**
  * @return {boolean}

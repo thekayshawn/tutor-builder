@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import * as React from "react";
 
 // Components.
@@ -7,17 +8,19 @@ import Loader from "../components/loader";
 import { Error500 } from "../components/error";
 
 // Utils.
-import { apiService } from "../service";
+import { apiService, deletePage } from "../service";
 import { getAuthHeaders } from "../utils";
 import { URL_USER_SERVICE } from "../env";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 // Static.
 import "./Home.css";
+import { toast } from "react-toastify";
 
 function Dashboard() {
   const { id } = useParams();
-  const { user_type, access_token } = JSON.parse(localStorage.getItem("user"));
+  const history = useHistory();
+  const { user_type } = JSON.parse(localStorage.getItem("user"));
   const [{ data, state }, setState] = React.useState({
     data: [],
     state: "loading",
@@ -26,12 +29,38 @@ function Dashboard() {
   React.useEffect(() => {
     // Request the metadata for the current set of learning materials.
     apiService.get({
-      headers: getAuthHeaders(access_token),
+      headers: getAuthHeaders(),
       url: `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id}?order=ASC`,
       onSuccess: ({ data }) => setState({ data, state: "loaded" }),
       onFailure: () => setState({ state: "erred" }),
     });
-  }, [id, access_token]);
+  }, [id]);
+
+  /**
+   * Updates the list of pages while removing the page with the specified id.
+   * Moreover, navigates the user to the new first page of the list.
+   * @param {number} page_id
+   */
+  function onDeletePageListener(page_id) {
+    // There's just one page.
+    if (data.length <= 1) {
+      toast.info("This is the only page so far, no point in deleting it.");
+      return;
+    }
+
+    deletePage({
+      page_id,
+      onSuccess: () => {
+        setState((lastState) => ({
+          ...lastState,
+          data: data.filter((page) => page_id == page.page_id),
+        }));
+
+        // Not passing a page results in the first page being displayed.
+        history.push(`/${id}`);
+      },
+    });
+  }
 
   return (
     <div>
@@ -74,7 +103,7 @@ function Dashboard() {
         ) : state === "loading" ? (
           <Loader />
         ) : data ? (
-          <Editor data={data} token={access_token} />
+          <Editor {...{ data, onDeletePageListener }} />
         ) : (
           <Error500 />
         )
