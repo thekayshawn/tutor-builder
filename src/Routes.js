@@ -9,6 +9,7 @@ import EditContent from "./containers/EditContent";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CoursesAvailble from "./containers/CoursesAvailble";
 import LearnerShowPages from "./containers/LearnerShowPages";
+import OldDashboard from "./containers/OldDashboard";
 import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
 
 export default function Routes() {
@@ -61,12 +62,20 @@ export default function Routes() {
           component={LearnerShowPages}
           role={"learner"}
         ></ProtectedRoute>
+        <Route exact path="/:id/:title" component={Dashboard} role={"tutor"} />
         <Route
           exact
-          path="/:id/:title"
+          path="/edit/:id/:title"
+          component={OldDashboard}
+          role={"tutor"}
+        />
+        <Route exact path="/:id/:title" component={Dashboard} role={"tutor"} />
+        <Route
+          exact
+          path="/:id/:title/page/:page"
           component={Dashboard}
           role={"tutor"}
-        ></Route>
+        />
         <Route path="/">
           <Home />
         </Route>

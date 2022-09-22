@@ -24,10 +24,10 @@ export default class Edit extends Component {
     super(props);
 
     this.state = {
-      contentMeta: {
-        data: [],
-        state: "loading",
-      },
+      // contentMeta: {
+      //   data: [],
+      //   state: "loading",
+      // },
       html: "new page",
       visible: false,
       title: "",
@@ -513,23 +513,23 @@ export default class Edit extends Component {
     // }
 
     const user = JSON.parse(localStorage.getItem("user"));
-    const contentId = window.location.pathname.split("/")[1];
+    // const contentId = window.location.pathname.split("/")[1];
 
-    // Request the metadata for the current set of learning materials.
-    apiService.get({
-      headers: getAuthHeaders(user.access_token),
-      url: `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${contentId}?order=ASC`,
-      onSuccess: ({ data }) =>
-        this.setState({
-          ...this.state,
-          contentMeta: { data, state: "loaded" },
-        }),
-      onFailure: (error) =>
-        this.setState({
-          ...this.state,
-          contentMeta: { state: "erred" },
-        }),
-    });
+    // // Request the metadata for the current set of learning materials.
+    // apiService.get({
+    //   headers: getAuthHeaders(user.access_token),
+    //   url: `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${contentId}?order=ASC`,
+    //   onSuccess: ({ data }) =>
+    //     this.setState({
+    //       ...this.state,
+    //       contentMeta: { data, state: "loaded" },
+    //     }),
+    //   onFailure: (error) =>
+    //     this.setState({
+    //       ...this.state,
+    //       contentMeta: { state: "erred" },
+    //     }),
+    // });
 
     const pathName = window.location.pathname;
     const lm_id = pathName.split("/", 2);
@@ -540,37 +540,37 @@ export default class Edit extends Component {
       },
     });
     /// var id1 = this.props.match.params.id;
-    // let url = `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id1}?order=ASC`;
-    // console.log(url);
-    // const result1 = await authAxios.get(url);
-    // console.log(result1);
-    // if (result1.data.status == false) {
-    //   this.addFirstpage();
-    //   let url = `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id1}?order=ASC`;
-    //   console.log("iffff", url);
-    //   const result1 = await authAxios.get(url);
-    //   var response = result1.data.data;
-    //   console.log("response-runing page iffff", response);
-    //   this.setState({
-    //     learning_material: [response],
-    //     page_meta_title: response[0].title,
-    //     title_edit: response[0].title,
-    //     description_edit: response[0].description,
-    //     selectedFile_edit: response[0].thumbnail,
-    //   });
-    // } else {
-    //   let url = `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id1}?order=ASC`;
-    //   console.log("else", url);
-    //   const result1 = await authAxios.get(url);
-    //   var response = result1.data.data;
-    //   this.setState({
-    //     learning_material: [response],
-    //     page_meta_title: response[0].title,
-    //     title_edit: response[0].title,
-    //     description_edit: response[0].description,
-    //     selectedFile_edit: response[0].thumbnail,
-    //   });
-    // }
+    let url = `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id1}?order=ASC`;
+    console.log(url);
+    const result1 = await authAxios.get(url);
+    console.log(result1);
+    if (result1.data.status == false) {
+      this.addFirstpage();
+      let url = `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id1}?order=ASC`;
+      console.log("iffff", url);
+      const result1 = await authAxios.get(url);
+      var response = result1.data.data;
+      console.log("response-runing page iffff", response);
+      this.setState({
+        learning_material: [response],
+        page_meta_title: response[0].title,
+        title_edit: response[0].title,
+        description_edit: response[0].description,
+        selectedFile_edit: response[0].thumbnail,
+      });
+    } else {
+      let url = `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id1}?order=ASC`;
+      console.log("else", url);
+      const result1 = await authAxios.get(url);
+      var response = result1.data.data;
+      this.setState({
+        learning_material: [response],
+        page_meta_title: response[0].title,
+        title_edit: response[0].title,
+        description_edit: response[0].description,
+        selectedFile_edit: response[0].thumbnail,
+      });
+    }
     //   //Fetch Pages Ends
     var id_content = this.state.learning_material[0][0].id;
     console.log("testing done", id_content);

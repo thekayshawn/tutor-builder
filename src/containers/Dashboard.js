@@ -1,16 +1,37 @@
+import * as React from "react";
+
 // Components.
-import Edit from "./Edit";
-import { Link } from "react-router-dom";
+import Editor from "./Editor";
 import Courses from "./CoursesAvailble";
+import Loader from "../components/loader";
+import { Error500 } from "../components/error";
 
 // Utils.
-import { logout } from "../utils";
+import { apiService } from "../service";
+import { getAuthHeaders } from "../utils";
+import { URL_USER_SERVICE } from "../env";
+import { useParams } from "react-router-dom";
 
 // Static.
 import "./Home.css";
 
 function Dashboard() {
-  const { user_type } = JSON.parse(localStorage.getItem("user"));
+  const { id } = useParams();
+  const { user_type, access_token } = JSON.parse(localStorage.getItem("user"));
+  const [{ data, state }, setState] = React.useState({
+    data: [],
+    state: "loading",
+  });
+
+  React.useEffect(() => {
+    // Request the metadata for the current set of learning materials.
+    apiService.get({
+      headers: getAuthHeaders(access_token),
+      url: `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id}?order=ASC`,
+      onSuccess: ({ data }) => setState({ data, state: "loaded" }),
+      onFailure: () => setState({ state: "erred" }),
+    });
+  }, [id, access_token]);
 
   return (
     <div>
@@ -47,7 +68,19 @@ function Dashboard() {
           </div>
         </div>
       </nav> */}
-      {user_type === "tutor" ? <Edit /> : <Courses />}
+      {user_type === "tutor" ? (
+        state === "erred" ? (
+          <Error500 />
+        ) : state === "loading" ? (
+          <Loader />
+        ) : data ? (
+          <Editor data={data} token={access_token} />
+        ) : (
+          <Error500 />
+        )
+      ) : (
+        <Courses />
+      )}
     </div>
   );
 }
