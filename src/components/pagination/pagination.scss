@@ -1,0 +1,20 @@
+.page-link[disabled] {
+  color: gray !important;
+
+  :is(:hover, :focus) {
+    color: gray !important;
+  }
+}
+
+// Overriding the BS thrown by contentbuilder.scss.
+ul.pagination li {
+  margin: 0 !important;
+}
+
+.pagination .page-item.active .page-link {
+  margin-top: 0 !important;
+  height: 24px !important;
+  width: 24px !important;
+  color: #ffffff;
+  line-height: inherit !important;
+}

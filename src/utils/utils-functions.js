@@ -44,6 +44,21 @@ export const isObjectValid = (object) =>
   Object.keys(object).length > 0 &&
   Object.getPrototypeOf(object) === Object.prototype;
 
+/**
+ * @see https://stackoverflow.com/a/24457420
+ * @param {any} subject
+ * @returns {Boolean}
+ */
+const isNumeric = (subject) => /^-?\d+$/.test(subject);
+
+/**
+ * Stricly checks if even the type of a value is number o not.
+ * @param {any} subject
+ * @returns {Boolean}
+ */
+export const isStrictlyNumeric = (subject) =>
+  typeof subject === "number" && isNumeric(subject);
+
 export function logout() {
   localStorage.removeItem("user");
   window.open(URL_LOGOUT);

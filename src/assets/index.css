@@ -3,7 +3,7 @@
   --bs-secondary-rgb: 5, 56, 107;
   --bs-secondary: rgb(var(--bs-secondary-rgb));
 
-  /* Toastify. */
+  /* Others. */
   --toastify-z-index: 100000;
 }
 
@@ -55,5 +55,17 @@
 }
 
 .z-100 {
-  z-index: 10000000000 !important;
+  z-index: 10000 !important;
+}
+
+.fs-5\.5 {
+  font-size: 0.9rem !important;
+}
+
+.fs-7 {
+  font-size: 0.75rem !important;
+}
+
+.fs-8 {
+  font-size: 0.65rem !important;
 }

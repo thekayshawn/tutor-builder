@@ -1,36 +1,37 @@
 import { toast } from "react-toastify";
 import apiService from "../service-api";
 import { URL_USER_SERVICE } from "../../env";
-import { getAuthHeaders } from "../../utils";
+import { getAuthHeaders, getFormDataFromObject } from "../../utils";
 
 /**
- * Delete a page from the database.
+ * Update a page's content using the API.
  * @param {Object} props
  * @param {number} props.page_id
+ * @param {string} props.html
  */
-function deletePage({ page_id, onSuccess, onFailure }) {
+function updatePageContent({ page_id, html, onSuccess, onFailure }) {
   if (!page_id) {
     toast.error("Internal server error! Please try again.");
     console.error(
-      `Missing 'page_id' parameter in ${deletePage.name} function!`
+      `Missing 'page_id' parameter in ${updatePageContent.name} function!`
     );
     return;
   }
 
-  const burger = toast("Deleting...", {
+  const burger = toast("Saving...", {
     isLoading: true,
   });
 
-  apiService.delete({
-    recordId: page_id,
+  apiService.post({
     headers: getAuthHeaders(),
-    url: `${URL_USER_SERVICE}/contentbuilder/learning-material/delete-page`,
+    data: getFormDataFromObject({ page_id, html }),
+    url: `${URL_USER_SERVICE}/api/learning-material/update`,
     onSuccess: ({ data }) => {
       toast.update(burger, {
         autoClose: true,
         isLoading: false,
         type: toast.TYPE.SUCCESS,
-        render: "Page reduced to atoms.",
+        render: "Page saved successfully.",
       });
       onSuccess?.(data, burger);
     },
@@ -39,15 +40,14 @@ function deletePage({ page_id, onSuccess, onFailure }) {
         autoClose: true,
         isLoading: false,
         type: toast.TYPE.ERROR,
-        render:
-          message || "It's a sturdy one, won't get deleted, please try again!",
+        render: message || "Unable to save right now, please try again!",
       });
       onFailure?.(
-        message || "It's a sturdy one, won't get deleted, please try again!",
+        message || "Unable to save right now, please try again!",
         burger
       );
     },
   });
 }
 
-export default deletePage;
+export default updatePageContent;

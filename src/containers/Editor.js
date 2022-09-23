@@ -2,21 +2,25 @@ import * as React from "react";
 
 // Utils.
 import config from "../config";
-import { getAuthHeaders } from "../utils";
-import { apiService, updatePage } from "../service";
+import { getAuthHeaders, isObjectValid } from "../utils";
+import { apiService, updatePageContent } from "../service";
 import { useHistory, useParams } from "react-router-dom";
 import {
+  URL_WEBSITE,
+  URL_DASHBOARD,
   URL_USER_SERVICE,
   URL_DASHBOARD_PRICING,
   URL_DASHBOARD_CONTENT_BUILDER,
-  URL_WEBSITE,
-  URL_DASHBOARD,
 } from "../env";
 
 // Components.
 import {
   Button,
+  Modal,
   Dropdown,
+  CardTitle,
+  ModalBody,
+  CardHeader,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
@@ -24,31 +28,34 @@ import {
 import { toast } from "react-toastify";
 import Loader from "../components/loader";
 import { Error404, Error500 } from "../components/error";
+import Pagination from "../components/pagination";
 import BuilderControl from "../components/contentbuilder/buildercontrol";
 
 /**
  * @param {Object} props
  *
- * @param {{
- * id: number,
- * content_id: number,
- * title: string,
- * description: string,
- * thumbnail: string | undefined
- * }[]} props.data
+ * @param {PageEntity[]} props.data
  *
- * @property {(page_id: number) => void} props.onDeletePageListener
+ * @param {number} props.number_of_pages
+ *
+ * @property {(page: object) => void} props.onCreatePage
+ *
+ * @property {(page_id: number) => void} props.onDeletePage
+ *
+ * @property {(page: Object) => void} props.onUpdatePageMeta
  *
  * @returns {JSX.Element}
  */
-function Editor({ data, onDeletePageListener }) {
-  const { page = 1 } = useParams();
-  const pageMetaData = data[page - 1];
-
-  /**
-   * A page is valid till it exceeds the number of available pages.
-   */
-  const isValidPage = data.length >= page && pageMetaData;
+function Editor({
+  data,
+  page,
+  onDeletePage,
+  onCreatePage,
+  onUpdatePageMeta,
+  number_of_pages,
+}) {
+  // There's is either a single entry or nothing at all.
+  const pageMetaData = data[0];
 
   // References.
   const history = useHistory();
@@ -56,29 +63,36 @@ function Editor({ data, onDeletePageListener }) {
 
   // State.
   const [
-    { state, currentPage, newPageModal, editPageModal, isMenuDropdownOpen },
+    { state, pageContent, newPageModal, editPageModal, isMenuDropdownOpen },
     setState,
   ] = React.useState({
     state: "loading",
-    currentPage: {
-      page_id: null,
+    pageContent: {
       questions: [],
       html: "",
     },
     newPageModal: {
+      isOpen: false,
       title: "",
       description: "",
       thumbnail: null,
     },
     editPageModal: {
-      title: pageMetaData.title,
-      description: pageMetaData.description,
-      thumbnail: pageMetaData.thumbnail,
+      isOpen: false,
+      title: pageMetaData?.title,
+      description: pageMetaData?.description,
+      thumbnail: pageMetaData?.thumbnail,
     },
     isMenuDropdownOpen: false,
   });
 
-  console.log({ data, isValidPage, currentPage, newPageModal, editPageModal });
+  console.log({
+    data,
+    pageContent,
+    pageMetaData,
+    newPageModal,
+    editPageModal,
+  });
 
   // Effects.
   React.useEffect(() => {
@@ -86,25 +100,23 @@ function Editor({ data, onDeletePageListener }) {
     }
 
     // No page to fetch data for.
-    if (!isValidPage) return;
+    if (!pageMetaData) return;
 
     // Request the content of the current page.
     apiService.get({
       headers: getAuthHeaders(),
-      url: `${URL_USER_SERVICE}/api/learning-material/fetch-page-content/${
-        data[page - 1].id
-      }`,
+      url: `${URL_USER_SERVICE}/api/learning-material/fetch-page-content/${pageMetaData.id}`,
       onSuccess: ({ data }) =>
         setState((lastState) => ({
           ...lastState,
           state: "loaded",
-          currentPage: data,
+          pageContent: isObjectValid(data) ? data : pageContent,
         })),
       onFailure: () =>
         setState((lastState) => ({ ...lastState, state: "erred" })),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, data]);
+  }, [page]);
 
   // async function handleOnSave(html, pageNumber) {
   //   const builderHTML = contentBuilderRef.current.getHTML();
@@ -523,7 +535,7 @@ function Editor({ data, onDeletePageListener }) {
 
     // Update.
     return {
-      page_id: currentPage.page_id,
+      page_id: pageMetaData.id,
       html: contentBuilderRef.current.getHTML(),
     };
   }
@@ -532,9 +544,9 @@ function Editor({ data, onDeletePageListener }) {
    * Listener for the save action.
    * @returns {void}
    */
-  function onSaveListener() {
+  function onUpdateContentListener() {
     // Update.
-    updatePage(getPageData());
+    updatePageContent(getPageData());
   }
 
   /**
@@ -544,10 +556,12 @@ function Editor({ data, onDeletePageListener }) {
   function onContinueListener() {
     const pageData = getPageData();
 
-    updatePage({
+    // Save and continue.
+    updatePageContent({
       ...pageData,
       onSuccess: (_, burger) => {
         toast.update(burger, {
+          autoClose: true,
           isLoading: false,
           type: toast.TYPE.INFO,
           render: "Saved, redirecting to dashboard...",
@@ -560,10 +574,6 @@ function Editor({ data, onDeletePageListener }) {
         }, config.duration.REDIRECTION);
       },
     });
-  }
-
-  function onUpdateListener(e) {
-    e.preventDefault();
   }
 
   /**
@@ -598,30 +608,34 @@ function Editor({ data, onDeletePageListener }) {
     }));
   }
 
-  function onCreatePage(e) {
-    e.preventDefault();
+  function onToggleModal(modal) {
+    setState((lastState) => ({
+      ...lastState,
+      [modal]: {
+        ...lastState[modal],
+        isOpen: !lastState[modal].isOpen,
+      },
+    }));
   }
 
   return state === "erred" ? (
     <Error500 />
-  ) : // An invalid page, say 5, for a valid set of data, say an array of 4 pages.
-  !isValidPage && data.length > 0 ? (
+  ) : // An invalid page, say 5, for a valid set of data, say an array of 4 pages. Note that a page is valid when it's metadata isn't found while the actual list of pages fundamentally exists. If the list isn't there, a new page is created in a side-effect handler above.
+  !pageMetaData && data.length > 0 ? (
     <Error404 />
   ) : state === "loading" ? (
     <Loader />
   ) : (
     <>
-      <div id="overlay">
-        <div className="cv-spinner">
-          <span className="spinner"></span>
-        </div>
-      </div>
+      {/* The huge margin above the actual content builder. */}
       <div className="html_showPart"></div>
-
+      {/* The header's logo. */}
       <div className="logo_tutor">
         <img src="/assets/minimalist-blocks/preview/Logo.svg" alt="logo-img" />
       </div>
+      {/* The header's background. */}
       <div className="back_round"></div>
+      {/* The header. */}
       <div
         className="is-ui ui_save_content gap-2"
         style={{
@@ -632,7 +646,10 @@ function Editor({ data, onDeletePageListener }) {
           justifyContent: "flex-end",
         }}
       >
-        <button id="add_current" className="btn border rounded bg-light fs-5">
+        <button
+          onClick={() => onToggleModal("newPageModal")}
+          className="btn border rounded bg-light fs-5"
+        >
           <ion-icon name="add-circle-outline"></ion-icon>
         </button>
         <button
@@ -641,7 +658,11 @@ function Editor({ data, onDeletePageListener }) {
         >
           <ion-icon name="trash-outline"></ion-icon>
         </button>
-        <Button type="button" color="secondary" onClick={onSaveListener}>
+        <Button
+          type="button"
+          color="secondary"
+          onClick={onUpdateContentListener}
+        >
           Save
         </Button>
         <Button type="button" color="secondary" onClick={onContinueListener}>
@@ -650,7 +671,6 @@ function Editor({ data, onDeletePageListener }) {
         {/* <button type="button" onClick={() => callSaveAndFinish()} style={{"width":"120px"}}>Save On Page</button> */}
         {/* <button type="button" className="save-contenting" onClick={() => closeBuilder()} style={{"width":"85px"}}>Close</button> */}
       </div>
-
       {/* Delete page modal. */}
       <div
         id="confirmModal"
@@ -679,7 +699,7 @@ function Editor({ data, onDeletePageListener }) {
               </button>
               <button
                 className="btn btn-confirm"
-                onClick={() => onDeletePageListener(currentPage.page_id)}
+                onClick={() => onDeletePage(pageMetaData.id)}
               >
                 Confirm
               </button>
@@ -687,12 +707,11 @@ function Editor({ data, onDeletePageListener }) {
           </div>
         </div>
       </div>
-
       <BuilderControl
         history={history}
         ref={contentBuilderRef}
-        onSave={onSaveListener}
-        initialHtml={currentPage.html}
+        onSave={onUpdateContentListener}
+        initialHtml={pageContent.html}
         //doSave={(f) => (callSave = f)}
         //doDestroy={(f) => (callDestroy = f)}
         base64Handler={"/upload"}
@@ -717,206 +736,187 @@ function Editor({ data, onDeletePageListener }) {
       }
 
       {/* Add page modal. */}
-      <div
-        id="tutor_add_page_modal"
-        className="modal fade"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
+      <Modal
+        isOpen={newPageModal.isOpen}
+        toggle={() => onToggleModal("newPageModal")}
       >
-        <div className="modal-dialog tutor-adding-page-modal">
-          <div className="modal-content tutor_modal">
-            <div className="modal-header tutor-modal-header">
-              <div
-                className="title_modal-add modal-title h4"
-                id="contained-modal-title-vcenter"
-              >
-                Please Enter The Page Properties
-              </div>
-              <button
-                type="button"
-                id="tutor_close_page"
-                className="close"
-                data-dismiss="modal"
-              >
-                &times;
-              </button>
-            </div>
-            <div className="modal-body">
-              <form
-                onSubmit={onCreatePage}
-                encType="multipart/form-data"
-                id="tutor_add_page_modal_form"
-              >
-                <div className="row">
-                  <div className="col-lg-3 col-md-3 col-sm-12">
-                    <div
-                      className="control-group file-upload"
-                      id="file-upload1"
-                    >
-                      <div className="image-box text-center cursor-pointer">
-                        <span
-                          className="iconify tutor-iconifing"
-                          data-icon="clarity:plus-line"
-                        ></span>
-                        <img alt="" src="" id="image-thumbnail" />
-                      </div>
-                      <div className="controls" style={{ display: "none" }}>
-                        <input
-                          type="file"
-                          name="thumbnail"
-                          onChange={(e) => onChangeFile("newPageModal", e)}
-                        />
-                      </div>
-                    </div>
-                    <h4 className="tutor-popup-thumbnail">
-                      Thumbnail <span>*</span>
-                    </h4>
+        <CardHeader className="p-3 w-100 bg-white hstack justify-content-between">
+          <CardTitle>Enter properties of the new page</CardTitle>
+          <button
+            type="button"
+            className="btn fs-5"
+            onClick={() => onToggleModal("newPageModal")}
+          >
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+        </CardHeader>
+        <ModalBody>
+          <form
+            encType="multipart/form-data"
+            onSubmit={(e) => {
+              onCreatePage(e, {
+                ...newPageModal,
+                page_id: pageMetaData.id,
+                content_id: pageMetaData.content_id,
+              });
+              onToggleModal("newPageModal");
+            }}
+          >
+            <div className="row">
+              <div className="col-lg-3 col-md-3 col-sm-12">
+                <div className="control-group file-upload" id="file-upload1">
+                  <div className="image-box text-center cursor-pointer">
+                    <span
+                      className="iconify tutor-iconifing"
+                      data-icon="clarity:plus-line"
+                    ></span>
+                    <img alt="" src="" id="image-thumbnail" />
                   </div>
-                  <div className="col-lg-9 col-md-9 col-sm-12">
-                    <div className="form-group input-forming">
-                      <input
-                        type="text"
-                        name="title"
-                        className="form-control"
-                        placeholder="Enter A Title"
-                        onChange={(e) => onChangeText("newPageModal", e)}
-                      />
-                    </div>
-                    <div className="form-group input-forming">
-                      <textarea
-                        type="text"
-                        name="description"
-                        rows="4"
-                        cols="50"
-                        className="form-control"
-                        placeholder="Enter A Short Description"
-                        onChange={(e) => onChangeText("newPageModal", e)}
-                      ></textarea>
-                    </div>
-                    <div className="form-group input-forming-btn">
-                      <button
-                        type="submit"
-                        className="btn btn-Success btn-new-add"
-                      >
-                        Add New Page
-                      </button>
-                    </div>
+                  <div className="controls" style={{ display: "none" }}>
+                    <input
+                      type="file"
+                      name="thumbnail"
+                      onChange={(e) => onChangeFile("newPageModal", e)}
+                    />
                   </div>
                 </div>
-              </form>
+                <h4 className="tutor-popup-thumbnail">
+                  Thumbnail <span>*</span>
+                </h4>
+              </div>
+              <div className="col-lg-9 col-md-9 col-sm-12">
+                <div className="form-group input-forming">
+                  <input
+                    type="text"
+                    name="title"
+                    className="form-control"
+                    placeholder="Enter A Title"
+                    onChange={(e) => onChangeText("newPageModal", e)}
+                  />
+                </div>
+                <div className="form-group input-forming">
+                  <textarea
+                    type="text"
+                    name="description"
+                    rows="4"
+                    cols="50"
+                    className="form-control"
+                    placeholder="Enter A Short Description"
+                    onChange={(e) => onChangeText("newPageModal", e)}
+                  ></textarea>
+                </div>
+                <div className="form-group input-forming-btn">
+                  <button type="submit" className="btn btn-Success btn-new-add">
+                    Add New Page
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
-
+          </form>
+        </ModalBody>
+      </Modal>
       {/* Edit page modal. */}
-      <div
-        id="tutor_edit_page_modal"
-        className="edit-prop-model modal fade"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
+      <Modal
+        isOpen={editPageModal.isOpen}
+        toggle={() => onToggleModal("editPageModal")}
       >
-        <div className="modal-dialog tutor-adding-page-modal">
-          <div className="modal-content tutor_modal">
-            <div className="modal-header tutor-modal-header">
-              <div
-                className="title_modal-add modal-title h4"
-                id="contained-modal-title-vcenter"
-              >
-                Modify the currently opened page.
-              </div>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                id="tutor_closing_page"
-              >
-                &times;
-              </button>
-            </div>
-            <div className="modal-body">
-              <form onSubmit={onUpdateListener} encType="multipart/form-data">
-                <div className="row">
-                  <div className="col-lg-3 col-md-3 col-sm-12">
-                    <div
-                      className="control-group file-upload"
+        <CardHeader className="p-3 w-100 bg-white hstack justify-content-between">
+          <CardTitle>Modify the currently opened page</CardTitle>
+          <button
+            type="button"
+            className="btn fs-5"
+            onClick={() => onToggleModal("editPageModal")}
+          >
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+        </CardHeader>
+        <ModalBody>
+          <form
+            encType="multipart/form-data"
+            onSubmit={(e) => {
+              onUpdatePageMeta(e, {
+                ...editPageModal,
+                page_id: pageMetaData.id,
+                content_id: pageMetaData.content_id,
+              });
+              onToggleModal("editPageModal");
+            }}
+          >
+            <div className="row">
+              <div className="col-lg-3 col-md-3 col-sm-12">
+                <div className="control-group file-upload" id="file-upload1">
+                  <label
+                    htmlFor="file-upload1"
+                    className="image-box text-center cursor-pointer w-100"
+                  >
+                    <span
+                      className="iconify tutor-iconifing"
+                      data-icon="clarity:plus-line"
+                    ></span>
+                    <img alt="" src="" id="image-thumbnail" />
+                  </label>
+                  <div className="controls" style={{ display: "none" }}>
+                    <input
+                      type="file"
+                      name="thumbnail"
                       id="file-upload1"
-                    >
-                      <div className="image-box text-center cursor-pointer">
-                        <span
-                          className="iconify tutor-iconifing"
-                          data-icon="clarity:plus-line"
-                        ></span>
-                        <img alt="" src="" id="image-thumbnail" />
-                      </div>
-                      <div className="controls" style={{ display: "none" }}>
-                        <input
-                          type="file"
-                          name="thumbnail"
-                          onChange={(e) => onChangeFile("editPageModal", e)}
-                        />
-                      </div>
-                    </div>
-                    <h4 className="tutor-popup-thumbnail">
-                      Thumbnail <span>*</span>
-                    </h4>
-                  </div>
-                  <div className="col-lg-9 col-md-9 col-sm-12">
-                    <div className="form-group input-forming">
-                      <input
-                        type="text"
-                        name="title"
-                        className="form-control"
-                        placeholder="Enter A Title"
-                        value={editPageModal.title}
-                        onChange={(e) => onChangeText("editPageModal", e)}
-                      />
-                    </div>
-                    <div className="form-group input-forming">
-                      <textarea
-                        type="text"
-                        name="description"
-                        rows="4"
-                        cols="50"
-                        className="form-control"
-                        value={editPageModal.description}
-                        placeholder="Enter A Short Description"
-                        onChange={(e) => onChangeText("editPageModal", e)}
-                      ></textarea>
-                    </div>
-                    <div className="form-group input-forming-btn">
-                      <button
-                        type="submit"
-                        className="btn btn-Success btn-new-edit"
-                      >
-                        Update The Page
-                      </button>
-                    </div>
+                      onChange={(e) => onChangeFile("editPageModal", e)}
+                    />
                   </div>
                 </div>
-              </form>
+                <h4 className="tutor-popup-thumbnail">
+                  Thumbnail <span>*</span>
+                </h4>
+              </div>
+              <div className="col-lg-9 col-md-9 col-sm-12">
+                <div className="form-group input-forming">
+                  <input
+                    type="text"
+                    name="title"
+                    className="form-control"
+                    placeholder="Enter A Title"
+                    value={editPageModal.title}
+                    onChange={(e) => onChangeText("editPageModal", e)}
+                  />
+                </div>
+                <div className="form-group input-forming">
+                  <textarea
+                    type="text"
+                    name="description"
+                    rows="4"
+                    cols="50"
+                    className="form-control"
+                    value={editPageModal.description}
+                    placeholder="Enter A Short Description"
+                    onChange={(e) => onChangeText("editPageModal", e)}
+                  ></textarea>
+                </div>
+                <div className="form-group input-forming-btn">
+                  <button
+                    type="submit"
+                    className="btn btn-Success btn-new-edit"
+                  >
+                    Update The Page
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
+          </form>
+        </ModalBody>
+      </Modal>
 
       <div className="back_rounds"></div>
 
-      {/* <Pagination
-        activePage={state.currentPage}
-        itemsCountPerPage={1}
-        totalItemsCount={state.number_of_pages}
-        pageRangeDisplayed={state.id}
-        onChange={fetchThePagination.bind(this)}
-        itemClass="page-item"
-        linkClass="page-link"
-      /> */}
+      <Pagination
+        type="pages"
+        itemsPerPage={1}
+        className="mb-2"
+        currentPage={parseInt(page)}
+        totalItems={parseInt(number_of_pages)}
+        onChangePage={(newPage) =>
+          history.push(`/${pageMetaData.content_id}/page/${newPage}`)
+        }
+      />
 
       <nav
         style={{ zIndex: 100 }}
@@ -925,7 +925,7 @@ function Editor({ data, onDeletePageListener }) {
         {/* Settings button. */}
         <button
           type="button"
-          id="edit_current"
+          onClick={() => onToggleModal("editPageModal")}
           className="btn border rounded bg-light fs-5"
         >
           <ion-icon name="settings-outline"></ion-icon>

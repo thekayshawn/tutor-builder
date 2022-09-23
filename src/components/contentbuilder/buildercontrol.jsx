@@ -1,7 +1,6 @@
+/* eslint-disable eqeqeq */
 import React, { Component } from "react";
 import axios from "axios";
-import { Container, Row, Col } from "reactstrap";
-import ReactHtmlParser from "react-html-parser";
 import ContentBuilder from "@innovastudio/contentbuilder";
 import "./contentbuilder.css";
 import $ from "jquery";
@@ -159,12 +158,18 @@ class BuilderControl extends Component {
     var quiz_questionnaire = document.querySelectorAll(
       ".quiz-questionnaire form"
     );
-    for (let question of quiz_questionnaire) {
-      if (question.querySelector("input[name=question_ref_id]").value == "") {
-        question.querySelector("input[name=question_ref_id]").value =
-          Math.floor(new Date().getTime() / 1000) +
-          Math.floor(Math.random() * 10100);
-        //+Math.floor(Math.random() * 10100)+
+    if (quiz_questionnaire && quiz_questionnaire.length) {
+      for (let question of quiz_questionnaire) {
+        let value = question?.querySelector(
+          "input[name=question_ref_id]"
+        ).value;
+
+        if (value == "") {
+          value =
+            Math.floor(new Date().getTime() / 1000) +
+            Math.floor(Math.random() * 10100);
+          //+Math.floor(Math.random() * 10100)+
+        }
       }
     }
 
