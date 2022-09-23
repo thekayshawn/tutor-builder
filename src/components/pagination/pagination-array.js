@@ -67,10 +67,7 @@ function PaginationArray({
   }
 
   return (
-    <PaginationNav
-      listClassName="m-0 gap-1 align-items-center flex-wrap"
-      {...props}
-    >
+    <PaginationNav listClassName="m-0 hstack gap-1 flex-wrap" {...props}>
       <PreviousLink
         type="array"
         currentHead={currentIndex}
@@ -103,7 +100,7 @@ function PaginationArray({
           <PaginationItem key={index} active={isActive}>
             <PaginationLink
               onClick={() => isActive || onChangeIndex(index * itemsPerPage)}
-              className={`fw-bold fs-7 hstack ${
+              className={`fw-bold fs-7 p-0 ${
                 isActive
                   ? "text-success border-0 rounded-circle"
                   : "border-0 text-secondary"

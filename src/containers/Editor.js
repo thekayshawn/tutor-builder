@@ -51,8 +51,8 @@ function Editor({
   page,
   onDeletePage,
   onCreatePage,
-  onUpdatePageMeta,
   number_of_pages,
+  onUpdatePageMeta,
 }) {
   // There's is either a single entry or nothing at all.
   const pageMetaData = data[0];
@@ -906,22 +906,19 @@ function Editor({
       </Modal>
 
       <div className="back_rounds"></div>
-
-      <Pagination
-        type="pages"
-        itemsPerPage={1}
-        className="mb-2"
-        currentPage={parseInt(page)}
-        totalItems={parseInt(number_of_pages)}
-        onChangePage={(newPage) =>
-          history.push(`/${pageMetaData.content_id}/page/${newPage}`)
-        }
-      />
-
       <nav
         style={{ zIndex: 100 }}
         className="position-fixed bottom-0 end-0 m-2 hstack gap-2"
       >
+        <Pagination
+          type="pages"
+          itemsPerPage={1}
+          currentPage={parseInt(page)}
+          totalItems={parseInt(number_of_pages)}
+          onChangePage={(newPage) =>
+            history.push(`/${pageMetaData.content_id}/page/${newPage}`)
+          }
+        />
         {/* Settings button. */}
         <button
           type="button"

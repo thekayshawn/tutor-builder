@@ -9,7 +9,7 @@ export const URL_DASHBOARD_PRICING =
 // Integers.
 const config = {
   duration: {
-    REDIRECTION: 5000,
+    REDIRECTION: 3000,
   },
 };
 

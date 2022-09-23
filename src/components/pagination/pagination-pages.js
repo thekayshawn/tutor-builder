@@ -66,10 +66,7 @@ function PaginationPages({
   }
 
   return (
-    <PaginationNav
-      listClassName="m-0 gap-1 align-items-center flex-wrap"
-      {...props}
-    >
+    <PaginationNav listClassName="m-0 hstack gap-1 flex-wrap" {...props}>
       <PreviousLink
         type="pages"
         currentHead={currentPage}
@@ -84,10 +81,14 @@ function PaginationPages({
         const isActive = currentPage === index + 1;
 
         return (
-          <PaginationItem key={index} active={isActive}>
+          <PaginationItem
+            key={index}
+            active={isActive}
+            className="position-relative"
+          >
             <PaginationLink
               onClick={() => isActive || onChangePage(1 + index)}
-              className={`fw-bold fs-7 hstack ${
+              className={`fw-bold fs-7 p-0 ${
                 isActive
                   ? "text-success border-0 rounded-circle"
                   : "border-0 text-secondary"

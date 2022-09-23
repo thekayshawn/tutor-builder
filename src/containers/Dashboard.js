@@ -75,7 +75,7 @@ function Dashboard() {
    */
   function onDeletePage(page_id) {
     // There's just one page.
-    if (pages.length <= 1) {
+    if (number_of_pages == 1) {
       toast.info("This is the only page so far, no point in deleting it.");
       return;
     }
