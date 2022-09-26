@@ -2,9 +2,9 @@ import * as React from "react";
 
 // Utils.
 import config from "../config";
+import { useHistory } from "react-router-dom";
 import { getAuthHeaders, isObjectValid } from "../utils";
 import { apiService, updatePageContent } from "../service";
-import { useHistory, useParams } from "react-router-dom";
 import {
   URL_WEBSITE,
   URL_DASHBOARD,
@@ -80,8 +80,8 @@ function Editor({
     editPageModal: {
       isOpen: false,
       title: pageMetaData?.title,
-      description: pageMetaData?.description,
       thumbnail: pageMetaData?.thumbnail,
+      description: pageMetaData?.description,
     },
     isMenuDropdownOpen: false,
   });
@@ -96,11 +96,20 @@ function Editor({
 
   // Effects.
   React.useEffect(() => {
-    if (!data.length) {
-    }
-
     // No page to fetch data for.
     if (!pageMetaData) return;
+
+    // The editPageModal needs to be updated whenever the pageMetaData changes.
+    // PageMetaData changes whenever a page changes.
+    setState((lastState) => ({
+      ...lastState,
+      editPageModal: {
+        isOpen: false,
+        title: pageMetaData.title,
+        thumbnail: pageMetaData.thumbnail,
+        description: pageMetaData.description,
+      },
+    }));
 
     // Request the content of the current page.
     apiService.get({
@@ -688,21 +697,15 @@ function Editor({
               <h5>Are you sure you want to delete this page?</h5>
             </div>
             <div className="modal-footer">
-              <button
-                type="button"
-                id="close_hide"
-                className="close btn btn-danger"
-                data-dismiss="modal"
-                aria-hidden="true"
-              >
+              <Button type="button" color="danger" id="close_hide">
                 Cancel
-              </button>
-              <button
-                className="btn btn-confirm"
+              </Button>
+              <Button
+                color="success"
                 onClick={() => onDeletePage(pageMetaData.id)}
               >
                 Confirm
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -806,9 +809,9 @@ function Editor({
                   ></textarea>
                 </div>
                 <div className="form-group input-forming-btn">
-                  <button type="submit" className="btn btn-Success btn-new-add">
+                  <Button color="success" type="submit" className="w-100">
                     Add New Page
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -892,12 +895,9 @@ function Editor({
                   ></textarea>
                 </div>
                 <div className="form-group input-forming-btn">
-                  <button
-                    type="submit"
-                    className="btn btn-Success btn-new-edit"
-                  >
+                  <Button color="success" type="submit" className="w-100">
                     Update The Page
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
