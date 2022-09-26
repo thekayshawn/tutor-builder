@@ -26,7 +26,7 @@ function createPage({ data, onSuccess, onFailure }) {
 
   apiService.post({
     headers: getAuthHeaders(),
-    data: getFormDataFromObject({ ...data, html: "" }),
+    data: getFormDataFromObject(data),
     url: `${URL_USER_SERVICE}/contentbuilder/learning-material/add-page`,
     onSuccess: ({ data }) => {
       toast.update(burger, {

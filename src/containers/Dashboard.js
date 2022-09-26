@@ -9,7 +9,7 @@ import { Error500 } from "../components/error";
 
 // Utils.
 import config from "../config";
-import { getAuthHeaders } from "../utils";
+import { getAuthHeaders, getFormDataFromObject } from "../utils";
 import { URL_USER_SERVICE } from "../env";
 import { useParams } from "react-router-dom";
 import { apiService, createPage, deletePage } from "../service";
@@ -112,13 +112,9 @@ function Dashboard() {
     updatePageMeta({
       data: meta,
       onSuccess: (updatedPage) => {
-        const newPages = pages.slice();
-        newPages[newPages.findIndex((page) => updatedPage.page_id == page.id)] =
-          updatedPage;
-
         setState((lastState) => ({
           ...lastState,
-          pages: newPages,
+          pages: [updatedPage],
         }));
       },
     });

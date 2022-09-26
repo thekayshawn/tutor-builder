@@ -6,14 +6,21 @@ import { getAuthHeaders, getFormDataFromObject } from "../../utils";
 /**
  * Update a page's content using the API.
  * @param {Object} props
- * @param {number} props.page_id
  * @param {string} props.html
+ * @param {number} props.page_id
+ * @param {number} props.content_id
  */
-function updatePageContent({ page_id, html, onSuccess, onFailure }) {
-  if (!page_id) {
+function updatePageContent({
+  html,
+  page_id,
+  content_id,
+  onSuccess,
+  onFailure,
+}) {
+  if (!page_id || !content_id) {
     toast.error("Internal server error! Please try again.");
     console.error(
-      `Missing 'page_id' parameter in ${updatePageContent.name} function!`
+      `Missing 'page_id' or 'content_id' parameter in ${updatePageContent.name} function!`
     );
     return;
   }
@@ -24,7 +31,7 @@ function updatePageContent({ page_id, html, onSuccess, onFailure }) {
 
   apiService.post({
     headers: getAuthHeaders(),
-    data: getFormDataFromObject({ page_id, html }),
+    data: getFormDataFromObject({ html, page_id, content_id }),
     url: `${URL_USER_SERVICE}/api/learning-material/update`,
     onSuccess: ({ data }) => {
       toast.update(burger, {

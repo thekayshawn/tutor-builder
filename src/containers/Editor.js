@@ -76,11 +76,13 @@ function Editor({
       title: "",
       description: "",
       thumbnail: null,
+      thumbnailSrc: "",
     },
     editPageModal: {
       isOpen: false,
+      thumbnail: null,
       title: pageMetaData?.title,
-      thumbnail: pageMetaData?.thumbnail,
+      thumbnailSrc: pageMetaData?.thumbnail,
       description: pageMetaData?.description,
     },
     isMenuDropdownOpen: false,
@@ -105,9 +107,10 @@ function Editor({
       ...lastState,
       editPageModal: {
         isOpen: false,
-        title: pageMetaData.title,
-        thumbnail: pageMetaData.thumbnail,
-        description: pageMetaData.description,
+        thumbnail: null,
+        title: pageMetaData?.title,
+        thumbnailSrc: pageMetaData?.thumbnail,
+        description: pageMetaData?.description,
       },
     }));
 
@@ -119,7 +122,8 @@ function Editor({
         setState((lastState) => ({
           ...lastState,
           state: "loaded",
-          pageContent: isObjectValid(data) ? data : pageContent,
+          // The pageContent is reset if none is found.
+          pageContent: isObjectValid(data) ? data : { questions: [], html: "" },
         })),
       onFailure: () =>
         setState((lastState) => ({ ...lastState, state: "erred" })),
@@ -545,6 +549,7 @@ function Editor({
     // Update.
     return {
       page_id: pageMetaData.id,
+      content_id: pageMetaData.content_id,
       html: contentBuilderRef.current.getHTML(),
     };
   }
@@ -590,14 +595,15 @@ function Editor({
    * @param {"newPageModal" | "editPageModal"} modal
    * @param {Promise} promise
    */
-  function onChangeFile(modal, promise) {
+  function onChangeFile(modal, file, promise) {
     // The state is set only if the image could be converted to base 64.
     promise.then((src) =>
       setState((lastState) => ({
         ...lastState,
         [modal]: {
           ...lastState[modal],
-          thumbnail: src,
+          thumbnail: file,
+          thumbnailSrc: src,
         },
       }))
     );
@@ -761,8 +767,9 @@ function Editor({
             encType="multipart/form-data"
             onSubmit={(e) => {
               onCreatePage(e, {
-                ...newPageModal,
-                page_id: pageMetaData.id,
+                title: newPageModal.title,
+                thumbnail: newPageModal.thumbnail,
+                description: newPageModal.description,
                 content_id: pageMetaData.content_id,
               });
               onToggleModal("newPageModal");
@@ -783,7 +790,7 @@ function Editor({
                   <img
                     alt=""
                     className="d-block mt-3"
-                    src={newPageModal.thumbnail}
+                    src={newPageModal.thumbnailSrc}
                   />
                   <div className="controls" style={{ display: "none" }}>
                     <input
@@ -793,6 +800,7 @@ function Editor({
                       onChange={(e) =>
                         onChangeFile(
                           "newPageModal",
+                          e.target.files[0],
                           getBase64FromFile(e.target.files[0])
                         )
                       }
@@ -854,7 +862,9 @@ function Editor({
             encType="multipart/form-data"
             onSubmit={(e) => {
               onUpdatePageMeta(e, {
-                ...editPageModal,
+                title: newPageModal.title,
+                thumbnail: newPageModal.thumbnail,
+                description: newPageModal.description,
                 page_id: pageMetaData.id,
                 content_id: pageMetaData.content_id,
               });
@@ -876,7 +886,7 @@ function Editor({
                   <img
                     alt=""
                     className="d-block mt-3"
-                    src={editPageModal.thumbnail}
+                    src={editPageModal.thumbnailSrc}
                   />
                   <div className="controls" style={{ display: "none" }}>
                     <input
@@ -886,6 +896,7 @@ function Editor({
                       onChange={(e) =>
                         onChangeFile(
                           "editPageModal",
+                          e.target.files[0],
                           getBase64FromFile(e.target.files[0])
                         )
                       }
@@ -941,7 +952,10 @@ function Editor({
           currentPage={parseInt(page)}
           totalItems={parseInt(number_of_pages)}
           onChangePage={(newPage) =>
-            history.push(`/${pageMetaData.content_id}/page/${newPage}`)
+            //history.push(`/${pageMetaData.content_id}/page/${newPage}`)
+            window.location.replace(
+              `/${pageMetaData.content_id}/page/${newPage}`
+            )
           }
         />
         {/* Settings button. */}
