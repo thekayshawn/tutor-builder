@@ -59,6 +59,18 @@ const isNumeric = (subject) => /^-?\d+$/.test(subject);
 export const isStrictlyNumeric = (subject) =>
   typeof subject === "number" && isNumeric(subject);
 
+/**
+ * @see https://stackoverflow.com/a/46639837
+ */
+export const getBase64FromFile = (file) =>
+  new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    fileReader.onload = () => resolve(fileReader.result);
+    fileReader.onerror = (error) => reject(error);
+  });
+
 export function logout() {
   localStorage.removeItem("user");
   window.open(URL_LOGOUT);

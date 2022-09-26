@@ -3,7 +3,7 @@ import * as React from "react";
 // Utils.
 import config from "../config";
 import { useHistory } from "react-router-dom";
-import { getAuthHeaders, isObjectValid } from "../utils";
+import { getAuthHeaders, getBase64FromFile, isObjectValid } from "../utils";
 import { apiService, updatePageContent } from "../service";
 import {
   URL_WEBSITE,
@@ -588,16 +588,19 @@ function Editor({
   /**
    * Listener for a change in file input fields of the two modals.
    * @param {"newPageModal" | "editPageModal"} modal
-   * @param {React.ChangeEvent<HTMLInputElement>} e
+   * @param {Promise} promise
    */
-  function onChangeFile(modal, e) {
-    setState((lastState) => ({
-      ...lastState,
-      [modal]: {
-        ...lastState[modal],
-        thumbnail: e.target.files[0],
-      },
-    }));
+  function onChangeFile(modal, promise) {
+    // The state is set only if the image could be converted to base 64.
+    promise.then((src) =>
+      setState((lastState) => ({
+        ...lastState,
+        [modal]: {
+          ...lastState[modal],
+          thumbnail: src,
+        },
+      }))
+    );
   }
 
   /**
@@ -697,14 +700,14 @@ function Editor({
               <h5>Are you sure you want to delete this page?</h5>
             </div>
             <div className="modal-footer">
-              <Button type="button" color="danger" id="close_hide">
-                Cancel
+              <Button type="button" color="success" id="close_hide">
+                No, cancel
               </Button>
               <Button
-                color="success"
+                color="danger"
                 onClick={() => onDeletePage(pageMetaData.id)}
               >
-                Confirm
+                Yes, delete
               </Button>
             </div>
           </div>
@@ -768,18 +771,31 @@ function Editor({
             <div className="row">
               <div className="col-lg-3 col-md-3 col-sm-12">
                 <div className="control-group file-upload" id="file-upload1">
-                  <div className="image-box text-center cursor-pointer">
+                  <label
+                    htmlFor="newPageModalThumbnail"
+                    className="image-box text-center cursor-pointer w-100"
+                  >
                     <span
                       className="iconify tutor-iconifing"
                       data-icon="clarity:plus-line"
                     ></span>
-                    <img alt="" src="" id="image-thumbnail" />
-                  </div>
+                  </label>
+                  <img
+                    alt=""
+                    className="d-block mt-3"
+                    src={newPageModal.thumbnail}
+                  />
                   <div className="controls" style={{ display: "none" }}>
                     <input
                       type="file"
                       name="thumbnail"
-                      onChange={(e) => onChangeFile("newPageModal", e)}
+                      id="newPageModalThumbnail"
+                      onChange={(e) =>
+                        onChangeFile(
+                          "newPageModal",
+                          getBase64FromFile(e.target.files[0])
+                        )
+                      }
                     />
                   </div>
                 </div>
@@ -810,7 +826,7 @@ function Editor({
                 </div>
                 <div className="form-group input-forming-btn">
                   <Button color="success" type="submit" className="w-100">
-                    Add New Page
+                    Add new page
                   </Button>
                 </div>
               </div>
@@ -847,23 +863,32 @@ function Editor({
           >
             <div className="row">
               <div className="col-lg-3 col-md-3 col-sm-12">
-                <div className="control-group file-upload" id="file-upload1">
+                <div className="control-group file-upload">
                   <label
-                    htmlFor="file-upload1"
+                    htmlFor="editPageModalThumbnail"
                     className="image-box text-center cursor-pointer w-100"
                   >
                     <span
                       className="iconify tutor-iconifing"
                       data-icon="clarity:plus-line"
                     ></span>
-                    <img alt="" src="" id="image-thumbnail" />
                   </label>
+                  <img
+                    alt=""
+                    className="d-block mt-3"
+                    src={editPageModal.thumbnail}
+                  />
                   <div className="controls" style={{ display: "none" }}>
                     <input
                       type="file"
                       name="thumbnail"
-                      id="file-upload1"
-                      onChange={(e) => onChangeFile("editPageModal", e)}
+                      id="editPageModalThumbnail"
+                      onChange={(e) =>
+                        onChangeFile(
+                          "editPageModal",
+                          getBase64FromFile(e.target.files[0])
+                        )
+                      }
                     />
                   </div>
                 </div>
@@ -896,7 +921,7 @@ function Editor({
                 </div>
                 <div className="form-group input-forming-btn">
                   <Button color="success" type="submit" className="w-100">
-                    Update The Page
+                    Update the page
                   </Button>
                 </div>
               </div>
