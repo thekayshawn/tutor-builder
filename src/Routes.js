@@ -1,7 +1,6 @@
 import React from "react";
 import ShowData from "./ShowData";
 import Home from "./containers/Home";
-import Edit from "./containers/Edit";
 import AddPage from "./containers/AddPage";
 import Dashboard from "./containers/Dashboard";
 import ShowAddPage from "./containers/ShowAddPage";
@@ -20,12 +19,6 @@ export default function Routes() {
           exact
           path="/addpage"
           component={AddPage}
-          role={"tutor"}
-        ></ProtectedRoute>
-        <ProtectedRoute
-          exact
-          path="/edit/:id"
-          component={Edit}
           role={"tutor"}
         ></ProtectedRoute>
         <ProtectedRoute
@@ -62,21 +55,27 @@ export default function Routes() {
         ></ProtectedRoute>
         <Route
           exact
-          path="/edit/:id/:title"
+          path="/old/:id/:title"
           component={OldDashboard}
           role={"tutor"}
         />
         {/* New Dashboard. */}
-        <Route exact path="/:id" component={Dashboard} role={"tutor"} />
+        <Route exact path="/add/:id" component={Dashboard} role="tutor" />
         <Route
           exact
-          path="/:id/page/:page"
+          role="tutor"
           component={Dashboard}
-          role={"tutor"}
+          path="/add/:id/page/:page"
         />
-        <Route path="/">
-          <Home />
-        </Route>
+        <Route exact path="/edit/:id" component={Dashboard} role="tutor" />
+        <Route
+          exact
+          role="tutor"
+          component={Dashboard}
+          path="/edit/:id/page/:page"
+        />
+        {/* Home */}
+        <Route path="/" component={Home} />
       </Switch>
     </BrowserRouter>
   );

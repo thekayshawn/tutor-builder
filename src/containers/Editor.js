@@ -1,7 +1,7 @@
 import * as React from "react";
 
 // Utils.
-import config from "../config";
+import { integers } from "../config";
 import { useHistory } from "react-router-dom";
 import { getAuthHeaders, getBase64FromFile, isObjectValid } from "../utils";
 import { apiService, updatePageContent } from "../service";
@@ -54,12 +54,13 @@ function Editor({
   number_of_pages,
   onUpdatePageMeta,
 }) {
-  // There's is either a single entry or nothing at all.
-  const pageMetaData = data[0];
+  const history = useHistory();
 
   // References.
-  const history = useHistory();
   const contentBuilderRef = React.createRef();
+
+  // There's is either a single entry or nothing at all.
+  const pageMetaData = data[0];
 
   // State.
   const [
@@ -573,21 +574,27 @@ function Editor({
     // Save and continue.
     updatePageContent({
       ...pageData,
-      onSuccess: (_, burger) => {
-        toast.update(burger, {
-          autoClose: true,
-          isLoading: false,
-          type: toast.TYPE.INFO,
-          render: "Saved, redirecting to dashboard...",
-        });
-
-        setTimeout(() => {
-          window.location.replace(
-            `${URL_DASHBOARD_PRICING}/${pageMetaData.content_id}`
-          );
-        }, config.duration.REDIRECTION);
-      },
+      onSuccess,
     });
+
+    function onSuccess(_, burger) {
+      toast.update(burger, {
+        isLoading: false,
+        type: toast.TYPE.INFO,
+        autoClose: integers.REDIRECTION,
+        render: "Saved, redirecting to dashboard...",
+      });
+
+      setTimeout(() => {
+        // Can be `edit` or `add`.
+        if (window.location.pathname.split("/")[1] === "edit") {
+          window.location.replace(URL_DASHBOARD_CONTENT_BUILDER);
+          return;
+        }
+
+        window.location.replace(`${URL_DASHBOARD_PRICING}/${pageMetaData.id}`);
+      }, integers.REDIRECTION);
+    }
   }
 
   /**
@@ -862,9 +869,9 @@ function Editor({
             encType="multipart/form-data"
             onSubmit={(e) => {
               onUpdatePageMeta(e, {
-                title: newPageModal.title,
-                thumbnail: newPageModal.thumbnail,
-                description: newPageModal.description,
+                title: editPageModal.title,
+                thumbnail: editPageModal.thumbnail,
+                description: editPageModal.description,
                 page_id: pageMetaData.id,
                 content_id: pageMetaData.content_id,
               });

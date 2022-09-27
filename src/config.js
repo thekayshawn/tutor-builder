@@ -6,11 +6,20 @@ export const BUILDER_API_URL = process.env.REACT_APP_CONTENT_BUILDER_URL;
 export const URL_DASHBOARD_PRICING =
   process.env.REACT_APP_URL_DASHBOARD_PRICING;
 
-// Integers.
+export const integers = {
+  REDIRECTION: 3000,
+};
+
+export const strings = {
+  /**
+   * key of the action for the content-builder's continue button.
+   */
+  KEY_ACTION_CONTINUE: "continue",
+};
+
 const config = {
-  duration: {
-    REDIRECTION: 3000,
-  },
+  strings,
+  integers,
 };
 
 export default config;
