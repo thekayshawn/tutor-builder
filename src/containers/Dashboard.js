@@ -66,7 +66,7 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, page]);
 
-  function onCreatePage(e, page, waitWithTimeout) {
+  function onCreatePage(e, page, waitWithTimeout = true) {
     e.preventDefault();
 
     createPage({
