@@ -9,7 +9,7 @@ import { Error500 } from "../components/error";
 
 // Utils.
 import config from "../config";
-import { getAuthHeaders, getFormDataFromObject } from "../utils";
+import { getAuthHeaders } from "../utils";
 import { URL_USER_SERVICE } from "../env";
 import { useParams } from "react-router-dom";
 import { apiService, createPage, deletePage } from "../service";
@@ -28,18 +28,45 @@ function Dashboard() {
     number_of_pages: 1,
   });
 
+  // The current action type, can be edit or add.
+  const currentAction = window.location.pathname.split("/")[1];
+
   React.useEffect(() => {
     // Request the current page's metadata.
     apiService.get({
       headers: getAuthHeaders(),
       url: `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id}?page=${page}&limit=1&order=ASC`,
-      onSuccess: ({ data, number_of_pages }) =>
-        setState({ pages: data, state: "loaded", number_of_pages }),
       onFailure: () => setState({ state: "erred" }),
+      onSuccess: ({ data, number_of_pages }) => {
+        // No exception.
+        if (!data) {
+          setState({ pages, number_of_pages, state: "erred" });
+          return;
+        }
+
+        // Phew.
+        if (data.length > 0) {
+          setState({ pages: data, state: "loaded", number_of_pages });
+          return;
+        }
+
+        // Time to create a new page.
+        onCreatePage(
+          { preventDefault: () => {} },
+          {
+            content_id: id,
+            title: "This page is missing a title.",
+            description: "This page is missing a description.",
+            thumbnail: null,
+          },
+          false
+        );
+      },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, page]);
 
-  function onCreatePage(e, page) {
+  function onCreatePage(e, page, waitWithTimeout) {
     e.preventDefault();
 
     createPage({
@@ -54,16 +81,20 @@ function Dashboard() {
         toast.update(burger, {
           isLoading: false,
           type: toast.TYPE.INFO,
-          autoClose: config.duration.REDIRECTION,
+          autoClose: config.integers.REDIRECTION,
           render: "Added, redirecting you to the new page.",
         });
 
-        // Mock a redirection mechanism for better UX.
-        setTimeout(() => {
-          // Redirect.
-          // The content builder, due to JQuery or whatever, doesn't handle a restart and parts of it don't even get re-rendered correctly. So we have to perform a hard reload in order for it to work.
-          window.location.replace(`/${id}/page/${newPages.length}`);
-        }, config.duration.REDIRECTION);
+        const nextUrl = `/${currentAction}/${id}/page/${newPages.length}`;
+
+        !waitWithTimeout
+          ? window.location.replace(nextUrl)
+          : // Mock a redirection mechanism for better UX.
+            setTimeout(() => {
+              // Redirect.
+              // The content builder, due to JQuery or whatever, doesn't handle a restart and parts of it don't even get re-rendered correctly. So we have to perform a hard reload in order for it to work.
+              window.location.replace(nextUrl);
+            }, config.integers.REDIRECTION);
       },
     });
   }
@@ -92,7 +123,7 @@ function Dashboard() {
         toast.update(burger, {
           isLoading: false,
           type: toast.TYPE.INFO,
-          autoClose: config.duration.REDIRECTION,
+          autoClose: config.integers.REDIRECTION,
           render: "Deleted, redirecting you to the first page.",
         });
 
@@ -100,8 +131,8 @@ function Dashboard() {
         setTimeout(() => {
           // Not passing a page results in the first page being displayed.
           // The method above this has an explanation for the hard reload performed in these handlers.
-          window.location.replace(`/${id}`);
-        }, config.duration.REDIRECTION);
+          window.location.replace(`/${currentAction}/${id}`);
+        }, config.integers.REDIRECTION);
       },
     });
   }
@@ -132,6 +163,7 @@ function Dashboard() {
           page,
           onDeletePage,
           onCreatePage,
+          currentAction,
           onUpdatePageMeta,
           number_of_pages,
         }}

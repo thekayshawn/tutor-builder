@@ -38,6 +38,9 @@ import BuilderControl from "../components/contentbuilder/buildercontrol";
  *
  * @param {number} props.number_of_pages
  *
+ * @param {string} props.currentAction
+ * The current action type, can be edit or add.
+ *
  * @property {(page: object) => void} props.onCreatePage
  *
  * @property {(page_id: number) => void} props.onDeletePage
@@ -51,6 +54,7 @@ function Editor({
   page,
   onDeletePage,
   onCreatePage,
+  currentAction,
   number_of_pages,
   onUpdatePageMeta,
 }) {
@@ -587,7 +591,7 @@ function Editor({
 
       setTimeout(() => {
         // Can be `edit` or `add`.
-        if (window.location.pathname.split("/")[1] === "edit") {
+        if (currentAction === "edit") {
           window.location.replace(URL_DASHBOARD_CONTENT_BUILDER);
           return;
         }
@@ -960,9 +964,7 @@ function Editor({
           totalItems={parseInt(number_of_pages)}
           onChangePage={(newPage) =>
             //history.push(`/${pageMetaData.content_id}/page/${newPage}`)
-            window.location.replace(
-              `/${pageMetaData.content_id}/page/${newPage}`
-            )
+            (window.location.href = `/${currentAction}/${pageMetaData.content_id}/page/${newPage}`)
           }
         />
         {/* Settings button. */}
