@@ -74,7 +74,13 @@ $(document).on("click", "#tutor_qoutes_collapse", function () {
   $("#collapseExample").css("display", "none");
   $("#collapseExamples").css("display", "block");
   var collapse = document.querySelector(".is-design-list #collapseExamples");
+
+  $(".scroll-darker").addClass("acyives");
+  $(".acyives").addClass("active");
+  $(".is-design-list").animate({ scrollTop: 0 }, "slow");
+
   if (collapse) return;
+
   $(".is-design-list").prepend(
     '<div class="collapse edit_collection qoutes_collection" id="collapseExamples">' +
       '<button type="button" id="close_collaped" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
@@ -84,15 +90,19 @@ $(document).on("click", "#tutor_qoutes_collapse", function () {
       "</ul>" +
       "</div>"
   );
-  $(".scroll-darker").addClass("acyives");
-  $(".acyives").addClass("active");
-  $(".is-design-list").animate({ scrollTop: 0 }, "slow");
 });
+
 $(document).on("click", "#tutor_image_collapse", function () {
   $("#collapseExamples").css("display", "none");
   $("#collapseExample").css("display", "block");
   var collapse = document.querySelector(".is-design-list #collapseExample");
+
+  $(".scroll-darker").addClass("acyives");
+  $(".acyives").addClass("active");
+  $(".is-design-list").animate({ scrollTop: 0 }, "slow");
+
   if (collapse) return;
+
   $(".is-design-list").prepend(
     '<div class="collapse edit_collection tutor_main_submenus" id="collapseExample">' +
       '<button type="button" id="close_collaped" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
@@ -104,9 +114,6 @@ $(document).on("click", "#tutor_image_collapse", function () {
       "</ul>" +
       "</div>"
   );
-  $(".scroll-darker").addClass("acyives");
-  $(".acyives").addClass("active");
-  $(".is-design-list").animate({ scrollTop: 0 }, "slow");
 });
 
 function _path() {
