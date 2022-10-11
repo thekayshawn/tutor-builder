@@ -146,7 +146,7 @@ class LearnerShowPages extends Component {
                 <div class="sidebar-brand">
                   <a href="#">
                     <img
-                      src="../assets/minimalist-blocks/preview/Navigation.png"
+                      src="/assets/minimalist-blocks/preview/Navigation.png"
                       alt="img"
                     />
                   </a>
@@ -216,7 +216,7 @@ class LearnerShowPages extends Component {
                     <Col lg={3} md={3} sm={12}>
                       <div className="learner-advertises-img">
                         <img
-                          src="../assets/minimalist-blocks/preview/advertise.svg"
+                          src="/assets/minimalist-blocks/preview/advertise.svg"
                           alt=""
                         />
                       </div>
@@ -248,10 +248,7 @@ class LearnerShowPages extends Component {
 
         <div className="learner-advertise">
           <div className="learner-advertise-img">
-            <img
-              src="../assets/minimalist-blocks/preview/advertise.svg"
-              alt=""
-            />
+            <img src="/assets/minimalist-blocks/preview/advertise.svg" alt="" />
           </div>
           <div className="learner-advertise-heading">
             <ul>

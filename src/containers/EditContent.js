@@ -526,7 +526,7 @@ else
         </div>
         <div className="logo_tutor">
           <img
-            src="../assets/minimalist-blocks/preview/Logo.svg"
+            src="/assets/minimalist-blocks/preview/Logo.svg"
             alt="logo-img"
           />
         </div>
@@ -542,12 +542,12 @@ else
           }}
         >
           <img
-            src="../assets/minimalist-blocks/preview/icon/add_page.svg"
+            src="/assets/minimalist-blocks/preview/icon/add_page.svg"
             id="add_current"
             className="tutor-content-modal"
           />
           <img
-            src="../assets/minimalist-blocks/preview/icon/delete_page.svg"
+            src="/assets/minimalist-blocks/preview/icon/delete_page.svg"
             className="add-contenting"
             id="delete_current"
           />
@@ -746,7 +746,7 @@ else
           <img
             className="screen_element"
             onClick={this.fullScreenPage}
-            src="../assets/minimalist-blocks/preview/icon/full_screen.svg"
+            src="/assets/minimalist-blocks/preview/icon/full_screen.svg"
             alt="full-icon"
           />
 
@@ -760,7 +760,7 @@ else
                 >
                   <a className="drop-textes" href="javascript:void(0)">
                     <img
-                      src="../assets/minimalist-blocks/preview/icon/house.svg"
+                      src="/assets/minimalist-blocks/preview/icon/house.svg"
                       alt="full-icon"
                     />
                   </a>
@@ -799,7 +799,7 @@ else
                 >
                   <a className="drop-text" href="javascript:void(0)">
                     <img
-                      src="../assets/minimalist-blocks/preview/icon/power_normal.svg"
+                      src="/assets/minimalist-blocks/preview/icon/power_normal.svg"
                       alt="full-icon"
                     />
                   </a>
@@ -869,7 +869,7 @@ else
                 >
                   <a className="drop-texties" href="javascript:void(0)">
                     <img
-                      src="../assets/minimalist-blocks/preview/icon/text.svg"
+                      src="/assets/minimalist-blocks/preview/icon/text.svg"
                       alt="full-icon"
                     />
                   </a>

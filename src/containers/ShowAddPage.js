@@ -48,7 +48,7 @@ function ShowAddPage() {
                   <Col lg={6} md={6} sm={6}>
                     <div className="ftr-thumbnail">
                       <img
-                        src="../../../assets/minimalist-blocks/images/-BwYjC1.jpg"
+                        src="..//assets/minimalist-blocks/images/-BwYjC1.jpg"
                         alt="thumbnail-img"
                       />
                     </div>

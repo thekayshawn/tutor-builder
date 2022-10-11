@@ -119,7 +119,7 @@ class ShowData extends Component {
                 <li class="sidebar-brand">
                   <a href="#">
                     <img
-                      src="../assets/minimalist-blocks/preview/Navigation.png"
+                      src="/assets/minimalist-blocks/preview/Navigation.png"
                       alt="img"
                     />
                   </a>
