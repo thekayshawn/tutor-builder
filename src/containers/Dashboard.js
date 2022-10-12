@@ -142,12 +142,6 @@ function Dashboard() {
 
     updatePageMeta({
       data: meta,
-      onSuccess: (updatedPage) => {
-        setState((lastState) => ({
-          ...lastState,
-          pages: [updatedPage],
-        }));
-      },
     });
   }
 
