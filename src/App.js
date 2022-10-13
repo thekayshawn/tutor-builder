@@ -2,7 +2,7 @@ import React from "react";
 import Routes from "./Routes";
 import { apiService } from "./service";
 import Loader from "./components/loader";
-import { USER_SERVICE_URL } from "./config";
+import { API_MAIN_URL } from "./config";
 import { useLocation } from "react-router-dom";
 import { getAuthHeaders, isObjectValid } from "./utils";
 import { Error403, Error500 } from "./components/error";
@@ -41,7 +41,7 @@ function App() {
     if (token) {
       apiService.post({
         headers: getAuthHeaders(token),
-        url: `${USER_SERVICE_URL}/validate-token`,
+        url: `${API_MAIN_URL}/validate-token`,
         onFailure: () => setState("erred"),
         onSuccess: ({ data }) => {
           localStorage.setItem(

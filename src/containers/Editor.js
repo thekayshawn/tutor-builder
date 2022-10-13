@@ -3,34 +3,16 @@ import * as React from "react";
 // Utils.
 import { integers } from "../config";
 import { useHistory } from "react-router-dom";
-import { getAuthHeaders, getBase64FromFile, isObjectValid } from "../utils";
+import { getAuthHeaders, isObjectValid } from "../utils";
 import { apiService, updatePageContent } from "../service";
-import {
-  URL_WEBSITE,
-  URL_DASHBOARD,
-  URL_USER_SERVICE,
-  URL_DASHBOARD_PRICING,
-  URL_DASHBOARD_CONTENT_BUILDER,
-} from "../env";
+import { URL_USER_SERVICE, URL_DASHBOARD_PRICING } from "../env";
 
 // Components.
-import {
-  Button,
-  Modal,
-  Dropdown,
-  CardTitle,
-  ModalBody,
-  CardHeader,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-} from "reactstrap";
+import Modals from "./Modals";
 import { toast } from "react-toastify";
 import Loader from "../components/loader";
 import { Error404, Error500 } from "../components/error";
-import Pagination from "../components/pagination";
 import BuilderControl from "../components/contentbuilder/buildercontrol";
-import Modals from "./Modals";
 
 /**
  * @param {Object} props
@@ -38,9 +20,6 @@ import Modals from "./Modals";
  * @param {PageEntity[]} props.data
  *
  * @param {number} props.number_of_pages
- *
- * @param {string} props.currentAction
- * The current action type, can be edit or add.
  *
  * @property {(page: object) => void} props.onCreatePage
  *
@@ -55,7 +34,6 @@ function Editor({
   page,
   onDeletePage,
   onCreatePage,
-  currentAction,
   number_of_pages,
   onUpdatePageMeta,
 }) {
@@ -64,42 +42,16 @@ function Editor({
   // References.
   const contentBuilderRef = React.createRef();
 
-  // There's is either a single entry or nothing at all.
+  // There's either a single entry or nothing at all.
   const pageMetaData = data[0];
 
   // State.
-  const [
-    { state, pageContent, newPageModal, editPageModal, isMenuDropdownOpen },
-    setState,
-  ] = React.useState({
+  const [{ state, pageContent }, setState] = React.useState({
     state: "loading",
     pageContent: {
       questions: [],
       html: "",
     },
-    newPageModal: {
-      isOpen: false,
-      title: "",
-      description: "",
-      thumbnail: null,
-      thumbnailSrc: "",
-    },
-    editPageModal: {
-      isOpen: false,
-      thumbnail: null,
-      title: pageMetaData?.title,
-      thumbnailSrc: pageMetaData?.thumbnail,
-      description: pageMetaData?.description,
-    },
-    isMenuDropdownOpen: false,
-  });
-
-  console.log({
-    data,
-    pageContent,
-    pageMetaData,
-    newPageModal,
-    editPageModal,
   });
 
   // Effects.
@@ -591,61 +543,11 @@ function Editor({
       });
 
       setTimeout(() => {
-        // Can be `edit` or `add`.
-        if (currentAction === "edit") {
-          window.location.replace(URL_DASHBOARD_CONTENT_BUILDER);
-          return;
-        }
-
-        window.location.replace(`${URL_DASHBOARD_PRICING}/${pageMetaData.id}`);
+        window.location.replace(
+          `${URL_DASHBOARD_PRICING}/${pageMetaData.content_id}`
+        );
       }, integers.REDIRECTION);
     }
-  }
-
-  /**
-   * Listener for a change in file input fields of the two modals.
-   * @param {"newPageModal" | "editPageModal"} modal
-   * @param {Promise} promise
-   */
-  function onChangeFile(modal, file, promise) {
-    // The state is set only if the image could be converted to base 64.
-    promise.then((src) =>
-      setState((lastState) => ({
-        ...lastState,
-        [modal]: {
-          ...lastState[modal],
-          thumbnail: file,
-          thumbnailSrc: src,
-        },
-      }))
-    );
-  }
-
-  /**
-   * Listener for a change in a text field of the two modals.
-   * @param {"newPageModal" | "editPageModal"} modal
-   * @param {React.ChangeEvent<HTMLInputElement>} e
-   */
-  function onChangeText(modal, e) {
-    const { name, value } = e.target;
-
-    setState((lastState) => ({
-      ...lastState,
-      [modal]: {
-        ...lastState[modal],
-        [name]: value,
-      },
-    }));
-  }
-
-  function onToggleModal(modal) {
-    setState((lastState) => ({
-      ...lastState,
-      [modal]: {
-        ...lastState[modal],
-        isOpen: !lastState[modal].isOpen,
-      },
-    }));
   }
 
   return state === "erred" ? (
@@ -668,15 +570,15 @@ function Editor({
       <BuilderControl
         history={history}
         ref={contentBuilderRef}
-        onSave={onUpdateContentListener}
         initialHtml={pageContent.html}
+        onSave={onUpdateContentListener}
         //doSave={(f) => (callSave = f)}
         //doDestroy={(f) => (callDestroy = f)}
-        base64Handler={"/upload"}
-        largerImageHandler={"/upload"}
-        imageSelect={"images.html"}
-        snippetFile={"/assets/minimalist-blocks/content.js"}
-        languageFile={"/contentbuilder/lang/en.js"}
+        base64Handler="/upload"
+        imageSelect="images.html"
+        largerImageHandler="/upload"
+        languageFile="/contentbuilder/lang/en.js"
+        snippetFile="/assets/minimalist-blocks/content.js"
       />
       <Modals
         {...{
@@ -684,7 +586,6 @@ function Editor({
           pageMetaData,
           onDeletePage,
           onCreatePage,
-          currentAction,
           number_of_pages,
           onUpdatePageMeta,
           onContinueListener,

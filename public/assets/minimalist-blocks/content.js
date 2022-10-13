@@ -381,29 +381,6 @@ $(document).on("click", ".btn-closeing", function () {
   $(".pagination").css("z-index", "99999999");
   $("#divSnippetList").css("z-index", "10003");
 });
-$(document).on("click", "#close_hide,.btn-confirm", function () {
-  $("#confirmModal").modal("hide");
-  $(".is-ui").css("z-index", "999999999");
-  $(".pagination").css("z-index", "99999999");
-  $("#divSnippetList").css("z-index", "10003");
-  $(".logo_tutor").css("z-index", "999999999");
-});
-
-$(document).on("click", ".btn-create-session", function (e) {
-  $("#confirmModal").modal("show");
-});
-
-$(document).on("click", "#delete_current", function (e) {
-  $("#confirmModal").modal("show");
-  $("#confirmModal").modal({
-    backdrop: "static",
-    keyboard: false,
-  });
-  $(".is-ui").css("z-index", "999");
-  $(".pagination").css("z-index", "999");
-  $("#divSnippetList").css("z-index", "999");
-  $(".logo_tutor").css("z-index", "999");
-});
 
 $(document).on("click", ".show_blank_answer", function () {
   $("#correct_answer").css("display", "block");
@@ -412,7 +389,6 @@ $(document).on("click", ".show_blank_answer", function () {
 
 $(document).on("click", ".correct-answer-btn", function () {
   if ($(this).closest("form").find(".multi-blank-div").length > 0) {
-    var main_btn = $(this);
     $(this)
       .closest("form")
       .find(".multi-blank-div")

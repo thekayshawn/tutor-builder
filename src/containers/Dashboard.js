@@ -11,7 +11,7 @@ import { Error500 } from "../components/error";
 import config from "../config";
 import { getAuthHeaders } from "../utils";
 import { URL_USER_SERVICE } from "../env";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { apiService, createPage, deletePage } from "../service";
 
 // Static.
@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import { updatePageMeta } from "../service";
 
 function Dashboard() {
+  const history = useHistory();
   const { id, page = 1 } = useParams();
   const { user_type } = JSON.parse(localStorage.getItem("user"));
   const [{ pages, state, number_of_pages }, setState] = React.useState({
@@ -27,9 +28,6 @@ function Dashboard() {
     state: "loading",
     number_of_pages: 1,
   });
-
-  // The current action type, can be edit or add.
-  const currentAction = window.location.pathname.split("/")[1];
 
   React.useEffect(() => {
     // Request the current page's metadata.
@@ -50,33 +48,55 @@ function Dashboard() {
           return;
         }
 
-        // Time to create a new page.
-        onCreatePage(
-          { preventDefault: () => {} },
-          {
-            content_id: id,
-            title: "This page is missing a title.",
-            description: "This page is missing a description.",
-            thumbnail: null,
-          },
-          false
-        );
+        /**
+         * A unique scenario.
+         *
+         * --------------------------------------------------------------------
+         * The user hasn't created a page yet, which we know due to the missing
+         * data, but there needs to be a page. So we create one for them.
+         *
+         * Note that this is valid only if the requested page is numbered as 1,
+         * which is the also the fallback when no page number is requested.
+         * --------------------------------------------------------------------
+         */
+        if (page == 1) {
+          // Time to create a new page.
+          onCreatePage(
+            { preventDefault: () => {} },
+            {
+              content_id: id,
+              title: "This page is missing a title.",
+              description: "This page is missing a description.",
+              thumbnail: null,
+            },
+            false
+          );
+          return;
+        }
+
+        //! Neither some data is found nor the 1st page is requested.
+        history.push("/error/404");
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, page]);
 
-  function onCreatePage(e, page, waitWithTimeout = true) {
+  /**
+   * Create a new page for the current material.
+   *
+   * @param {Event} e An event to be prevented from happening.
+   *
+   * @param {Object} data The data to create a new page with.
+   *
+   * @param {boolean} waitWithTimeout Default = true;
+   * Whether to wait, while a sweet little toast is displayed, before redirecting towards the newly created page or instantly hustle.
+   */
+  function onCreatePage(e, data, waitWithTimeout = true) {
     e.preventDefault();
 
     createPage({
-      data: page,
+      data,
       onSuccess: (newPages, burger) => {
-        setState((lastState) => ({
-          ...lastState,
-          pages: newPages,
-        }));
-
         // Inform the ongoing operation.
         toast.update(burger, {
           isLoading: false,
@@ -85,7 +105,7 @@ function Dashboard() {
           render: "Added, redirecting you to the new page.",
         });
 
-        const nextUrl = `/${currentAction}/${id}/page/${newPages.length}`;
+        const nextUrl = `/${id}/page/${newPages.length}`;
 
         !waitWithTimeout
           ? window.location.replace(nextUrl)
@@ -131,7 +151,7 @@ function Dashboard() {
         setTimeout(() => {
           // Not passing a page results in the first page being displayed.
           // The method above this has an explanation for the hard reload performed in these handlers.
-          window.location.replace(`/${currentAction}/${id}`);
+          window.location.replace(`/${id}`);
         }, config.integers.REDIRECTION);
       },
     });
@@ -157,7 +177,6 @@ function Dashboard() {
           page,
           onDeletePage,
           onCreatePage,
-          currentAction,
           onUpdatePageMeta,
           number_of_pages,
         }}

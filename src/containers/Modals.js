@@ -27,7 +27,6 @@ function Modals({
   pageMetaData,
   onDeletePage,
   onCreatePage,
-  currentAction,
   number_of_pages,
   onUpdatePageMeta,
   onContinueListener,
@@ -118,8 +117,12 @@ function Modals({
           <ion-icon name="add-circle-outline"></ion-icon>
         </button>
         <button
-          id="delete_current"
           className="btn border rounded bg-light fs-5"
+          onClick={() => {
+            if (window.confirm("Are you sure about that?")) {
+              onDeletePage(pageMetaData.id);
+            }
+          }}
         >
           <ion-icon name="trash-outline"></ion-icon>
         </button>
@@ -136,37 +139,6 @@ function Modals({
         {/* <button type="button" onClick={() => callSaveAndFinish()} style={{"width":"120px"}}>Save On Page</button> */}
         {/* <button type="button" className="save-contenting" onClick={() => closeBuilder()} style={{"width":"85px"}}>Close</button> */}
       </div>
-      {/* Delete page modal. */}
-      <div
-        id="confirmModal"
-        className="modal fade"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog confirm_dialog">
-          <div className="modal-content confirm-content">
-            <div className="modal-body">
-              <h3>Confirm!</h3>
-              <h5>Are you sure you want to delete this page?</h5>
-            </div>
-            <div className="modal-footer">
-              <Button type="button" color="success" id="close_hide">
-                No, cancel
-              </Button>
-              <Button
-                color="danger"
-                onClick={() => onDeletePage(pageMetaData.id)}
-              >
-                Yes, delete
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {
         /* https://stackoverflow.com/questions/37949981/call-child-method-from-parent */
         // console.log("irfan data",state.mydata)
@@ -249,6 +221,7 @@ function Modals({
               <div className="col-lg-9 col-md-9 col-sm-12">
                 <div className="form-group input-forming">
                   <input
+                    required
                     type="text"
                     name="title"
                     className="form-control"
@@ -258,6 +231,7 @@ function Modals({
                 </div>
                 <div className="form-group input-forming">
                   <textarea
+                    required
                     type="text"
                     name="description"
                     rows="4"
@@ -345,6 +319,7 @@ function Modals({
               <div className="col-lg-9 col-md-9 col-sm-12">
                 <div className="form-group input-forming">
                   <input
+                    required
                     type="text"
                     name="title"
                     className="form-control"
@@ -355,6 +330,7 @@ function Modals({
                 </div>
                 <div className="form-group input-forming">
                   <textarea
+                    required
                     type="text"
                     name="description"
                     rows="4"
@@ -388,16 +364,17 @@ function Modals({
           totalItems={parseInt(number_of_pages)}
           onChangePage={(newPage) =>
             //history.push(`/${pageMetaData.content_id}/page/${newPage}`)
-            (window.location.href = `/${currentAction}/${pageMetaData.content_id}/page/${newPage}`)
+            (window.location.href = `/${pageMetaData.content_id}/page/${newPage}`)
           }
         />
         {/* Settings button. */}
         <button
           type="button"
+          title="Settings"
           onClick={() => onToggleModal("editPageModal")}
           className="btn border rounded bg-light fs-5"
         >
-          <ion-icon name="settings-outline"></ion-icon>
+          <ion-icon name="settings-outline" />
         </button>
         {/* Home button. */}
         <Dropdown
@@ -412,6 +389,7 @@ function Modals({
         >
           <DropdownToggle
             tag="button"
+            title="Navigational Options"
             className="btn border rounded bg-light fs-5"
           >
             <ion-icon name="home-outline"></ion-icon>
@@ -449,12 +427,13 @@ function Modals({
         {/* Fullscreen button. */}
         <button
           type="button"
+          title="Fullscreen mode"
           className="btn border rounded bg-light fs-5"
           onClick={() =>
             document.getElementById("main_content")?.requestFullscreen()
           }
         >
-          <ion-icon name="expand-outline"></ion-icon>
+          <ion-icon name="expand-outline" />
         </button>
       </nav>
     </>

@@ -4,7 +4,7 @@ import vectorInterface from "../../assets/images/doodles/doodle.png";
 import vectorInterfaceLarge from "../../assets/images/doodles/@x2/doodle.png";
 
 const Error403 = () => (
-  <section className="min-vh-100 w-100 position-absolute top-0 end-0 bottom-0 start-0 d-flex justify-content-center align-items-center bg-light z-100">
+  <section className="min-vh-100 w-100 position-absolute top-0 end-0 bottom-0 start-0 d-flex justify-content-center align-items-center bg-light z-10000">
     <Container fluid className="text-center">
       <Row className="justify-content-center">
         <Col sm={4}>

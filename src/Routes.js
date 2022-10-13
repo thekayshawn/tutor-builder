@@ -10,6 +10,7 @@ import CoursesAvailble from "./containers/CoursesAvailble";
 import LearnerShowPages from "./containers/LearnerShowPages";
 import OldDashboard from "./containers/OldDashboard";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Error404 } from "./components/error";
 
 export default function Routes() {
   return (
@@ -60,22 +61,18 @@ export default function Routes() {
           role={"tutor"}
         />
         {/* New Dashboard. */}
-        <Route exact path="/add/:id" component={Dashboard} role="tutor" />
+        <Route exact role="tutor" component={Dashboard} path="/:id" />
         <Route
           exact
           role="tutor"
           component={Dashboard}
-          path="/add/:id/page/:page"
+          path="/:id/page/:page"
         />
-        <Route exact path="/edit/:id" component={Dashboard} role="tutor" />
-        <Route
-          exact
-          role="tutor"
-          component={Dashboard}
-          path="/edit/:id/page/:page"
-        />
+        {/* Errors */}
+        <Route path="/error/404" component={Error404} />
         {/* Home */}
         <Route path="/" component={Home} />
+        <Route path="*" component={Error404} />
       </Switch>
     </BrowserRouter>
   );
