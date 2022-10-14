@@ -28,15 +28,7 @@ function createPage({ data, onSuccess, onFailure }) {
     headers: getAuthHeaders(),
     data: getFormDataFromObject(data),
     url: `${URL_USER_SERVICE}/contentbuilder/learning-material/add-page`,
-    onSuccess: ({ data }) => {
-      toast.update(burger, {
-        autoClose: true,
-        isLoading: false,
-        type: toast.TYPE.SUCCESS,
-        render: "Page added successfully.",
-      });
-      onSuccess?.(data, burger);
-    },
+    onSuccess: ({ data }) => onSuccess?.(data, burger),
     onFailure: ({ message }) => {
       toast.update(burger, {
         autoClose: true,

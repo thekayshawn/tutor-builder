@@ -61,16 +61,16 @@ function Dashboard() {
          */
         if (page == 1) {
           // Time to create a new page.
-          onCreatePage(
-            { preventDefault: () => {} },
-            {
+          onCreatePage({
+            waitWithTimeout: false,
+            event: { preventDefault: () => {} },
+            data: {
               content_id: id,
-              title: "This page is missing a title.",
-              description: "This page is missing a description.",
+              title: "This page is missing a title",
+              description: "Oops, no description either 🥲",
               thumbnail: null,
             },
-            false
-          );
+          });
           return;
         }
 
@@ -84,21 +84,26 @@ function Dashboard() {
   /**
    * Create a new page for the current material.
    *
-   * @param {Event} e An event to be prevented from happening.
+   * @param {Object} props
    *
-   * @param {Object} data The data to create a new page with.
+   * @param {Event} props.event An event to be prevented from happening.
    *
-   * @param {boolean} waitWithTimeout Default = true;
+   * @param {Object} props.data The data to create a new page with.
+   *
+   * @param {import("react-toastify").Id | undefined} props.burger
+   * The toast to be updated, a newer is created otherwise.
+   *
+   * @param {boolean} props.waitWithTimeout Default = true;
    * Whether to wait, while a sweet little toast is displayed, before redirecting towards the newly created page or instantly hustle.
    */
-  function onCreatePage(e, data, waitWithTimeout = true) {
-    e.preventDefault();
+  function onCreatePage({ event, data, burger, waitWithTimeout = true }) {
+    event.preventDefault();
 
     createPage({
       data,
-      onSuccess: (newPages, burger) => {
+      onSuccess: (newPages, newBurger) => {
         // Inform the ongoing operation.
-        toast.update(burger, {
+        toast.update(burger || newBurger, {
           isLoading: false,
           type: toast.TYPE.INFO,
           autoClose: config.integers.REDIRECTION,

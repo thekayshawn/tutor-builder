@@ -514,11 +514,16 @@ function Editor({
 
   /**
    * Listener for the save action.
+   *
+   * @param {Function | undefined} onSuccess
+   *
    * @returns {void}
    */
-  function onUpdateContentListener() {
+  function onUpdateContentListener(onSuccess = () => {}) {
+    console.log({ onSuccess });
+
     // Update.
-    updatePageContent(getPageData());
+    updatePageContent({ ...getPageData(), onSuccess });
   }
 
   /**
@@ -526,15 +531,7 @@ function Editor({
    * Saves the current page and redirects to the dashboard's pricing page.
    */
   function onContinueListener() {
-    const pageData = getPageData();
-
-    // Save and continue.
-    updatePageContent({
-      ...pageData,
-      onSuccess,
-    });
-
-    function onSuccess(_, burger) {
+    onUpdateContentListener((_, burger) => {
       toast.update(burger, {
         isLoading: false,
         type: toast.TYPE.INFO,
@@ -547,7 +544,7 @@ function Editor({
           `${URL_DASHBOARD_PRICING}/${pageMetaData.content_id}`
         );
       }, integers.REDIRECTION);
-    }
+    });
   }
 
   return state === "erred" ? (

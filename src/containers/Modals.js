@@ -21,6 +21,7 @@ import {
   DropdownToggle,
 } from "reactstrap";
 import Pagination from "../components/pagination";
+import { toast } from "react-toastify";
 
 function Modals({
   page,
@@ -129,7 +130,7 @@ function Modals({
         <Button
           type="button"
           color="secondary"
-          onClick={onUpdateContentListener}
+          onClick={() => onUpdateContentListener()}
         >
           Save
         </Button>
@@ -173,13 +174,22 @@ function Modals({
           <form
             encType="multipart/form-data"
             onSubmit={(e) => {
-              onCreatePage(e, {
-                title: newPageModal.title,
-                thumbnail: newPageModal.thumbnail,
-                description: newPageModal.description,
-                content_id: pageMetaData.content_id,
+              e.preventDefault();
+
+              onUpdateContentListener((_, burger) => {
+                onCreatePage({
+                  burger,
+                  event: e,
+                  data: {
+                    title: newPageModal.title,
+                    thumbnail: newPageModal.thumbnail,
+                    description: newPageModal.description,
+                    content_id: pageMetaData.content_id,
+                  },
+                });
+
+                onToggleModal("newPageModal");
               });
-              onToggleModal("newPageModal");
             }}
           >
             <div className="row">
@@ -362,10 +372,13 @@ function Modals({
           itemsPerPage={1}
           currentPage={parseInt(page)}
           totalItems={parseInt(number_of_pages)}
-          onChangePage={(newPage) =>
-            //history.push(`/${pageMetaData.content_id}/page/${newPage}`)
-            (window.location.href = `/${pageMetaData.content_id}/page/${newPage}`)
-          }
+          onChangePage={(newPage) => {
+            // Save the current page before moving around.
+            onUpdateContentListener(() => {
+              //history.push(`/${pageMetaData.content_id}/page/${newPage}`)
+              window.location.href = `/${pageMetaData.content_id}/page/${newPage}`;
+            });
+          }}
         />
         {/* Settings button. */}
         <button
