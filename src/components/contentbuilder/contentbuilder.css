@@ -243,7 +243,7 @@ button#close_collaped {
 .is-ui {
   font-family: "Poppins";
   font-size: 13px;
-  z-index: 10000 !important;
+  z-index: 1000 !important;
   letter-spacing: 1px;
   font-weight: 300px;
   /* border-top: 1px solid #E6EBF0;
@@ -399,7 +399,7 @@ button#close_collaped {
 #_cbhtml .is-pop,
 .is-ui .is-pop {
   display: none;
-  z-index: 10003;
+  z-index: 1003;
   position: absolute;
   top: 0;
   left: 0;
@@ -409,7 +409,7 @@ button#close_collaped {
 }
 #_cbhtml .is-pop:hover,
 .is-ui .is-pop:hover {
-  z-index: 10003;
+  z-index: 1003;
 }
 #_cbhtml .is-pop.arrow-top:after,
 #_cbhtml .is-pop.arrow-top:before,
@@ -830,7 +830,7 @@ ul.list-heading li a {
 .is-ui .is-elementrte-tool,
 .is-ui .is-rte-pop.rte-more-options,
 .is-ui .is-rte-pop.elementrte-more-options {
-  z-index: 1000;
+  z-index: 100;
   padding: 0;
   color: #000;
   background: #fff;
@@ -2762,7 +2762,7 @@ ul.list-heading li a {
   font-family: "Poppins";
   font-size: 14px;
   letter-spacing: 1px;
-  z-index: 10003;
+  z-index: 1003;
 }
 #_cbhtml .is-side.active,
 .is-ui .is-side.active {
@@ -4602,7 +4602,7 @@ img.add-contenting {
   outline: none;
 }
 .is-tool:hover {
-  z-index: 10003;
+  z-index: 1003;
 }
 .is-tool.active {
   display: flex;
