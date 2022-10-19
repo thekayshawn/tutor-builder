@@ -5719,3 +5719,27 @@ input.add_type_question {
   width: 100%;
   margin-top: 30px;
 }
+
+/* Hiding the add snippets button from the top toolbar. */
+.rte-addsnippet[data-title="Add Snippet"] {
+  display: none !important;
+}
+
+/* Hiding the "Add More..." button on the "Add content" toolbar. */
+.add-more[title="More..."] {
+  display: none !important;
+}
+
+/* Changing the styles of the default buttons. */
+.input-select:is(:hover, :focus),
+.input-cancel.classic-primary:is(:hover, :focus),
+.input-ok.classic-primary:is(:hover, :focus),
+.input-cancel.classic-secondary:is(:hover, :focus),
+.input-ok.classic-secondary:is(:hover, :focus) {
+  outline: 1px dashed black !important;
+}
+
+/* Fixing the widths of snippet-toolbar buttons. */
+button .closed_collaped {
+  width: calc(100% + 6px) !important
+}

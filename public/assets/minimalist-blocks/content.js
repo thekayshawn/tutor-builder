@@ -107,7 +107,7 @@ $(document).on("click", "#tutor_image_collapse", function () {
     '<div class="collapse edit_collection tutor_main_submenus" id="collapseExample">' +
       '<button type="button" id="close_collaped" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
       "<ul>" +
-      '<li class="tutor-list-imging"><a href="javascript:void(0)" id="122" class="single_placeholder"><img src="/assets/minimalist-blocks/preview/single.svg" alt=""/></a></li>' +
+      '<li class="tutor-list-imging"><a href="javascript:void(0)" id="122" class="single_placeholder"><img class="border border-2 border-primary rounded" src="/assets/minimalist-blocks/preview/single.svg" alt=""/></a></li>' +
       '<li><a href="javascript:void(0)" id="113" class="single_placeholder"><img src="/assets/minimalist-blocks/preview/two.svg" alt=""/></a></li>' +
       '<li class="tutor-list-imging"><a href="javascript:void(0)" id="114" class="single_placeholder"><img src="/assets/minimalist-blocks/preview/three.svg" alt=""/></a></li>' +
       '<li><a href="javascript:void(0)" id="112" class="single_placeholder"><img src="/assets/minimalist-blocks/preview/multiple.svg" alt=""/></a></li>' +
@@ -213,6 +213,14 @@ $(document).on("click", "#close_hidies", function () {
 $(document).on("click", ".single_placeholder", function () {
   var elmId = $(this).attr("id");
   $(".is-design-list .snippet-item").addClass("hide");
+
+  // Hide the border from all the placeholders.
+  $(".single_placeholder img").removeClass(["border", "border-2", "border-primary", "rounded"])
+
+  // Idk what the shit is going on here, but I'm adding a border to the selected image placeholder, that's all I know.
+  this && this.children[0] && this.children[0].classList.add("border", "border-2", "border-primary", "rounded");
+  // Yeah, I'm done.
+
   if ($(`.is-design-list .snippet-item[data-cat="${elmId}"]`).length == 0) {
     var items = data_basic.snippets.filter((x) => x.category == elmId);
     for (var i = 0; i < items.length; i++) {

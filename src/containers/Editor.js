@@ -569,8 +569,11 @@ function Editor({
         ref={contentBuilderRef}
         initialHtml={pageContent.html}
         onSave={onUpdateContentListener}
-        //doSave={(f) => (callSave = f)}
-        //doDestroy={(f) => (callDestroy = f)}
+        // Hides themes from the preferences modal.
+        themes={null}
+        elementHighlight={true}
+        // Hides the add snippet (+) button.
+        snippetAddTool={false}
         base64Handler="/upload"
         imageSelect="images.html"
         largerImageHandler="/upload"
