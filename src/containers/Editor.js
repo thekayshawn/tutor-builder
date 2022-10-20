@@ -520,8 +520,6 @@ function Editor({
    * @returns {void}
    */
   function onUpdateContentListener(onSuccess = () => {}) {
-    console.log({ onSuccess });
-
     // Update.
     updatePageContent({ ...getPageData(), onSuccess });
   }

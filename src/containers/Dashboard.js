@@ -66,8 +66,8 @@ function Dashboard() {
             event: { preventDefault: () => {} },
             data: {
               content_id: id,
-              title: "This page is missing a title",
-              description: "Oops, no description either 🥲",
+              title: "Default title",
+              description: "Default description",
               thumbnail: null,
             },
           });
@@ -103,7 +103,7 @@ function Dashboard() {
       data,
       onSuccess: (newPages, newBurger) => {
         // Inform the ongoing operation.
-        toast.update(burger || newBurger, {
+        toast.update(newBurger, {
           isLoading: false,
           type: toast.TYPE.INFO,
           autoClose: config.integers.REDIRECTION,

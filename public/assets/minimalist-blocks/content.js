@@ -1,4 +1,99 @@
-﻿/* v3.1 */
+﻿window.addEventListener("DOMContentLoaded", () => {
+  /// Setting the toggled state on the sidebar buttons.
+
+  // The buttons are generated in buildercontrol.jsx
+  // Hopefully the items will be loaded on the first try.
+  let sidebarButtonParagraphs =
+    document.getElementsByClassName("closed_collaped");
+
+  // Otherwise, we'll try to find them after each second.
+  const interval = setInterval(() => {
+    setCurrentSnippetButtonAsActive();
+  }, 1000);
+
+  function setCurrentSnippetButtonAsActive() {
+    sidebarButtonParagraphs =
+      document.getElementsByClassName("closed_collaped");
+
+    // Once found, we cancel the interval and go on with our lives.
+    if (sidebarButtonParagraphs && sidebarButtonParagraphs.length > 0) {
+      clearInterval(interval);
+
+      Array.from(sidebarButtonParagraphs).forEach((p, _, rest) =>
+        // The parent of the paragraph, a button, already has an event listener, so we append another to it like bam!
+        p.parentElement?.addEventListener("click", () => {
+          // Remove the attribute from all paragraphs.
+          rest.forEach((p) => p.removeAttribute("data-active"));
+
+          // Set it on the currently clicked one.
+          p.setAttribute("data-active", true);
+
+          // Also reset the image-snippet buttons cuz if the clicked button is the toggler of them, they won't reset their state and some weird shit will happen, check out the called function for more.
+          resetImageSnippetButtons();
+        })
+      );
+    }
+  }
+
+  /**
+   * Alright, let's talk about the snippet menu anchor.
+   *
+   * --------------------------------------------------------------------------
+   * This lil shit needs some serious modifications since it somehow swaps a
+   * whole icon when clicked, funny eh? Let's swap it's icon with our own icon
+   * and then make make it turn as we wish.
+   * --------------------------------------------------------------------------
+   */
+
+  // Default event listener.
+  $(document).on("click", "#divSnippetHandle", function () {
+    $(".acyives").removeClass("acyives");
+  });
+});
+
+/**
+ * Reset the image snippets.
+ *
+ * --------------------------------------------------------------------------
+ * What happens is that when this button is clicked, the snippet-sidebar is
+ * closed, yet the state of the image-snippets stays unaffected.
+ *
+ * The subjective snippets come with 4 buttons. Clicking each of them renders
+ * a sub-snippet-bar, each containing different kinds of image-snippets.
+ *
+ * Catching up so far? Good.
+ *
+ * Let's say we're viewing the 4th sub-bar of the image-snippets and we close
+ * the sidebar. The sidebar gets thrown aside yet the 4th sub-bar stays
+ * active.
+ *
+ * No problem, the user will see the 4th bar when it opens again, right?
+ * No, the shitter handling the open functionality resets the bar's state to
+ * display the 1st one as the active bar.
+ *
+ * Now, visually, the 4th bar is active, while the actual active bar is the
+ * 1st. So we're going to make sure we set the 1st bar as active while
+ * closing the sidebar, cuz I don't know where TF does the snippet buttons
+ * come from.
+ * --------------------------------------------------------------------------
+ */
+function resetImageSnippetButtons() {
+  const imageSnippetButtons = document.querySelectorAll(".single_placeholder");
+
+  if (imageSnippetButtons && imageSnippetButtons.length > 0) {
+    Array.from(imageSnippetButtons).forEach((button, _, rest) => {
+      // Make all the others inactive.
+      rest?.forEach((otherButton) =>
+        otherButton.removeAttribute("data-active")
+      );
+
+      // Don't forget to click it cuz the state isn't reset when this lil arrow is clicked again to open the sidebar.
+      imageSnippetButtons[0]?.click();
+    });
+  }
+}
+
+/* v3.1 */
 function _tabs(n) {
   var html = "";
   for (var i = 1; i <= n; i++) {
@@ -107,7 +202,7 @@ $(document).on("click", "#tutor_image_collapse", function () {
     '<div class="collapse edit_collection tutor_main_submenus" id="collapseExample">' +
       '<button type="button" id="close_collaped" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
       "<ul>" +
-      '<li class="tutor-list-imging"><a href="javascript:void(0)" id="122" class="single_placeholder"><img class="border border-2 border-primary rounded" src="/assets/minimalist-blocks/preview/single.svg" alt=""/></a></li>' +
+      '<li class="tutor-list-imging"><a href="javascript:void(0)" id="122" class="single_placeholder" data-active="true"><img src="/assets/minimalist-blocks/preview/single.svg" alt=""/></a></li>' +
       '<li><a href="javascript:void(0)" id="113" class="single_placeholder"><img src="/assets/minimalist-blocks/preview/two.svg" alt=""/></a></li>' +
       '<li class="tutor-list-imging"><a href="javascript:void(0)" id="114" class="single_placeholder"><img src="/assets/minimalist-blocks/preview/three.svg" alt=""/></a></li>' +
       '<li><a href="javascript:void(0)" id="112" class="single_placeholder"><img src="/assets/minimalist-blocks/preview/multiple.svg" alt=""/></a></li>' +
@@ -139,9 +234,6 @@ $(document).on("click", "#closed_collaped", function () {
   $(".scroll-darker").addClass("acyives");
   $(".acyives").addClass("active");
   $(".edit_collection").delay(8000).remove();
-});
-$(document).on("click", "#divSnippetHandle", function () {
-  $(".acyives").removeClass("acyives");
 });
 
 /*  $(document).on('click' ,".previewcontent-button",function(e){
@@ -214,12 +306,16 @@ $(document).on("click", ".single_placeholder", function () {
   var elmId = $(this).attr("id");
   $(".is-design-list .snippet-item").addClass("hide");
 
-  // Hide the border from all the placeholders.
-  $(".single_placeholder img").removeClass(["border", "border-2", "border-primary", "rounded"])
+  const imageSnippetButtons = document.querySelectorAll(".single_placeholder");
 
-  // Idk what the shit is going on here, but I'm adding a border to the selected image placeholder, that's all I know.
-  this && this.children[0] && this.children[0].classList.add("border", "border-2", "border-primary", "rounded");
-  // Yeah, I'm done.
+  // Set all buttons as inactive.
+  Array.from(imageSnippetButtons)?.forEach((button) =>
+    button.removeAttribute("data-active")
+  );
+
+  // Set the clicked button as active.
+  this.setAttribute("data-active", true);
+  // Idk whatever the hell is happening here, I'm just tryna survive.
 
   if ($(`.is-design-list .snippet-item[data-cat="${elmId}"]`).length == 0) {
     var items = data_basic.snippets.filter((x) => x.category == elmId);

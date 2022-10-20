@@ -5,6 +5,7 @@
 
   /* Others. */
   --toastify-z-index: 100000;
+  --color-accent: hsl(147, 64%, 61%);
 }
 
 .btn {

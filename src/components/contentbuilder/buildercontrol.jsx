@@ -251,7 +251,7 @@ BuilderControl.defaultProps = {
   snippetCategories: [
     [
       101,
-      '<p id="closed_collaped" class="closed_collaped">' +
+      '<p id="closed_collaped" class="closed_collaped" data-active="true">' +
         '<img src="/assets/minimalist-blocks/preview/icon/Heading.svg" alt="svg-icon"/><span>Title</span>' +
         "</p>",
     ],
@@ -263,7 +263,7 @@ BuilderControl.defaultProps = {
     ],
     [
       122,
-      '<p id="tutor_image_collapse">' +
+      '<p id="tutor_image_collapse" class="closed_collaped">' +
         '<img src="/assets/minimalist-blocks/preview/icon/Images.svg" alt="svg-icon"/><span>Image</span>' +
         "</p>",
     ],
@@ -287,7 +287,7 @@ BuilderControl.defaultProps = {
     ],
     [
       108,
-      '<p id="tutor_qoutes_collapse">' +
+      '<p id="tutor_qoutes_collapse" class="closed_collaped">' +
         '<img src="/assets/minimalist-blocks/preview/icon/Quote.svg" alt="svg-icon"/><span>Quotes</span>' +
         "</p>",
     ],

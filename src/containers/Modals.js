@@ -6,6 +6,7 @@ import {
   URL_WEBSITE,
   URL_DASHBOARD,
   URL_DASHBOARD_CONTENT_BUILDER,
+  MAX_PAGES_PER_MATERIAL,
 } from "../env";
 
 // Components.
@@ -21,6 +22,9 @@ import {
   DropdownToggle,
 } from "reactstrap";
 import Pagination from "../components/pagination";
+
+// Static.
+import "microtip/microtip.css";
 import { toast } from "react-toastify";
 
 function Modals({
@@ -99,6 +103,35 @@ function Modals({
     }));
   }
 
+  /**
+   * Handle for the "Add a page" button's click listener.
+   *
+   * --------------------------------------------------------------------------
+   * Well, about everything is limited in this world. So is the number of pages
+   * a user can create. This is where we tell them their limits and also play
+   * with them cuz why not?
+   * --------------------------------------------------------------------------
+   */
+  function onClickNewPageButton() {
+    if (number_of_pages < MAX_PAGES_PER_MATERIAL) {
+      onToggleModal("newPageModal");
+      return;
+    }
+
+    // Otherwise, teach them some manners.
+    toast.error(
+      <div>
+        Ohh 🤯 Can't create more than {MAX_PAGES_PER_MATERIAL} pages, you should
+        contact{" "}
+        <a href={`${URL_DASHBOARD}/support`} target="_blank" rel="noreferrer">
+          support
+        </a>
+      </div>
+    );
+
+    return;
+  }
+
   return (
     <>
       <div
@@ -112,12 +145,22 @@ function Modals({
         }}
       >
         <button
-          onClick={() => onToggleModal("newPageModal")}
+          role="tooltip"
+          onClick={onClickNewPageButton}
+          data-microtip-position="bottom"
           className="btn border rounded bg-light fs-5"
+          aria-label={
+            number_of_pages < MAX_PAGES_PER_MATERIAL
+              ? "Add a page"
+              : `Can't add more than ${MAX_PAGES_PER_MATERIAL} pages`
+          }
         >
           <ion-icon name="add-circle-outline"></ion-icon>
         </button>
         <button
+          role="tooltip"
+          aria-label="Delete this page"
+          data-microtip-position="bottom"
           className="btn border rounded bg-light fs-5"
           onClick={() => {
             if (window.confirm("Are you sure about that?")) {
@@ -135,7 +178,7 @@ function Modals({
           Save
         </Button>
         <Button type="button" color="secondary" onClick={onContinueListener}>
-          Save and Continue
+          Save & Continue
         </Button>
         {/* <button type="button" onClick={() => callSaveAndFinish()} style={{"width":"120px"}}>Save On Page</button> */}
         {/* <button type="button" className="save-contenting" onClick={() => closeBuilder()} style={{"width":"85px"}}>Close</button> */}
@@ -174,6 +217,7 @@ function Modals({
           <form
             encType="multipart/form-data"
             onSubmit={(e) => {
+              toast.dismiss();
               e.preventDefault();
 
               onUpdateContentListener((_, burger) => {
@@ -280,6 +324,8 @@ function Modals({
           <form
             encType="multipart/form-data"
             onSubmit={(e) => {
+              toast.dismiss();
+
               onUpdatePageMeta(e, {
                 title: editPageModal.title,
                 thumbnail: editPageModal.thumbnail,
@@ -383,7 +429,9 @@ function Modals({
         {/* Settings button. */}
         <button
           type="button"
-          title="Settings"
+          role="tooltip"
+          aria-label="Edit this page"
+          data-microtip-position="top"
           onClick={() => onToggleModal("editPageModal")}
           className="btn border rounded bg-light fs-5"
         >
@@ -402,7 +450,9 @@ function Modals({
         >
           <DropdownToggle
             tag="button"
-            title="Navigational Options"
+            role="tooltip"
+            aria-label="Home"
+            data-microtip-position="top"
             className="btn border rounded bg-light fs-5"
           >
             <ion-icon name="home-outline"></ion-icon>
@@ -440,7 +490,9 @@ function Modals({
         {/* Fullscreen button. */}
         <button
           type="button"
-          title="Fullscreen mode"
+          role="tooltip"
+          aria-label="Fullscreen"
+          data-microtip-position="top-left"
           className="btn border rounded bg-light fs-5"
           onClick={() =>
             document.getElementById("main_content")?.requestFullscreen()

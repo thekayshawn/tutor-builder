@@ -3282,7 +3282,6 @@ nav.site-navigations {
 #_cbhtml #divSnippetList.fromleft,
 .is-ui #divSnippetList.fromleft {
   left: -139px;
-  top: 73.5px;
 }
 #_cbhtml #divSnippetList.fromleft.active,
 .is-ui #divSnippetList.fromleft.active {
@@ -4167,7 +4166,6 @@ ul.tutor-main-menu-list li {
 #_cbhtml .is-selectbox-options,
 .is-ui .is-selectbox-options {
   width: 84px;
-  height: 100%;
   border: #e8e8e8 1px solid;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -4176,6 +4174,8 @@ ul.tutor-main-menu-list li {
   position: fixed;
   left: 0;
   top: 74px;
+  bottom: 1px;
+  padding-bottom: 1.5rem;
 }
 .back_round {
   height: 74px;
@@ -4341,13 +4341,6 @@ img.add-contenting {
   font-weight: 300;
   cursor: pointer;
   text-align: center;
-}
-#_cbhtml .is-selectbox-options > div:focus,
-.is-ui .is-selectbox-options > div:focus,
-#_cbhtml .is-selectbox-options > div:hover,
-.is-ui .is-selectbox-options > div:hover {
-  /* background: whitesmoke; */
-  background-color: #ffffff;
 }
 #_cbhtml .is-selectbox-options > div.selected,
 .is-ui .is-selectbox-options > div.selected {
@@ -4595,7 +4588,7 @@ img.add-contenting {
   top: 0;
   left: 0;
   display: none;
-  z-index: 10001;
+  z-index: 1001;
   background: rgba(243, 243, 243, 0.9);
   box-sizing: border-box;
   padding: 0;
@@ -5739,7 +5732,35 @@ input.add_type_question {
   outline: 1px dashed black !important;
 }
 
-/* Fixing the widths of snippet-toolbar buttons. */
-button .closed_collaped {
-  width: calc(100% + 6px) !important
+/*** The side-toolbar hides the borders of it's children. ***/
+.is-selectbox-options {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Default border to prevent visual glitches. */
+.is-selectbox-options [role="button"] p {
+  border-left: 4px solid white !important;
+}
+
+.is-selectbox-options [role="button"]:is(:hover, :focus) p {
+  border-left: 4px solid rgb(241, 239, 239) !important;
+  background-color: rgb(241, 239, 239) !important;
+}
+
+/* Active state. */
+.is-selectbox-options [role="button"] p[data-active] {
+  border-left: 4px solid var(--color-accent) !important;
+}
+
+/*** The image snippet bar's buttons. ***/
+
+/* Default border. */
+ul > li > .single_placeholder img {
+  border-radius: 5px;
+  border: 2px solid white !important;
+}
+
+ul > li > .single_placeholder[data-active] img {
+  border: 2px solid var(--bs-primary) !important;
 }
