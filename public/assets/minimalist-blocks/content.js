@@ -6,11 +6,6 @@
   let sidebarButtonParagraphs =
     document.getElementsByClassName("closed_collaped");
 
-  // Otherwise, we'll try to find them after each second.
-  const interval = setInterval(() => {
-    setCurrentSnippetButtonAsActive();
-  }, 1000);
-
   function setCurrentSnippetButtonAsActive() {
     sidebarButtonParagraphs =
       document.getElementsByClassName("closed_collaped");
@@ -30,13 +25,23 @@
 
           // Also reset the image-snippet buttons cuz if the clicked button is the toggler of them, they won't reset their state and some weird shit will happen, check out the called function for more.
           resetImageSnippetButtons();
+
+          // Finally, let the snippet handle (arrow) know that the snippets are shown so that it can play with the arrow as expected.
+          document
+            .getElementById("divSnippetHandle")
+            ?.setAttribute("data-snippets-shown", true);
         })
       );
     }
   }
 
+  // Otherwise, we'll try to find them after each second.
+  const interval = setInterval(() => {
+    setCurrentSnippetButtonAsActive();
+  }, 1000);
+
   /**
-   * Alright, let's talk about the snippet menu anchor.
+   * Alright, let's talk about the snippet menu handle.
    *
    * --------------------------------------------------------------------------
    * This lil shit needs some serious modifications since it somehow swaps a

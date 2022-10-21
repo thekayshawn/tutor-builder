@@ -12,6 +12,7 @@
     "buffer": "^6.0.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "dompurify": "^2.4.0",
     "env-cmd": "^10.1.0",
     "jquery": "^3.6.0",
     "microtip": "^0.2.2",

@@ -10,6 +10,7 @@ svg {
   pointer-events: none;
 }
 #divSnippetHandle .is-icon-flex {
+  display: none !important;
   filter: invert(1);
 }
 
@@ -5753,9 +5754,7 @@ input.add_type_question {
   border-left: 4px solid var(--color-accent) !important;
 }
 
-/*** The image snippet bar's buttons. ***/
-
-/* Default border. */
+/* The image snippet bar's buttons. */
 ul > li > .single_placeholder img {
   border-radius: 5px;
   border: 2px solid white !important;
@@ -5763,4 +5762,23 @@ ul > li > .single_placeholder img {
 
 ul > li > .single_placeholder[data-active] img {
   border: 2px solid var(--bs-primary) !important;
+}
+
+/* Snippet handle's custom icon. */
+#divSnippetHandle::before {
+  content: "";
+  transition: transform 0.5s ease;
+  position: absolute;
+  height: 10px;
+  width: 10px;
+  top: 10px;
+  left: 17.5px;
+  transform: rotate(45deg);
+  border-radius: 3px;
+  border-top: 2px solid white;
+  border-right: 2px solid white;
+}
+
+#divSnippetHandle[data-snippets-shown="true"]::before {
+  transform: rotate(-135deg);
 }

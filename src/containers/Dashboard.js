@@ -30,6 +30,8 @@ function Dashboard() {
   });
 
   React.useEffect(() => {
+    // console.log(document.getElementById("divSnippetHandle"));
+
     // Request the current page's metadata.
     apiService.get({
       headers: getAuthHeaders(),

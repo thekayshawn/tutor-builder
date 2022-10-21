@@ -1,6 +1,7 @@
 import * as React from "react";
 
 // Utils.
+import { builderConfig } from "../Core/Config";
 import { integers } from "../config";
 import { useHistory } from "react-router-dom";
 import { getAuthHeaders, isObjectValid } from "../utils";
@@ -565,18 +566,14 @@ function Editor({
       <BuilderControl
         history={history}
         ref={contentBuilderRef}
-        initialHtml={pageContent.html}
-        onSave={onUpdateContentListener}
-        // Hides themes from the preferences modal.
-        themes={null}
-        elementHighlight={true}
-        // Hides the add snippet (+) button.
-        snippetAddTool={false}
         base64Handler="/upload"
         imageSelect="images.html"
         largerImageHandler="/upload"
+        initialHtml={pageContent.html}
+        onSave={onUpdateContentListener}
         languageFile="/contentbuilder/lang/en.js"
         snippetFile="/assets/minimalist-blocks/content.js"
+        {...builderConfig}
       />
       <Modals
         {...{

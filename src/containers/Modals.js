@@ -26,6 +26,7 @@ import Pagination from "../components/pagination";
 // Static.
 import "microtip/microtip.css";
 import { toast } from "react-toastify";
+import { SnippetHandle } from "../Presentation/Components";
 
 function Modals({
   page,
@@ -144,6 +145,7 @@ function Modals({
           justifyContent: "flex-end",
         }}
       >
+        <SnippetHandle />
         <button
           role="tooltip"
           onClick={onClickNewPageButton}

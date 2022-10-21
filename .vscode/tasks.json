@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "React",
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "type": "npm",
+      "script": "start",
+      "icon": {"id": "symbol-object", "color": "terminal.ansiBlue"},
+    },
+  ]
+}
