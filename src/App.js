@@ -25,18 +25,6 @@ function App() {
     localStorage.getItem("token");
 
   React.useEffect(() => {
-    // A previous session exists.
-    if (isObjectValid(user)) {
-      setState("authenticated");
-      return;
-    }
-
-    // Neither a token is provided nor a previous session is saved.
-    if (!token && !isObjectValid(user)) {
-      setState("unauthenticated");
-      return;
-    }
-
     // A token is provided for a new session.
     if (token) {
       apiService.post({
@@ -56,6 +44,18 @@ function App() {
         },
       });
 
+      return;
+    }
+
+    // A previous session exists.
+    if (isObjectValid(user)) {
+      setState("authenticated");
+      return;
+    }
+
+    // Neither a token is provided nor a previous session is saved.
+    if (!token && !isObjectValid(user)) {
+      setState("unauthenticated");
       return;
     }
 

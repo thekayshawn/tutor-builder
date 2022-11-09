@@ -1,22 +1,29 @@
+// import ShowData from "./ShowData";
+// import AddPage from "./containers/AddPage";
+// import ShowAddPage from "./containers/ShowAddPage";
+// import EditContent from "./containers/EditContent";
 import React from "react";
-import ShowData from "./ShowData";
 import Home from "./containers/Home";
-import AddPage from "./containers/AddPage";
 import Dashboard from "./containers/Dashboard";
-import ShowAddPage from "./containers/ShowAddPage";
-import EditContent from "./containers/EditContent";
-import ProtectedRoute from "./components/ProtectedRoute";
 import CoursesAvailble from "./containers/CoursesAvailble";
 import LearnerShowPages from "./containers/LearnerShowPages";
 import OldDashboard from "./containers/OldDashboard";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Error404 } from "./components/error";
 
+// Content Builder.
+import { Viewer } from "./Presentation/Views/(Builder)";
+
+// Helpers.
+import { ProtectedRoute } from "./Core/Helpers/ProtectedRoute";
+
 export default function Routes() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
     <BrowserRouter>
       <Switch>
-        <ProtectedRoute
+        {/* <ProtectedRoute
           exact
           path="/addpage"
           component={AddPage}
@@ -40,8 +47,6 @@ export default function Routes() {
           component={EditContent}
           role={"tutor"}
         ></ProtectedRoute>
-
-        {/* Learner ProtectedRoutes */}
         <ProtectedRoute
           exact
           path="/coursesavailble"
@@ -59,7 +64,13 @@ export default function Routes() {
           path="/old/:id/:title"
           component={OldDashboard}
           role={"tutor"}
-        />
+        />*/}
+        {/* Content Builder. */}
+        <Route path="/viewer/:id/:slug">
+          <ProtectedRoute userType={user.user_type} expectedUserType="learner">
+            <Viewer />
+          </ProtectedRoute>
+        </Route>
         {/* New Dashboard. */}
         <Route exact role="tutor" component={Dashboard} path="/:id" />
         <Route
