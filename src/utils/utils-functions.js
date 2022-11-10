@@ -2,7 +2,7 @@ import { URL_LOGOUT } from "../env";
 
 /**
  * Get the headers required for an authorized request.
- * @param {string} token the Authentication token.
+ * @param {string | undefined} token the Authentication token.
  * @returns {Object} The required headers.
  */
 export const getAuthHeaders = (token) => {

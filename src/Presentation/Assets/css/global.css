@@ -1,0 +1,118 @@
+.dir-ltr {
+  direction: ltr;
+}
+
+.dir-rtl {
+  direction: rtl;
+}
+
+/* BS colors start here. */
+.bg-gray-100 {
+  background-color: var(--bs-gray-100);
+}
+
+.hover\:bg-gray-100:hover {
+  background-color: var(--bs-gray-100);
+}
+
+.focus\:bg-gray-100:focus {
+  background-color: var(--bs-gray-100);
+}
+
+.bg-gray-200 {
+  background-color: var(--bs-gray-200);
+}
+
+.hover\:bg-gray-200:hover {
+  background-color: var(--bs-gray-200);
+}
+
+.focus\:bg-gray-200:focus {
+  background-color: var(--bs-gray-200);
+}
+
+.bg-gray-300 {
+  background-color: var(--bs-gray-300);
+}
+
+.hover\:bg-gray-300:hover {
+  background-color: var(--bs-gray-300);
+}
+
+.focus\:bg-gray-300:focus {
+  background-color: var(--bs-gray-300);
+}
+
+.bg-gray-400 {
+  background-color: var(--bs-gray-400);
+}
+
+.hover\:bg-gray-400:hover {
+  background-color: var(--bs-gray-400);
+}
+
+.focus\:bg-gray-400:focus {
+  background-color: var(--bs-gray-400);
+}
+
+.bg-gray-500 {
+  background-color: var(--bs-gray-500);
+}
+
+.hover\:bg-gray-500:hover {
+  background-color: var(--bs-gray-500);
+}
+
+.focus\:bg-gray-500:focus {
+  background-color: var(--bs-gray-500);
+}
+
+.bg-gray-600 {
+  background-color: var(--bs-gray-600);
+}
+
+.hover\:bg-gray-600:hover {
+  background-color: var(--bs-gray-600);
+}
+
+.focus\:bg-gray-600:focus {
+  background-color: var(--bs-gray-600);
+}
+
+.bg-gray-700 {
+  background-color: var(--bs-gray-700);
+}
+
+.hover\:bg-gray-700:hover {
+  background-color: var(--bs-gray-700);
+}
+
+.focus\:bg-gray-700:focus {
+  background-color: var(--bs-gray-700);
+}
+
+.bg-gray-800 {
+  background-color: var(--bs-gray-800);
+}
+
+.hover\:bg-gray-800:hover {
+  background-color: var(--bs-gray-800);
+}
+
+.focus\:bg-gray-800:focus {
+  background-color: var(--bs-gray-800);
+}
+
+.bg-gray-900 {
+  background-color: var(--bs-gray-900);
+}
+
+.hover\:bg-gray-900:hover {
+  background-color: var(--bs-gray-900);
+}
+
+.focus\:bg-gray-900:focus {
+  background-color: var(--bs-gray-900);
+}
+
+/* BS colors end here. */

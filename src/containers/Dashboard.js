@@ -16,6 +16,7 @@ import { apiService, createPage, deletePage } from "../service";
 
 // Static.
 import "./Home.css";
+import "../assets/index.css";
 import { toast } from "react-toastify";
 import { updatePageMeta } from "../service";
 

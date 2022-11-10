@@ -64,22 +64,13 @@ function getProposal({ url, headers, method }) {
 /**
  * Perform a GET request.
  *
- * @param {Object} object The parameters passed.
- * @param {string} object.url The endpoint to send the request to.
- * @param {{ key: string, value: string | Array }[]} object.data
- * The body of the request, must be an
- * array of the objects of the form {key, value} where;
- * - key: the string-based URL query parameter,
- * - value: the value for the URL query parameter,
- * @param {Object} object.headers The headers of the request.
- * @param {{
- * onSuccess: (response: any) => void,
- * onFailure: (error: any) => void
- * }} object.boolBacks The boolean callback methods:
- * Can be anything but undefined, but must have one of these
- * for callback functionalities.:
- * - onSuccess => The successful callback, returns the request data.
- * - onFailure => The failed callback, returns the erred data.
+ * @param {Object & {
+ * url: string
+ * headers: Object
+ * onSuccess: (data: any) => void,
+ * onFailure: (message: string) => void,
+ * data: undefined | { key: string, value: any | Array<any> }[],
+ * }} object The parameters passed.
  */
 function get({ url, data, headers, ...boolBacks }) {
   const params = {};

@@ -78,12 +78,6 @@
   font-size: 0.65rem !important;
 }
 
-/* It's a desktop tool. */
-body {
-  min-width: 968px !important;
-  overflow-x: auto !important;
-}
-
 /* The save + edit + delete buttons in the top right corner. */
 /* .is-ui.ui_save_content {
   top: 5.75rem !important;
