@@ -67,15 +67,15 @@
 }
 
 .fs-5\.5 {
-  font-size: 0.9rem !important;
+  font-size: 0.9rem;
 }
 
 .fs-7 {
-  font-size: 0.75rem !important;
+  font-size: 0.75rem;
 }
 
 .fs-8 {
-  font-size: 0.65rem !important;
+  font-size: 0.65rem;
 }
 
 /* The save + edit + delete buttons in the top right corner. */

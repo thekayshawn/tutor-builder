@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "build/dist",
     "module": "commonjs",
     "target": "ESNext",
@@ -12,7 +13,13 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "paths": {
+      "@Core/*": ["./src/Core/*"],
+      "@Data/*": ["./src/Data/*"],
+      "@Repos/*": ["./src/Repos/*"],
+      "@Presentation/*": ["./src/Presentation/*"],
+    }
   },
   "exclude": [
     "node_modules",
@@ -25,5 +32,5 @@
   ],
   "types": [
     "typePatches"
-  ]
+  ],
 }

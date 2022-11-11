@@ -46,8 +46,25 @@
 /* Sidebar > Controller ends here. */
 
 /* Sidebar > Display-controlled content starts here. */
+.sidebar .hide-when-compact {
+  display: block;
+}
+
 .sidebar[data-compact] .hide-when-compact {
   display: none;
+}
+
+.sidebar .stretch-when-compact,
+.sidebar .shrink-when-compact {
+  transition: width var(--transition-base) ease;
+}
+
+.sidebar[data-compact] .shrink-when-compact {
+  width: 0 !important;
+}
+
+.sidebar[data-compact] .stretch-when-compact {
+  width: 100%;
 }
 /* Sidebar > Display-controlled content ends here. */
 
@@ -61,3 +78,19 @@
   transform: rotate(0deg);
 }
 /* Sidebar > Controller > Content ends here. */
+
+/* Sidebar > List-Item starts here. */
+.sidebar .thumbnail {
+  min-width: 48.5px;
+  max-width: 60px;
+}
+
+.sidebar .text {
+  opacity: 1;
+  transition: opacity var(--transition-base) ease;
+}
+
+.sidebar[data-compact] .text {
+  opacity: 0;
+}
+/* Sidebar > List-Item ends here. */

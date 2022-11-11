@@ -34,7 +34,7 @@ export default function IconButton({
   return (
     <button
       {...finalProps}
-      className={`py-0 px-1 border-1 rounded bg-gray-100 hover:bg-gray-200 focus:bg-gray-200 text-secondary ${className}`}
+      className={`py-0 px-1 border-1 rounded bg-white text-secondary ${className}`}
     >
       {children}
     </button>

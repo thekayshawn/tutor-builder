@@ -19,7 +19,9 @@ function Viewer() {
 
   return (
     <ViewerViewModel>
-      <main className={`bg-light text-dark min-vh-100 ${styles.container}`}>
+      <main
+        className={`bg-light text-dark min-vh-100 text-secondary ${styles.container}`}
+      >
         <ViewerSidebar />
         <ViewerFrame />
         {/* Errors. */}

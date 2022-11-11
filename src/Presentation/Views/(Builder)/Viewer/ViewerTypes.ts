@@ -1,6 +1,6 @@
-import type { LearningMaterial } from "../../../../Data/Entities/LearningMaterialEntity";
+import type { LearningMaterialPage } from "../../../../Data/Entities/LearningMaterialPageEntity";
 
 export type ViewerState = {
-  materialPages: LearningMaterial[];
-  selectedMaterialPage?: LearningMaterial;
+  materialPages: LearningMaterialPage[];
+  selectedMaterialPage?: LearningMaterialPage;
 };

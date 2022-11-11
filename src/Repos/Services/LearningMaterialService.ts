@@ -7,11 +7,11 @@ export default class LearningMaterialService {
   /**
    * Fetch a material's pages.
    */
-  getPages({
+  getPages<T>({
     id,
     onSuccess,
     onFailure,
-  }: Boolbacks & {
+  }: Boolbacks<T> & {
     id: number;
   }) {
     apiService.get({
@@ -26,11 +26,11 @@ export default class LearningMaterialService {
   /**
    * Fetch a material's page's content.
    */
-  getPageContent({
+  getPageContent<T>({
     id,
     onSuccess,
     onFailure,
-  }: Boolbacks & {
+  }: Boolbacks<T> & {
     id: number;
   }) {
     apiService.get({

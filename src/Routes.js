@@ -65,8 +65,13 @@ export default function Routes() {
           component={OldDashboard}
           role={"tutor"}
         />*/}
-        {/* Content Builder. */}
+        {/* Builder > Viewer. */}
         <Route path="/viewer/:id/:slug">
+          <ProtectedRoute userType={user.user_type} expectedUserType="learner">
+            <Viewer />
+          </ProtectedRoute>
+        </Route>
+        <Route path="/viewer/:id/:slug/page/:page">
           <ProtectedRoute userType={user.user_type} expectedUserType="learner">
             <Viewer />
           </ProtectedRoute>
