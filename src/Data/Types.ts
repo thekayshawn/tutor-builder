@@ -1,6 +1,6 @@
 export type RequestState = {
   message?: string;
-  status: "loading" | "loaded" | "erred";
+  status: "idle" | "loading" | "loaded" | "erred";
 };
 
 export type DocumentHeadProps = {

@@ -4,7 +4,7 @@ import type {
   RawLearningMaterialPageContent,
 } from "../Entities/LearningMaterialPageContentEntity";
 
-export default class LearningMaterialAdapterPageContent {
+export default class LearningMaterialPageContentAdapter {
   serialize(
     state: LearningMaterialPageContent
   ): RawLearningMaterialPageContent {

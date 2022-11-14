@@ -13,6 +13,7 @@ export interface User {
   phone: string;
   isVerified: boolean;
   timezoneName: string;
+  profilePicture?: string;
 }
 
 /**
@@ -27,4 +28,5 @@ export interface RawUser {
   mobile_number: string;
   verification_status: 1 | 0;
   timezone: string;
+  profile_picture?: string;
 }

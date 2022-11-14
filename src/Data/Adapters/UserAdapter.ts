@@ -12,6 +12,7 @@ export default class UserAdapter {
       mobile_number: state.phone || "",
       verification_status: state.isVerified ? 1 : 0,
       timezone: state.timezoneName || "",
+      profile_picture: state.profilePicture || "",
     };
   }
 
@@ -25,6 +26,7 @@ export default class UserAdapter {
       phone: state.mobile_number || "",
       isVerified: state.verification_status == 1,
       timezoneName: state.timezone,
+      profilePicture: state.profile_picture || "",
     };
   }
 }
