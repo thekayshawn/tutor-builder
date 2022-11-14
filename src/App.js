@@ -10,6 +10,7 @@ import { Error403, Error500 } from "./components/error";
 // Static.
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import Error440 from "./components/error/error-440";
 
 function App() {
   const [state, setState] = React.useState("loading");
@@ -30,7 +31,16 @@ function App() {
       apiService.post({
         headers: getAuthHeaders(token),
         url: `${API_MAIN_URL}/validate-token`,
-        onFailure: () => setState("erred"),
+        onFailure: ({ error }) => {
+          // Token expired.
+          if (error.status === 440) {
+            setState("expired");
+            return;
+          }
+
+          // Some other error.
+          setState("erred");
+        },
         onSuccess: ({ data }) => {
           localStorage.setItem(
             "user",
@@ -68,6 +78,7 @@ function App() {
       {{
         erred: <Error500 />,
         loading: <Loader />,
+        expired: <Error440 />,
         authenticated: <Routes />,
         unauthenticated: <Error403 />,
       }[state] || <Error500 />}
