@@ -1,0 +1,21 @@
+:root {
+  --navbar-height: 5rem;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--navbar-height);
+}
+
+.content {
+  margin-top: var(--navbar-height);
+}
+
+/* The child(ren) can have their own overflow but the parent won't allow it. */
+.content > * {
+  overflow-y: auto;
+  max-height: calc(100vh - var(--navbar-height));
+}
