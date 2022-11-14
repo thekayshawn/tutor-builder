@@ -52,7 +52,7 @@ export default function TwoSectionLayout({ children }: Props): JSX.Element {
               <DropdownToggle
                 caret
                 tag="button"
-                className="rounded-pill bg-gray-200 d-flex align-items-center gap-2 px-2 py-0"
+                className="rounded-pill bg-light border-1 d-flex align-items-center gap-2 px-2 py-0"
               >
                 <Avatar
                   src={user.profilePicture}
