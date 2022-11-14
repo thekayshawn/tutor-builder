@@ -1,7 +1,7 @@
 import { apiService } from "../../service";
 import { Boolbacks } from "../../Data/Types";
-import { API_MAIN_URL } from "../../config";
 import { getAuthHeaders } from "../../utils";
+import { URL_USER_SERVICE } from "@Core/env";
 
 export default class LearningMaterialService {
   /**
@@ -19,7 +19,7 @@ export default class LearningMaterialService {
       onFailure,
       data: undefined,
       headers: getAuthHeaders(undefined),
-      url: `${API_MAIN_URL}/contentbuilder/learning-material/fetch-pages/${id}`,
+      url: `${URL_USER_SERVICE}/contentbuilder/learning-material/fetch-pages/${id}`,
     });
   }
 
@@ -38,7 +38,7 @@ export default class LearningMaterialService {
       onFailure,
       data: undefined,
       headers: getAuthHeaders(undefined),
-      url: `${API_MAIN_URL}/api/learning-material/fetch-page-content/${id}`,
+      url: `${URL_USER_SERVICE}/api/learning-material/fetch-page-content/${id}`,
     });
   }
 }
