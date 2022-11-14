@@ -49,29 +49,30 @@ export default function ViewerSidebarRenderer({
       {strings.DEFAULT_EMPTY_MESSAGE}
     </Alert>
   ) : (
-    <ul className="p-0 m-0 d-flex flex-column gap-3">
+    <ul className="px-3 pb-3 m-0 d-flex flex-column gap-3">
       {materialPages.map((page) => (
-        <button
-          key={page.id}
-          onClick={() => onClickPage(page)}
-          className="p-2 w-100 bg-white border rounded focusable text-start overflow-hidden"
-        >
-          <div className="d-flex flex-nowrap gap-2 align-items-center">
-            {/* Thumbnail. */}
-            <div className={`w-100 thumbnail rounded ${styles.thumbnail}`}>
-              <SassyImage src={page.thumbnail} fallbackImgSrc={gradientSrc} />
-            </div>
-            {/* Textual Content. */}
-            <div className={`fs-6 text-secondary ${styles.text}`}>
-              <div aria-label="Title" className="lh-sm text-truncate-2">
-                {page.title}
+        <li key={page.id}>
+          <button
+            onClick={() => onClickPage(page)}
+            className="p-2 w-100 bg-white border rounded focusable text-start overflow-hidden"
+          >
+            <div className="d-flex flex-nowrap gap-2 align-items-center">
+              {/* Thumbnail. */}
+              <div className={`w-100 thumbnail rounded ${styles.thumbnail}`}>
+                <SassyImage src={page.thumbnail} fallbackImgSrc={gradientSrc} />
               </div>
-              <div className="fs-7 text-disabled text-truncate">
-                {page.description}
+              {/* Textual Content. */}
+              <div className={`fs-6 text-secondary ${styles.text}`}>
+                <div aria-label="Title" className="lh-sm text-truncate-2">
+                  {page.title}
+                </div>
+                <div className="fs-7 text-disabled text-truncate">
+                  {page.description}
+                </div>
               </div>
             </div>
-          </div>
-        </button>
+          </button>
+        </li>
       ))}
     </ul>
   );

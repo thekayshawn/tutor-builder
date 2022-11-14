@@ -42,11 +42,11 @@ export default function ViewerSidebar(): JSX.Element {
       ref={sidebarRef}
       // rtl makes the sidebar appear on the left.
       // It's overwritten by the content below to make that appear normally.
-      className={`p-3 dir-rtl bg-gray-100 border-end ${styles.sidebar}`}
+      className={`py-3 dir-rtl bg-gray-100 border-end ${styles.sidebar}`}
     >
       {/* Content. */}
       <div className="dir-ltr h-100 d-flex flex-column gap-3">
-        <header className="d-flex gap-3 align-items-center text-secondary">
+        <header className="px-3 d-flex gap-3 align-items-center text-secondary">
           <IconButton onClick={() => history.goBack()}>
             <IconChevronLeft size={16} />
           </IconButton>
@@ -64,7 +64,7 @@ export default function ViewerSidebar(): JSX.Element {
       </div>
       {/* Controller. */}
       <IconButton
-        className={`border-secondary ${styles.controller}`}
+        className={`z-10 border-secondary ${styles.controller}`}
         onClick={() => switchSidebarState(sidebarRef.current)}
       >
         <IconChevronRight size={16} />

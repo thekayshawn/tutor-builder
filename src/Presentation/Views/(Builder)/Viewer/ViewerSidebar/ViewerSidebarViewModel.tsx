@@ -29,7 +29,20 @@ type Props = {
   }) => JSX.Element;
 };
 
-export default function ViewerSidebarViewModel({ children }: Props) {
+/**
+ * ViewModel for the viewer's frame view.
+ *
+ * Requests the content of the selected page, if it's selected, and provided it
+ * to the view.
+ *
+ * @returns {JSX.Element}
+ *
+ * @author kashan-ahmad
+ * @version 0.0.1
+ */
+export default function ViewerSidebarViewModel({
+  children,
+}: Props): JSX.Element {
   const { id: materialID } = useParams<{
     id?: string;
   }>();
@@ -52,8 +65,6 @@ export default function ViewerSidebarViewModel({ children }: Props) {
     const matPageAdapter = new LearningMaterialPageAdapter();
 
     // Notice the type cohersion.
-    // getPages is inferred with RawPaginatedEntity, which needs a type to infer
-    // it's data/records property with.
     service.getPages<{ data: RawLearningMaterialPage[] }>({
       id,
       onFailure: (message) => {
@@ -78,6 +89,8 @@ export default function ViewerSidebarViewModel({ children }: Props) {
   return children({
     state,
     requestState,
-    onClickPage: (page) => setState({ ...state, selectedMaterialPage: page }),
+    onClickPage: (page) =>
+      page !== state.selectedMaterialPage &&
+      setState({ ...state, selectedMaterialPage: page }),
   });
 }

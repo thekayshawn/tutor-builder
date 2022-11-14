@@ -1,13 +1,14 @@
 import * as React from "react";
 import { baseConfig } from "../../../../Core/Config";
 import useDocumentHead from "../../../../Core/Hooks/useDocumentHead";
+import TwoSectionLayout from "@Presentation/Layouts/TwoSectionLayout/TwoSectionLayout";
 
 // Static.
 import styles from "./Viewer.module.css";
 
 // Features.
-import ViewerFrame from "./ViewerFrame";
 import ViewerViewModel from "./ViewerViewModel";
+import ViewerFrame from "./ViewerFrame/ViewerFrame";
 import ViewerErrorViewport from "./ViewerErrorViewport";
 import ViewerSidebar from "./ViewerSidebar/ViewerSidebar";
 
@@ -18,16 +19,20 @@ function Viewer() {
   });
 
   return (
-    <ViewerViewModel>
-      <main
-        className={`bg-light text-dark min-vh-100 text-secondary ${styles.container}`}
-      >
-        <ViewerSidebar />
-        <ViewerFrame />
-        {/* Errors. */}
-        <ViewerErrorViewport />
-      </main>
-    </ViewerViewModel>
+    <TwoSectionLayout>
+      {({ contentCLassName }) => (
+        <ViewerViewModel>
+          <main
+            className={`bg-light text-dark text-secondary ${contentCLassName} ${styles.container}`}
+          >
+            <ViewerSidebar />
+            <ViewerFrame />
+            {/* Errors. */}
+            <ViewerErrorViewport />
+          </main>
+        </ViewerViewModel>
+      )}
+    </TwoSectionLayout>
   );
 }
 
