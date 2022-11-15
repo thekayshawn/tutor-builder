@@ -4,18 +4,17 @@ import useApiEffect from "@Core/Hooks/useApiEffect";
 
 // Features.
 import ViewerContext from "../ViewerContext";
-import PaginationAdapter from "@Data/Adapters/PaginationAdapter";
 import LearningMaterialService from "@Repos/Services/LearningMaterialService";
 import LearningMaterialPageAdapter from "@Data/Adapters/LearningMaterialPageAdapter";
 
 // Types.
 import type { RequestState } from "@Data/Types";
 import type { ViewerState } from "../ViewerTypes";
-import type { RawPaginatedEntity } from "@Data/Entities/PaginatedEntity";
 import type {
   LearningMaterialPage,
   RawLearningMaterialPage,
 } from "@Data/Entities/LearningMaterialPageEntity";
+import { isNumber } from "@Core/Helpers/utils";
 
 type Props = {
   children: ({
@@ -47,6 +46,8 @@ export default function ViewerSidebarViewModel({
     id?: string;
   }>();
 
+  const service = new LearningMaterialService();
+  const matPageAdapter = new LearningMaterialPageAdapter();
   const { state, setState } = React.useContext(ViewerContext);
 
   // Local state.
@@ -55,18 +56,11 @@ export default function ViewerSidebarViewModel({
   });
 
   useApiEffect(() => {
-    if (!materialID) return;
-
-    const id = parseInt(materialID);
-
-    if (isNaN(id)) return;
-
-    const service = new LearningMaterialService();
-    const matPageAdapter = new LearningMaterialPageAdapter();
+    if (!isNumber(materialID)) return;
 
     // Notice the type cohersion.
     service.getPages<{ data: RawLearningMaterialPage[] }>({
-      id,
+      id: materialID,
       onFailure: (message) => {
         setRequestState({ message, status: "erred" });
       },
@@ -86,11 +80,27 @@ export default function ViewerSidebarViewModel({
     });
   }, [materialID]);
 
+  function onClickPage(page: LearningMaterialPage) {
+    // If it's not the already selected page.
+    if (page !== state.selectedMaterialPage) {
+      setState({ ...state, selectedMaterialPage: page });
+
+      //* The progress is now updated automatically by the API.
+      // if (!isNumber(materialID) || !isNumber(page.id)) return;
+
+      // // Also, update the progress.
+      // service.updateProgress({
+      //   id: materialID,
+      //   entityID: page.id,
+      //   onSuccess: () => {},
+      //   onFailure: () => {},
+      // });
+    }
+  }
+
   return children({
     state,
+    onClickPage,
     requestState,
-    onClickPage: (page) =>
-      page !== state.selectedMaterialPage &&
-      setState({ ...state, selectedMaterialPage: page }),
   });
 }
