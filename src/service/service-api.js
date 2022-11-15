@@ -97,17 +97,13 @@ function get({ url, data, headers, ...boolBacks }) {
 /**
  * Perform a POST request.
  *
- * @param {Object} object The parameters passed.
- * @param {string} object.url The endpoint to send the request to.
- * @param {Object} object.data The body of the request.
- * @param {Object} object.headers The headers of the request.
  * @param {{
- * onSuccess: (response: any) => void,
+ * onSuccess: (data: any) => void
  * onFailure: (error: any) => void
- * }} object.boolBacks The boolean callback methods:
- * Can be anything but undefined, but must have one of these
- * - onSuccess => The successful callback, returns the request data.
- * - onFailure => The failed callback, returns the erred data.
+ * url: string
+ * data: Object
+ * headers: Object
+ * }} object The parameters passed.
  */
 function post({ url, data, headers, ...boolBacks }) {
   service({
