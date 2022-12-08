@@ -6,7 +6,7 @@
   "dependencies": {
     "@craco/craco": "^7.0.0",
     "@innovastudio/contentbuilder": "^1.0.34",
-    "@tabler/icons": "^1.110.0",
+    "@tabler/icons": "^1.116.1",
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",

@@ -12,3 +12,13 @@ export type Boolbacks<T> = {
   onSuccess: (data: T) => void;
   onFailure: (message: string) => void;
 };
+
+export type Directions =
+  | "top"
+  | "right"
+  | "bottom"
+  | "left"
+  | "top-left"
+  | "top-right"
+  | "bottom-right"
+  | "bottom-left";

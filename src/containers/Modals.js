@@ -135,6 +135,7 @@ function Modals({
 
   return (
     <>
+      <SnippetHandle />
       <div
         className="is-ui ui_save_content gap-2"
         style={{
@@ -145,7 +146,6 @@ function Modals({
           justifyContent: "flex-end",
         }}
       >
-        <SnippetHandle />
         <button
           role="tooltip"
           onClick={onClickNewPageButton}

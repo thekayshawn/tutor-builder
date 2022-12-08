@@ -690,6 +690,14 @@ button.add-contenting:hover {
   border-radius: 50%;
   line-height: 2.3;
 }
+.edit-prop-model .file-upload .image-box img {
+  display: block !important;
+}
+
+.edit-prop-model .file-upload .image-box img.page-no-thumb {
+  display: none !important;
+}
+
 .file-upload .image-box {
   background: #4444;
   border-radius: 10px;
@@ -700,14 +708,6 @@ button.add-contenting:hover {
   height: 100%;
   display: none;
 }
-.edit-prop-model .file-upload .image-box img {
-  display: block !important;
-}
-
-.edit-prop-model .file-upload .image-box img.page-no-thumb {
-  display: none !important;
-}
-
 .file-upload .image-box p {
   position: relative;
   top: 45%;

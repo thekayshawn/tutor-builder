@@ -5,14 +5,11 @@
 import React from "react";
 import Home from "./containers/Home";
 import Dashboard from "./containers/Dashboard";
-import CoursesAvailble from "./containers/CoursesAvailble";
-import LearnerShowPages from "./containers/LearnerShowPages";
-import OldDashboard from "./containers/OldDashboard";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Error404 } from "./components/error";
 
 // Content Builder.
-import { Viewer } from "./Presentation/Views/(Builder)";
+import { Editor, Viewer } from "./Presentation/Views/(Builder)";
 
 // Helpers.
 import { ProtectedRoute } from "./Core/Helpers/ProtectedRoute";
@@ -65,7 +62,7 @@ export default function Routes() {
           component={OldDashboard}
           role={"tutor"}
         />*/}
-        {/* Builder > Viewer. */}
+        {/* Builder > Viewer */}
         <Route path="/viewer/:id/:slug">
           <ProtectedRoute userType={user.user_type} expectedUserType="learner">
             <Viewer />
@@ -74,6 +71,17 @@ export default function Routes() {
         <Route path="/viewer/:id/:slug/page/:page">
           <ProtectedRoute userType={user.user_type} expectedUserType="learner">
             <Viewer />
+          </ProtectedRoute>
+        </Route>
+        {/* Builder > Editor */}
+        <Route path="/editor/:id/:slug">
+          <ProtectedRoute userType={user.user_type} expectedUserType="tutor">
+            <Editor />
+          </ProtectedRoute>
+        </Route>
+        <Route path="/editor/:id/:slug/page/:page">
+          <ProtectedRoute userType={user.user_type} expectedUserType="tutor">
+            <Editor />
           </ProtectedRoute>
         </Route>
         {/* New Dashboard. */}
