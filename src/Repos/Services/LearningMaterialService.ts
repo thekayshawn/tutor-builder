@@ -1,18 +1,7 @@
 import { apiService } from "../../service";
-import { getAuthHeaders, getFormDataFromObject } from "../../utils";
+import { getAuthHeaders } from "../../utils";
 import { URL_USER_SERVICE } from "@Core/env";
 import type { Boolbacks } from "../../Data/Types";
-
-// type UpdateProgressService = {
-//   // The learning material's ID.
-//   id: number;
-
-//   // ID of the page that's receiving a progress update.
-//   entityID: number;
-
-//   onSuccess: Boolbacks<any>["onSuccess"];
-//   onFailure: Boolbacks<any>["onFailure"];
-// };
 
 export default class LearningMaterialService {
   /**

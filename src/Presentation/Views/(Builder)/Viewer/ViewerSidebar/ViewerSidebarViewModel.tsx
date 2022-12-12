@@ -58,7 +58,7 @@ export default function ViewerSidebarViewModel({
   useApiEffect(() => {
     if (!isNumber(materialID)) return;
 
-    // Notice the type cohersion.
+    // Notice the type coercion.
     service.getPages<{ data: RawLearningMaterialPage[] }>({
       id: materialID,
       onFailure: (message) => {
@@ -70,7 +70,7 @@ export default function ViewerSidebarViewModel({
           materialPages: data.map((record) =>
             // Notice that the records are originally of the type
             // RawLearningMaterialPage. We need to deserialize the individual
-            // records before adding the pagination.
+            // records.
             matPageAdapter.deserialize(record)
           ),
         });

@@ -8,7 +8,7 @@ export const defaultViewerState: ViewerState = {
 
 const ViewerContext = React.createContext({
   state: defaultViewerState,
-  setState: (newState: ViewerState) => {},
+  setState: (_: ViewerState) => {},
 });
 
 export default ViewerContext;

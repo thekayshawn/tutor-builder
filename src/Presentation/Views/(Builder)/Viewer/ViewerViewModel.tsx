@@ -14,10 +14,8 @@ type Props = {
  * @author kashan-ahmad
  * @version 0.0.1
  */
-function ViewerViewModel({ children }: Props): JSX.Element {
+export default function ViewerViewModel({ children }: Props): JSX.Element {
   const [state, setState] = React.useState<ViewerState>(defaultViewerState);
-
-  console.log(state.selectedMaterialPage);
 
   return (
     <ViewerContext.Provider value={{ state, setState }}>
@@ -25,5 +23,3 @@ function ViewerViewModel({ children }: Props): JSX.Element {
     </ViewerContext.Provider>
   );
 }
-
-export default ViewerViewModel;

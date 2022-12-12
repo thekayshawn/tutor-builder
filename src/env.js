@@ -11,3 +11,6 @@ export const URL_DASHBOARD_CONTENT_BUILDER =
 export const MAX_PAGES_PER_MATERIAL = parseInt(
   process.env.REACT_APP_MAX_PAGES_PER_MATERIAL || 10
 );
+export const MAX_PARAGRAPH_LENGTH = parseInt(
+  process.env.REACT_APP_MAX_PARAGRAPH_LENGTH || 500
+);

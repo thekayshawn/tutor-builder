@@ -1,91 +1,82 @@
 import * as React from "react";
-import { IconSettings } from "@tabler/icons";
+import EditorModal from "./EditorModal";
+import useForm from "@Core/Hooks/useForm";
+import { MAX_PARAGRAPH_LENGTH } from "src/env";
+import { IconCirclePlus } from "@tabler/icons";
 import useToggleState from "@Core/Hooks/useToggleState";
-import { Button, Col, FormGroup, Modal, ModalBody, Row } from "reactstrap";
-import { ModalFileInput, ModalHeader } from "@Presentation/Components/Modals";
+import { ModalFileInput } from "@Presentation/Components/Modals";
+import { Button, Col, Form, FormGroup, Input, Row } from "reactstrap";
 
-export default function EditorAddPageModal() {
+/**
+ * Modal to control the settings of a page within the content builder's editor.
+ *
+ * @returns {JSX.Element}
+ */
+export default function EditorAddPageModal(): JSX.Element {
+  const submissionHandler = useForm();
   const [isOpen, toggleIsOpen] = useToggleState();
 
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    // onUpdateContentListener((_, burger) => {
+    //   onCreatePage({
+    //     burger,
+    //     event: e,
+    //     data: {
+    //       title: newPageModal.title,
+    //       thumbnail: newPageModal.thumbnail,
+    //       description: newPageModal.description,
+    //       content_id: pageMetaData.content_id,
+    //     },
+    //   });
+    //   onToggleModal("newPageModal");
+    // });
+  }
+
   return (
-    <>
-      <button
-        type="button"
-        role="tooltip"
-        onClick={toggleIsOpen}
-        aria-label="Edit this page"
-        data-microtip-position="top"
-        className="btn border rounded bg-light fs-5"
+    <EditorModal
+      icon={<IconCirclePlus />}
+      id="editorAddPageModal"
+      title="Enter properties of the new page"
+      {...{ isOpen, toggleIsOpen }}
+    >
+      <Form
+        encType="multipart/form-data"
+        onSubmit={(e) => submissionHandler(e, onSubmit)}
       >
-        <IconSettings />
-      </button>
-      <Modal {...{ isOpen }} toggle={toggleIsOpen}>
-        <ModalHeader
-          onClose={toggleIsOpen}
-          title="Modify the currently opened page"
-        />
-        <ModalBody>
-          <form
-            encType="multipart/form-data"
-            // onSubmit={(e) => {
-            //   toast.dismiss();
-            //   e.preventDefault();
-
-            //   onUpdateContentListener((_, burger) => {
-            //     onCreatePage({
-            //       burger,
-            //       event: e,
-            //       data: {
-            //         title: newPageModal.title,
-            //         thumbnail: newPageModal.thumbnail,
-            //         description: newPageModal.description,
-            //         content_id: pageMetaData.content_id,
-            //       },
-            //     });
-
-            //     onToggleModal("newPageModal");
-            //   });
-            // }}
-          >
-            <Row>
-              <Col xs={12} md={3}>
-                <ModalFileInput
-                  id="addPageModalFile"
-                  onChange={() => console.log()}
-                />
-              </Col>
-              <Col xs={12} md={9}>
-                <FormGroup>
-                  <input
-                    required
-                    type="text"
-                    name="title"
-                    className="form-control"
-                    placeholder="Enter A Title"
-                    // value={editPageModal.title}
-                    // onChange={(e) => onChangeText("editPageModal", e)}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <textarea
-                    required
-                    rows={4}
-                    cols={50}
-                    name="description"
-                    className="form-control"
-                    placeholder="Enter properties of the new page"
-                    // value={editPageModal.description}
-                    // onChange={(e) => onChangeText("editPageModal", e)}
-                  ></textarea>
-                </FormGroup>
-                <Button color="success" type="submit">
-                  Update the page
-                </Button>
-              </Col>
-            </Row>
-          </form>
-        </ModalBody>
-      </Modal>
-    </>
+        <Row>
+          <Col xs={12} md={3}>
+            {/* <ModalFileInput /> */}
+          </Col>
+          <Col xs={12} md={9}>
+            <FormGroup>
+              <Input
+                required
+                type="text"
+                name="title"
+                maxLength={255}
+                placeholder="Enter A Title"
+                // onChange={(e) => onChangeText("newPageModal", e)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Input
+                required
+                rows={4}
+                cols={50}
+                type="textarea"
+                name="description"
+                className="form-control"
+                maxLength={MAX_PARAGRAPH_LENGTH}
+                placeholder="Enter A Short Description"
+                // onChange={(e) => onChangeText("newPageModal", e)}
+              ></Input>
+            </FormGroup>
+            <Button color="success" type="submit">
+              Add new page
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+    </EditorModal>
   );
 }

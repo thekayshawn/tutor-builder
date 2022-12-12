@@ -1,55 +1,53 @@
 import * as React from "react";
 import {
-  Dropdown,
   Pagination,
   DropdownMenu,
   DropdownItem,
   DropdownToggle,
+  UncontrolledDropdown,
 } from "reactstrap";
 import {
   URL_WEBSITE,
   URL_DASHBOARD,
   URL_DASHBOARD_CONTENT_BUILDER,
 } from "src/env";
-import { IconArrowsMaximize, IconHome, IconSettings } from "@tabler/icons";
+import EditorContext, { EDITOR_ID } from "./EditorContext";
+import { IconArrowsMaximize, IconHome } from "@tabler/icons";
+import EditorSettingsModal from "./Modals/EditorSettingsModal";
+import styles from "./Editor.module.css";
+import { getEditorRoute } from "@Core/Helpers/routerFunctions";
 
 type Props = {};
 
 export default function EditorFooter({}: Props) {
+  const { state, setState } = React.useContext(EditorContext);
+
+  const {currentPage, materialPages, selectedMaterialPage} = state
+
+  function onChangePage(newPage: number) {
+    getEditorRoute({
+      page: newPage,
+      id: selectedMaterialPage?.id,
+      slug: selectedMaterialPage.
+    })
+  }
+
   return (
-    <>
-      <div className="back_rounds"></div>
+    <footer className={styles.header}>
       <nav
         style={{ zIndex: 100 }}
-        className="position-fixed bottom-0 end-0 m-2 d-flex align-items-center gap-2"
+        className="m-2 d-flex align-items-center gap-2"
       >
         <Pagination
           type="pages"
           itemsPerPage={1}
-          {...{ currentPage, totalItems, onChangePage }}
+          totalItems={materialPages.length}
+          {...{ currentPage, onChangePage }}
         />
         {/* Settings button. */}
-        <button
-          type="button"
-          role="tooltip"
-          aria-label="Edit this page"
-          data-microtip-position="top"
-          className="btn border rounded bg-light fs-5"
-          onClick={onOpenSettingsModal}
-        >
-          <IconSettings />
-        </button>
+        <EditorSettingsModal />
         {/* Home button. */}
-        <Dropdown
-          direction="up"
-          isOpen={isMenuDropdownOpen}
-          toggle={() =>
-            setState((lastState) => ({
-              ...lastState,
-              isMenuDropdownOpen: !lastState.isMenuDropdownOpen,
-            }))
-          }
-        >
+        <UncontrolledDropdown direction="up">
           <DropdownToggle
             tag="button"
             role="tooltip"
@@ -88,7 +86,7 @@ export default function EditorFooter({}: Props) {
               Help
             </DropdownItem>
           </DropdownMenu>
-        </Dropdown>
+        </UncontrolledDropdown>
         {/* Fullscreen button. */}
         <button
           type="button"
@@ -97,12 +95,12 @@ export default function EditorFooter({}: Props) {
           data-microtip-position="top-left"
           className="btn border rounded bg-light fs-5"
           onClick={() =>
-            document.getElementById("main_content")?.requestFullscreen()
+            document.getElementById(EDITOR_ID)?.requestFullscreen()
           }
         >
           <IconArrowsMaximize />
         </button>
       </nav>
-    </>
+    </footer>
   );
 }

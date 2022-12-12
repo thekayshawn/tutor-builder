@@ -1,0 +1,11 @@
+/* Editor's footer starts here. */
+.footer {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  z-index: 10;
+  background: #ffffff;
+  height: 50px;
+  border-top: 1px solid #e6ebf0;
+}
+/* Editor's footer ends here. */
