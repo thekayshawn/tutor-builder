@@ -11,27 +11,18 @@ import {
   URL_DASHBOARD,
   URL_DASHBOARD_CONTENT_BUILDER,
 } from "src/env";
-import EditorContext, { EDITOR_ID } from "./EditorContext";
 import { IconArrowsMaximize, IconHome } from "@tabler/icons";
-import EditorSettingsModal from "./Modals/EditorSettingsModal";
+import EditorSettingsModal from "../Modals/EditorSettingsModal";
 import styles from "./Editor.module.css";
-import { getEditorRoute } from "@Core/Helpers/routerFunctions";
+import { EditorFooterState } from "../EditorTypes";
 
-type Props = {};
-
-export default function EditorFooter({}: Props) {
-  const { state, setState } = React.useContext(EditorContext);
-
-  const {currentPage, materialPages, selectedMaterialPage} = state
-
-  function onChangePage(newPage: number) {
-    getEditorRoute({
-      page: newPage,
-      id: selectedMaterialPage?.id,
-      slug: selectedMaterialPage.
-    })
-  }
-
+export default function EditorFooterView({
+  currentPage,
+  onChangePage,
+  materialPages,
+  onRequestFullscreen,
+  selectedMaterialPage,
+}: EditorFooterState) {
   return (
     <footer className={styles.header}>
       <nav
@@ -44,9 +35,9 @@ export default function EditorFooter({}: Props) {
           totalItems={materialPages.length}
           {...{ currentPage, onChangePage }}
         />
-        {/* Settings button. */}
+        {/* Settings modal */}
         <EditorSettingsModal />
-        {/* Home button. */}
+        {/* Home button */}
         <UncontrolledDropdown direction="up">
           <DropdownToggle
             tag="button"
@@ -92,11 +83,9 @@ export default function EditorFooter({}: Props) {
           type="button"
           role="tooltip"
           aria-label="Fullscreen"
+          onClick={onRequestFullscreen}
           data-microtip-position="top-left"
           className="btn border rounded bg-light fs-5"
-          onClick={() =>
-            document.getElementById(EDITOR_ID)?.requestFullscreen()
-          }
         >
           <IconArrowsMaximize />
         </button>

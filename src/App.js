@@ -11,6 +11,7 @@ import { Error403, Error500 } from "./components/error";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Error440 from "./components/error/error-440";
+import { removeAllSearchParams } from "@Core/Helpers/utils";
 
 function App() {
   const [state, setState] = React.useState("loading");
@@ -50,6 +51,11 @@ function App() {
               isAuthenticated: true,
             })
           );
+
+          // The token needs to be removed from the URL.
+          removeAllSearchParams();
+
+          // Proceed to the next step.
           setState("authenticated");
         },
       });

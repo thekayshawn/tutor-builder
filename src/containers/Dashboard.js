@@ -97,7 +97,8 @@ function Dashboard() {
    * The toast to be updated, a newer is created otherwise.
    *
    * @param {boolean} props.waitWithTimeout Default = true;
-   * Whether to wait, while a sweet little toast is displayed, before redirecting towards the newly created page or instantly hustle.
+   * Whether to wait, while a sweet little toast is displayed, before
+   * redirecting towards the newly created page or instantly hustle.
    */
   function onCreatePage({ event, data, burger, waitWithTimeout = true }) {
     event.preventDefault();

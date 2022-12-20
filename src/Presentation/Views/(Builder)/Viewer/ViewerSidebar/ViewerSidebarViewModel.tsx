@@ -1,20 +1,14 @@
 import * as React from "react";
 import { useParams } from "react-router-dom";
-import useApiEffect from "@Core/Hooks/useApiEffect";
 
 // Features.
 import ViewerContext from "../ViewerContext";
-import LearningMaterialService from "@Repos/Services/LearningMaterialService";
-import LearningMaterialPageAdapter from "@Data/Adapters/LearningMaterialPageAdapter";
 
 // Types.
 import type { RequestState } from "@Data/Types";
 import type { ViewerState } from "../ViewerTypes";
-import type {
-  LearningMaterialPage,
-  RawLearningMaterialPage,
-} from "@Data/Entities/LearningMaterialPageEntity";
-import { isNumber } from "@Core/Helpers/utils";
+import type { LearningMaterialPage } from "@Data/Entities/LearningMaterialPageEntity";
+import useLearningMaterialPages from "@Core/Hooks/learning-materials/useLearningMaterialPages";
 
 type Props = {
   children: ({
@@ -42,43 +36,27 @@ type Props = {
 export default function ViewerSidebarViewModel({
   children,
 }: Props): JSX.Element {
+  // The ID is always in the URL.
   const { id: materialID } = useParams<{
     id?: string;
   }>();
 
-  const service = new LearningMaterialService();
-  const matPageAdapter = new LearningMaterialPageAdapter();
   const { state, setState } = React.useContext(ViewerContext);
 
-  // Local state.
+  // Local request state.
   const [requestState, setRequestState] = React.useState<RequestState>({
     status: "loading",
   });
 
-  useApiEffect(() => {
-    if (!isNumber(materialID)) return;
-
-    // Notice the type coercion.
-    service.getPages<{ data: RawLearningMaterialPage[] }>({
-      id: materialID,
-      onFailure: (message) => {
-        setRequestState({ message, status: "erred" });
-      },
-      onSuccess: ({ data }) => {
-        setState({
-          ...requestState,
-          materialPages: data.map((record) =>
-            // Notice that the records are originally of the type
-            // RawLearningMaterialPage. We need to deserialize the individual
-            // records.
-            matPageAdapter.deserialize(record)
-          ),
-        });
-
-        setRequestState({ status: "loaded" });
-      },
-    });
-  }, [materialID]);
+  // Fetch the pages by ID.
+  useLearningMaterialPages({
+    id: materialID,
+    onChangeRequestState: (newState) => setRequestState(newState),
+    onSuccess: (data) => ({
+      ...requestState,
+      materialPages: data,
+    }),
+  });
 
   function onClickPage(page: LearningMaterialPage) {
     // If it's not the already selected page.
