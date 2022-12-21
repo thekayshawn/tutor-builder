@@ -3,6 +3,11 @@ import { IconPlus } from "@tabler/icons";
 
 type Props = {
   /**
+   * The HTML ID attribute for the input field.
+   */
+  id: string;
+
+  /**
    * Additional props for the parent container of the field.
    */
   containerProps?: React.ComponentPropsWithoutRef<"div">;
@@ -11,7 +16,7 @@ type Props = {
    * @param file The selected file
    */
   onChange: (e: React.ChangeEvent<HTMLInputElement>, file: File) => void;
-} & Omit<React.ComponentPropsWithoutRef<"input">, "onChange">;
+} & Omit<React.ComponentPropsWithoutRef<"input">, "id" | "onChange">;
 
 export default function ModalFileInput({
   id,
@@ -20,9 +25,6 @@ export default function ModalFileInput({
   containerProps,
   ...props
 }: Props) {
-  const uniqueID = React.useId();
-  const finalID = id || `input-${uniqueID}`;
-
   return (
     <aside
       {...containerProps}
@@ -30,7 +32,7 @@ export default function ModalFileInput({
     >
       <div className="card-title">Thumbnail *</div>
       <label
-        htmlFor={finalID}
+        htmlFor={id}
         style={{ backgroundColor: "var(--bs-gray-600)" }}
         className="focusable w-100 p-4 rounded border-1"
       >
@@ -46,8 +48,8 @@ export default function ModalFileInput({
       <input
         hidden
         {...props}
+        id={id}
         type="file"
-        id={finalID}
         onChange={(e) => {
           const selectedFile = e.target.files?.[0];
 

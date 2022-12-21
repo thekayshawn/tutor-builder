@@ -13,8 +13,12 @@ import {
 } from "src/env";
 import { IconArrowsMaximize, IconHome } from "@tabler/icons";
 import EditorSettingsModal from "../Modals/EditorSettingsModal";
-import styles from "./Editor.module.css";
-import { EditorFooterState } from "../EditorTypes";
+
+// Types.
+import type { EditorFooterState } from "../EditorTypes";
+
+// Static.
+import styles from "../Editor.module.css";
 
 export default function EditorFooterView({
   currentPage,
@@ -24,11 +28,8 @@ export default function EditorFooterView({
   selectedMaterialPage,
 }: EditorFooterState) {
   return (
-    <footer className={styles.header}>
-      <nav
-        style={{ zIndex: 100 }}
-        className="m-2 d-flex align-items-center gap-2"
-      >
+    <footer className={styles.footer}>
+      <nav>
         <Pagination
           type="pages"
           itemsPerPage={1}
@@ -44,7 +45,7 @@ export default function EditorFooterView({
             role="tooltip"
             aria-label="Home"
             data-microtip-position="top"
-            className="btn border rounded bg-light fs-5"
+            className="btn border rounded bg-light fs-6"
           >
             <IconHome />
           </DropdownToggle>
@@ -85,7 +86,7 @@ export default function EditorFooterView({
           aria-label="Fullscreen"
           onClick={onRequestFullscreen}
           data-microtip-position="top-left"
-          className="btn border rounded bg-light fs-5"
+          className="btn border rounded bg-light fs-6"
         >
           <IconArrowsMaximize />
         </button>

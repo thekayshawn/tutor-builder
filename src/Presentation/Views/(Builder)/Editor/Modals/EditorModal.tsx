@@ -55,8 +55,10 @@ export default function EditorModal({
     <>
       <button
         {...controlProps}
+        role="tooltip"
         onClick={toggleIsOpen}
         aria-controls={`#${id}`}
+        data-microtip-position="top"
         className={`btn border rounded bg-light fs-5 ${controlProps?.className}`}
       >
         {icon}

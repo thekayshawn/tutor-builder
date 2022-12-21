@@ -25,3 +25,31 @@ export type EditorFooterState = {
    */
   onChangePage: (newPage: number) => void;
 } & EditorState;
+
+// Header.
+export type EditorHeaderState = {
+  /**
+   * The total number of pages added so far.
+   */
+  numOfPages: number;
+
+  /**
+   * Event listener for the add button's click event.
+   */
+  onClickAdd: () => void;
+
+  /**
+   * Event listener for the remove button's click event.
+   */
+  onClickRemove: () => void;
+
+  /**
+   * Event listener for the save button's click event.
+   */
+  onClickSave: () => void;
+
+  /**
+   * Event listener for the save & continue button's click event.
+   */
+  onClickSaveAndContinue: () => void;
+} & React.ComponentPropsWithoutRef<"div">;

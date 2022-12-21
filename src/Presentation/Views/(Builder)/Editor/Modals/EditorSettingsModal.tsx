@@ -36,6 +36,9 @@ export default function EditorSettingsModal(): JSX.Element {
       icon={<IconSettings />}
       id="editorSettingsModal"
       title="Modify the currently opened page"
+      controlProps={{
+        "aria-label": "Settings",
+      }}
       {...{ isOpen, toggleIsOpen }}
     >
       <Form
