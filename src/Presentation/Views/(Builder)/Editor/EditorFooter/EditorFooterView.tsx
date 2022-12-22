@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  Pagination,
   DropdownMenu,
   DropdownItem,
   DropdownToggle,
@@ -13,6 +12,7 @@ import {
 } from "src/env";
 import { IconArrowsMaximize, IconHome } from "@tabler/icons";
 import EditorSettingsModal from "../Modals/EditorSettingsModal";
+import { Pagination } from "@Presentation/Components/Pagination";
 
 // Types.
 import type { EditorFooterState } from "../EditorTypes";
@@ -31,9 +31,8 @@ export default function EditorFooterView({
     <footer className={styles.footer}>
       <nav>
         <Pagination
-          type="pages"
+          totalItems={10}
           itemsPerPage={1}
-          totalItems={materialPages.length}
           {...{ currentPage, onChangePage }}
         />
         {/* Settings modal */}

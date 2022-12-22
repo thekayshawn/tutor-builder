@@ -12,7 +12,7 @@ button,
   border: 1px solid var(--bs-gray-300);
 }
 
-:is(button, .focusable):is(:hover, :focus, :focus-within) {
+:is(button, .focusable):is(:hover, :focus, :focus-within):not(:disabled) {
   outline: 2px solid var(--bs-primary);
 }
 /* Defaults end here. */
