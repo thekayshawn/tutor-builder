@@ -12,7 +12,7 @@ export default function EditorFooterViewModel({ children }: Props) {
   const history = useHistory();
   const { state } = React.useContext(EditorContext);
 
-  const { selectedMaterialPage } = state;
+  const { slug, selectedMaterialPage } = state;
 
   function onRequestFullscreen() {
     document.getElementById(EDITOR_ID)?.requestFullscreen();
@@ -21,9 +21,9 @@ export default function EditorFooterViewModel({ children }: Props) {
   function onChangePage(newPage: number) {
     history.push(
       getEditorRoute({
+        slug,
         page: newPage,
         id: selectedMaterialPage?.id,
-        slug: `page-number-${selectedMaterialPage?.id}`,
       })
     );
   }

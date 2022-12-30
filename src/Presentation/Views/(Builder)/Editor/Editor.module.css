@@ -1,43 +1,6 @@
-.editor > header,
-.editor > footer {
-  position: fixed;
-  width: 100%;
-  z-index: 10;
-  height: 3.5rem;
-  background: var(--bs-white);
+/* Editor's container starts here. */
+.container {
+  display: grid;
+  grid-template-rows: 1fr auto;
 }
-
-.editor > header > nav,
-.editor > footer > nav {
-  /* Absolutely positioned */
-  position: absolute;
-  top: 50%;
-  z-index: 100;
-  right: 0.5rem;
-  transform: translateY(-50%);
-
-  /* Flexbox */
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-
-/* Editor's header starts here. */
-.header {
-  top: 0px;
-  border-bottom: 1px solid #e6ebf0;
-}
-/* Editor's header ends here. */
-
-/* Editor's footer starts here. */
-.footer {
-  bottom: 0px;
-  border-top: 1px solid #e6ebf0;
-}
-/* Editor's footer ends here. */
-
-/* Editor starts here. */
-.editor {
-  min-height: 100vh;
-}
+/* Editor's container ends here. */

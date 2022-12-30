@@ -3,13 +3,14 @@ import * as React from "react";
 // Static.
 import styles from "./TwoSectionLayout.module.css";
 import logoSrc from "@Presentation/Assets/images/logo.png";
+import { Link } from "react-router-dom";
 
 type Props = {
   /**
    * Element to place in the navbar, next to the branding logo.
    */
-  header: React.ReactElement;
-  children: ({ contentCLassName }: { contentCLassName: string }) => JSX.Element;
+  header?: React.ReactNode;
+  children: ({ contentClassName }: { contentClassName: string }) => JSX.Element;
 };
 
 /**
@@ -37,16 +38,18 @@ export default function TwoSectionLayout({
       <header
         className={`z-10 px-3 px-md-4 bg-white border-bottom d-flex align-items-center justify-content-between ${styles.header}`}
       >
-        <img
-          src={logoSrc}
-          alt="TheTutor.me"
-          className="img-fluid"
-          style={{ height: "2rem" }}
-        />
+        <Link to="/">
+          <img
+            src={logoSrc}
+            alt="TheTutor.me"
+            className="img-fluid"
+            style={{ height: "2rem" }}
+          />
+        </Link>
         {header}
       </header>
       {children({
-        contentCLassName: styles.content,
+        contentClassName: styles.content,
       })}
     </>
   );

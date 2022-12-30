@@ -1,9 +1,9 @@
 import * as React from "react";
+import { RequestState } from "@Data/Types";
 import { EditorState } from "./EditorTypes";
 import { useParams } from "react-router-dom";
 import EditorContext, { defaultEditorState } from "./EditorContext";
 import useLearningMaterialPages from "@Core/Hooks/learning-materials/useLearningMaterialPages";
-import { RequestState } from "@Data/Types";
 
 type Children = { requestState: RequestState } & EditorState;
 
@@ -22,13 +22,19 @@ type Props = {
  */
 export default function EditorViewModel({ children }: Props): JSX.Element {
   // The ID is always in the URL.
-  const { page = "1", id: materialID } = useParams<{
+  const {
+    slug,
+    page = "1",
+    id: materialID,
+  } = useParams<{
     id?: string;
     page: string;
+    slug: string;
   }>();
 
   const [state, setState] = React.useState<EditorState>({
     ...defaultEditorState,
+    slug,
     currentPage: parseInt(page),
   });
 
@@ -40,14 +46,13 @@ export default function EditorViewModel({ children }: Props): JSX.Element {
   // Fetch the pages by ID.
   useLearningMaterialPages({
     id: materialID,
-    onSuccess: (data) => ({
-      ...requestState,
-      materialPages: data,
-    }),
+    onSuccess: (data) =>
+      setState({
+        ...state,
+        materialPages: data,
+      }),
     onChangeRequestState: (newState) => setRequestState(newState),
   });
-
-  console.log(state.selectedMaterialPage);
 
   return (
     <EditorContext.Provider value={{ state, setState }}>

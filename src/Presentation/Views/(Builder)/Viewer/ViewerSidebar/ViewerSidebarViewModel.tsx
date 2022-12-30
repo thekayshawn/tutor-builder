@@ -52,10 +52,11 @@ export default function ViewerSidebarViewModel({
   useLearningMaterialPages({
     id: materialID,
     onChangeRequestState: (newState) => setRequestState(newState),
-    onSuccess: (data) => ({
-      ...requestState,
-      materialPages: data,
-    }),
+    onSuccess: (data) =>
+      setState({
+        ...state,
+        materialPages: data,
+      }),
   });
 
   function onClickPage(page: LearningMaterialPage) {

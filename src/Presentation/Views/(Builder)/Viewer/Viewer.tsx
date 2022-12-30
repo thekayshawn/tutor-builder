@@ -24,10 +24,10 @@ function Viewer() {
 
   return (
     <TwoSectionLayout header={<ProfileDropdown {...{ user }} />}>
-      {({ contentCLassName }) => (
+      {({ contentClassName }) => (
         <ViewerViewModel>
           <main
-            className={`bg-light text-dark text-secondary ${contentCLassName} ${styles.container}`}
+            className={`bg-light text-dark text-secondary ${contentClassName} ${styles.container}`}
           >
             <ViewerSidebar />
             <ViewerFrame />

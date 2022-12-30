@@ -1,6 +1,7 @@
 import type { LearningMaterialPage } from "@Data/Entities/LearningMaterialPageEntity";
 
 export type EditorState = {
+  slug: string;
   currentPage: number;
   materialPages: LearningMaterialPage[];
   selectedMaterialPage?: LearningMaterialPage;

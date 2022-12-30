@@ -17,9 +17,6 @@ import { Pagination } from "@Presentation/Components/Pagination";
 // Types.
 import type { EditorFooterState } from "../EditorTypes";
 
-// Static.
-import styles from "../Editor.module.css";
-
 export default function EditorFooterView({
   currentPage,
   onChangePage,
@@ -28,11 +25,11 @@ export default function EditorFooterView({
   selectedMaterialPage,
 }: EditorFooterState) {
   return (
-    <footer className={styles.footer}>
-      <nav>
+    <footer className="px-3 px-md-4 py-2 border-top">
+      <nav className="d-flex gap-2 justify-content-end">
         <Pagination
-          totalItems={10}
           itemsPerPage={1}
+          totalItems={materialPages.length}
           {...{ currentPage, onChangePage }}
         />
         {/* Settings modal */}
