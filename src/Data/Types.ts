@@ -22,3 +22,5 @@ export type Directions =
   | "top-right"
   | "bottom-right"
   | "bottom-left";
+
+export type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";

@@ -10,8 +10,8 @@ import styles from "./Viewer.module.css";
 // Features.
 import ViewerViewModel from "./ViewerViewModel";
 import ViewerFrame from "./ViewerFrame/ViewerFrame";
-import ViewerErrorViewport from "./ViewerErrorViewport";
 import ViewerSidebar from "./ViewerSidebar/ViewerSidebar";
+import BuilderErrorViewport from "../BuilderErrorViewport";
 import { ProfileDropdown } from "@Presentation/Components/Dropdowns";
 
 function Viewer() {
@@ -32,7 +32,7 @@ function Viewer() {
             <ViewerSidebar />
             <ViewerFrame />
             {/* Errors. */}
-            <ViewerErrorViewport />
+            <BuilderErrorViewport />
           </main>
         </ViewerViewModel>
       )}

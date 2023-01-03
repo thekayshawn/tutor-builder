@@ -1,11 +1,18 @@
+import { RequestState } from "@Data/Types";
+import { LearningMaterialPageContent } from "@Data/Entities/LearningMaterialPageContentEntity";
 import type { LearningMaterialPage } from "@Data/Entities/LearningMaterialPageEntity";
 
 export type EditorState = {
-  slug: string;
-  currentPage: number;
   materialPages: LearningMaterialPage[];
   selectedMaterialPage?: LearningMaterialPage;
 };
+
+export type EditorHelpers = {
+  currentSlug: string;
+  currentPage: number;
+};
+
+export type EditorBag = EditorState & EditorHelpers;
 
 // Footer.
 export type EditorFooterState = {
@@ -25,7 +32,7 @@ export type EditorFooterState = {
    * @returns {void}
    */
   onChangePage: (newPage: number) => void;
-} & EditorState;
+};
 
 // Header.
 export type EditorHeaderState = {
@@ -54,3 +61,8 @@ export type EditorHeaderState = {
    */
   onClickSaveAndContinue: () => void;
 } & React.ComponentPropsWithoutRef<"div">;
+
+// Interface.
+export type EditorInterfaceState = {
+  pageContent?: LearningMaterialPageContent;
+} & RequestState;

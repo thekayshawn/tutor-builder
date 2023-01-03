@@ -1,5 +1,7 @@
 import * as React from "react";
 import { useParams } from "react-router-dom";
+import { MIN_WIDTH_BUILDER } from "@Core/env";
+import useLearningMaterialPages from "@Core/Hooks/learning-materials/useLearningMaterialPages";
 
 // Features.
 import ViewerContext from "../ViewerContext";
@@ -8,7 +10,6 @@ import ViewerContext from "../ViewerContext";
 import type { RequestState } from "@Data/Types";
 import type { ViewerState } from "../ViewerTypes";
 import type { LearningMaterialPage } from "@Data/Entities/LearningMaterialPageEntity";
-import useLearningMaterialPages from "@Core/Hooks/learning-materials/useLearningMaterialPages";
 
 type Props = {
   children: ({
@@ -45,12 +46,15 @@ export default function ViewerSidebarViewModel({
 
   // Local request state.
   const [requestState, setRequestState] = React.useState<RequestState>({
-    status: "loading",
+    status: window.screen.width < MIN_WIDTH_BUILDER ? "idle" : "loading",
   });
+
+  console.log({ width: window.screen.width, identifier: MIN_WIDTH_BUILDER });
 
   // Fetch the pages by ID.
   useLearningMaterialPages({
     id: materialID,
+    isIdle: requestState.status === "idle",
     onChangeRequestState: (newState) => setRequestState(newState),
     onSuccess: (data) =>
       setState({

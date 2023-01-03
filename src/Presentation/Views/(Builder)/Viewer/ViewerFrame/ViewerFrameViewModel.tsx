@@ -64,7 +64,7 @@ export default function ViewerFrameViewModel({ children }: Props): JSX.Element {
     const service = new LearningMaterialService();
     const contentAdapter = new LearningMaterialPageContentAdapter();
 
-    // Notice the type cohersion.
+    // Notice the type coercion.
     service.getPageContent<{ data: RawLearningMaterialPageContent }>({
       id: selectedMaterialPage.id,
       onFailure: (message) => {

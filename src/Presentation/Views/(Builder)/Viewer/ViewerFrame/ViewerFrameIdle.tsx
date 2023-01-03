@@ -13,7 +13,7 @@ export default function ViewerFrameIdle() {
           🙌
         </div>
         <CardTitle className="text-center">
-          Select a page from the sidebar to begin the game.
+          Select a page from the sidebar to begin
         </CardTitle>
       </div>
     </article>

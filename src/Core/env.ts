@@ -7,6 +7,11 @@ export const URL_DASHBOARD_PRICING =
   process.env.REACT_APP_URL_DASHBOARD_PRICING;
 export const URL_DASHBOARD_CONTENT_BUILDER =
   process.env.REACT_APP_URL_DASHBOARD_CONTENT_BUILDER;
-// Limits.
+/* -----------------------------------------------------------------------------
+ * General Limitations.
+ * -------------------------------------------------------------------------- */
 export const MAX_PAGES_PER_MATERIAL =
   process.env.REACT_APP_MAX_PAGES_PER_MATERIAL || 10;
+export const MIN_WIDTH_BUILDER = parseInt(
+  process.env.REACT_APP_BUILDER_MIN_WIDTH || "557"
+);

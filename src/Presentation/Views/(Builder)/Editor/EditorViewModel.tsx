@@ -1,11 +1,14 @@
 import * as React from "react";
 import { RequestState } from "@Data/Types";
-import { EditorState } from "./EditorTypes";
 import { useParams } from "react-router-dom";
+import { MIN_WIDTH_BUILDER } from "@Core/env";
 import EditorContext, { defaultEditorState } from "./EditorContext";
 import useLearningMaterialPages from "@Core/Hooks/learning-materials/useLearningMaterialPages";
 
-type Children = { requestState: RequestState } & EditorState;
+// Types.
+import type { EditorState } from "./EditorTypes";
+
+type Children = { requestState: RequestState };
 
 type Props = {
   children: ({ requestState }: Children) => JSX.Element;
@@ -32,31 +35,43 @@ export default function EditorViewModel({ children }: Props): JSX.Element {
     slug: string;
   }>();
 
-  const [state, setState] = React.useState<EditorState>({
-    ...defaultEditorState,
-    slug,
-    currentPage: parseInt(page),
-  });
+  const parsedPage = parseInt(page);
+
+  const [state, setState] = React.useState<EditorState>(defaultEditorState);
 
   // Local request state.
   const [requestState, setRequestState] = React.useState<RequestState>({
-    status: "loading",
+    // The app won't even load for smaller screens.
+    status: window.screen.width < MIN_WIDTH_BUILDER ? "idle" : "loading",
   });
 
   // Fetch the pages by ID.
   useLearningMaterialPages({
     id: materialID,
+    isIdle: requestState.status === "idle",
     onSuccess: (data) =>
       setState({
         ...state,
         materialPages: data,
+        // Since pages start from 1, subtracting them by 1 gives us the
+        // selected index.
+        selectedMaterialPage: data[parsedPage - 1],
       }),
     onChangeRequestState: (newState) => setRequestState(newState),
   });
 
   return (
-    <EditorContext.Provider value={{ state, setState }}>
-      {children({ requestState, ...state })}
+    <EditorContext.Provider
+      value={{
+        setState,
+        bag: {
+          ...state,
+          currentSlug: slug,
+          currentPage: parsedPage,
+        },
+      }}
+    >
+      {children({ requestState })}
     </EditorContext.Provider>
   );
 }

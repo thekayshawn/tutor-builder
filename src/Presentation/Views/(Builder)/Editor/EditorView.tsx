@@ -1,24 +1,17 @@
 import * as React from "react";
 import EditorHeader from "./EditorHeader";
+import EditorContext from "./EditorContext";
 import EditorFooter from "./EditorFooter/EditorFooter";
+import EditorInterface from "./EditorInterface/EditorInterface";
 
 // Static.
 import styles from "./Editor.module.css";
 
 // Types.
-import type { EditorState } from "./EditorTypes";
 import TwoSectionLayout from "@Presentation/Layouts/TwoSectionLayout/TwoSectionLayout";
 
-export default function EditorView({
-  currentPage,
-  materialPages,
-  selectedMaterialPage,
-}: EditorState) {
-  // References.
-  const editorRef = React.createRef();
-
-  // There's either a single entry or nothing at all.
-  const materialPage = materialPages[0];
+export default function EditorView() {
+  const { bag } = React.useContext(EditorContext);
 
   return (
     <TwoSectionLayout
@@ -42,7 +35,7 @@ export default function EditorView({
     >
       {({ contentClassName }) => (
         <main className={`bg-light ${contentClassName} ${styles.container}`}>
-          <div>hello</div>
+          <EditorInterface />
           <EditorFooter />
         </main>
       )}

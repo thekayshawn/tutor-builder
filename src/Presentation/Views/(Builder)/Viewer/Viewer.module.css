@@ -8,6 +8,12 @@
   display: grid;
   grid-template-columns: auto 1fr;
 }
+
+/* The child(ren) can have their own overflow but the parent won't allow it. */
+.container > * {
+  overflow-y: auto;
+  max-height: calc(100vh - var(--navbar-height));
+}
 /* Container ends here. */
 
 /* Article starts here. */

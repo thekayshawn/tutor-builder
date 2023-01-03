@@ -1,15 +1,23 @@
 import * as React from "react";
-import { EditorState } from "./EditorTypes";
+import type { EditorState, EditorHelpers } from "./EditorTypes";
 
 export const defaultEditorState: EditorState = {
-  slug: "",
-  currentPage: 1,
   materialPages: [],
   selectedMaterialPage: undefined,
 };
 
+export const defaultEditorHelpers: EditorHelpers = {
+  currentPage: 1,
+  currentSlug: "",
+};
+
+export const defaultEditorBag = {
+  ...defaultEditorState,
+  ...defaultEditorHelpers,
+};
+
 const EditorContext = React.createContext({
-  state: defaultEditorState,
+  bag: defaultEditorBag,
   setState: (_: EditorState) => {},
 });
 

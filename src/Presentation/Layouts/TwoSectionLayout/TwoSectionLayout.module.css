@@ -14,9 +14,3 @@
   margin-top: var(--navbar-height);
   height: calc(100vh - var(--navbar-height));
 }
-
-/* The child(ren) can have their own overflow but the parent won't allow it. */
-.content > * {
-  overflow-y: auto;
-  max-height: calc(100vh - var(--navbar-height));
-}

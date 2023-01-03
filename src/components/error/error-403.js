@@ -23,7 +23,7 @@ const Error403 = () => (
           </div>
         </Col>
       </Row>
-      <h3 className="mt-5 secondary-color ">Not signed in!</h3>
+      <h3 className="mt-5 secondary-color">Not signed in!</h3>
       <p className="font-size-13 text-secondary-dim">
         You need to be signed in order to access dashboard
       </p>

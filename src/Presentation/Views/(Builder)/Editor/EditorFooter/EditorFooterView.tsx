@@ -16,14 +16,16 @@ import { Pagination } from "@Presentation/Components/Pagination";
 
 // Types.
 import type { EditorFooterState } from "../EditorTypes";
+import EditorContext from "../EditorContext";
 
 export default function EditorFooterView({
-  currentPage,
   onChangePage,
-  materialPages,
   onRequestFullscreen,
-  selectedMaterialPage,
 }: EditorFooterState) {
+  const { bag } = React.useContext(EditorContext);
+
+  const { currentPage, materialPages } = bag;
+
   return (
     <footer className="px-3 px-md-4 py-2 border-top">
       <nav className="d-flex gap-2 justify-content-end">

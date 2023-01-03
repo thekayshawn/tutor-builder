@@ -1,8 +1,10 @@
 import * as React from "react";
 import { useHistory } from "react-router-dom";
-import { EditorFooterState } from "../EditorTypes";
 import EditorContext, { EDITOR_ID } from "../EditorContext";
 import { getEditorRoute } from "@Core/Helpers/routerFunctions";
+
+// Types.
+import type { EditorFooterState } from "../EditorTypes";
 
 type Props = {
   children: (_: EditorFooterState) => JSX.Element;
@@ -10,9 +12,7 @@ type Props = {
 
 export default function EditorFooterViewModel({ children }: Props) {
   const history = useHistory();
-  const { state } = React.useContext(EditorContext);
-
-  const { slug, selectedMaterialPage } = state;
+  const { bag } = React.useContext(EditorContext);
 
   function onRequestFullscreen() {
     document.getElementById(EDITOR_ID)?.requestFullscreen();
@@ -21,15 +21,14 @@ export default function EditorFooterViewModel({ children }: Props) {
   function onChangePage(newPage: number) {
     history.push(
       getEditorRoute({
-        slug,
         page: newPage,
-        id: selectedMaterialPage?.id,
+        slug: bag.currentSlug,
+        id: bag.selectedMaterialPage?.id,
       })
     );
   }
 
   return children({
-    ...state,
     onChangePage,
     onRequestFullscreen,
   });

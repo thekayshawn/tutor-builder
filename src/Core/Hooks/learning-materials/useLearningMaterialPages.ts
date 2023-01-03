@@ -14,6 +14,12 @@ type Props = {
   id?: string;
 
   /**
+   * Whether the app is in idle state or not.
+   * Defines whether the app will work or show some idle screen.
+   */
+  isIdle?: boolean;
+
+  /**
    * Method that updates the local request state.
    */
   onChangeRequestState: (newState: RequestState) => void;
@@ -35,15 +41,21 @@ type Props = {
  */
 export default function useLearningMaterialPages({
   id,
+  isIdle,
   onSuccess,
   onChangeRequestState,
 }: Props) {
-  const service = new LearningMaterialService();
-  const matPageAdapter = new LearningMaterialPageAdapter();
-
   useApiEffect(() => {
+    const service = new LearningMaterialService();
+    const matPageAdapter = new LearningMaterialPageAdapter();
+
+    if (isIdle) return;
+
     // Guard clause.
-    if (!isNumber(id)) return;
+    if (!isNumber(id)) {
+      onChangeRequestState({ status: "erred", message: "404 - Not Found" });
+      return;
+    }
 
     // Notice the type coercion.
     service.getPages<{ data: RawLearningMaterialPage[] }>({
