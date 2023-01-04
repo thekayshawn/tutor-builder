@@ -1,0 +1,45 @@
+:root {
+  --editor-left-toolbar-width: 85px;
+  --editor-top-toolbar-height: 55px;
+}
+
+/* Top Toolbar. */
+.is-rte-tool {
+  z-index: 10 !important;
+  width: auto !important;
+  display: block !important;
+  box-shadow: none !important;
+  top: var(--navbar-height) !important;
+  left: var(--editor-left-toolbar-width) !important;
+}
+
+@media (min-width: 1200px) {
+  .is-rte-tool {
+    left: 7rem !important;
+    top: calc(var(--navbar-height) / 6) !important;
+  }
+}
+
+/* Editor. */
+.is-builder {
+  margin: 0 !important;
+  max-width: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 1.5rem;
+  padding-top: calc(var(--editor-top-toolbar-height) + 1.5rem) !important;
+  padding-left: calc(var(--editor-left-toolbar-width) + 1.5rem) !important;
+}
+
+@media (min-width: 992px) {
+  .is-builder {
+    max-width: 992px !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .is-builder {
+    margin: 0 auto !important;
+    padding: 1.5rem !important;
+  }
+}

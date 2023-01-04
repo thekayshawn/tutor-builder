@@ -59,7 +59,6 @@ button:focus {
   transition: all ease 0.3s;
   transform-origin: top;
   background: #ffffff;
-  padding: 20px 14px 65px 13px;
 }
 .is-builder > div > div:focus {
   outline: none;
@@ -602,9 +601,8 @@ nav.site-navigations ul li a {
 .tutor-multiple-option-heading {
   margin-top: 40px;
 }
-#_cbhtml .is-rte-tool,
+
 #_cbhtml .is-elementrte-tool,
-.is-ui .is-rte-tool,
 .is-ui .is-elementrte-tool {
   top: 10px;
   /* left: 30%; */
@@ -613,9 +611,6 @@ nav.site-navigations ul li a {
   right: calc(-50vw + 50%) !important;
   margin-left: auto;
   margin-right: auto;
-}
-.is-rte-tool {
-  display: block !important;
 }
 #_cbhtml .is-rte-tool > div:not(.is-draggable),
 #_cbhtml .is-elementrte-tool > div:not(.is-draggable),
@@ -2763,7 +2758,7 @@ ul.list-heading li a {
   font-family: "Poppins";
   font-size: 14px;
   letter-spacing: 1px;
-  z-index: 1003;
+  z-index: 10;
 }
 #_cbhtml .is-side.active,
 .is-ui .is-side.active {
@@ -4174,7 +4169,7 @@ ul.tutor-main-menu-list li {
   display: block !important;
   position: fixed;
   left: 0;
-  top: 74px;
+  top: 79px;
   bottom: 1px;
   padding-bottom: 1.5rem;
 }
@@ -4260,7 +4255,7 @@ img.add-contenting {
   /* min-height: 450px; */
   z-index: -1;
 }
-#_cbhtml .is-design-list,
+/* #_cbhtml .is-design-list,
 .is-ui .is-design-list::-webkit-scrollbar-track,
 .is-selectbox-options::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.9);
@@ -4331,7 +4326,7 @@ img.add-contenting {
 .is-design-list::-webkit-scrollbar-thumb {
   background-color: #5cdb95 !important;
   z-index: -1 !important;
-}
+} */
 #_cbhtml .is-selectbox-options > div,
 .is-ui .is-selectbox-options > div {
   color: #000;

@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import ContentBuilder from "@innovastudio/contentbuilder";
 import "./contentbuilder.css";
-import $ from "jquery";
 
 class BuilderControl extends Component {
   constructor(props) {

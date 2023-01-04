@@ -27,7 +27,7 @@ export default function EditorFooterView({
   const { currentPage, materialPages } = bag;
 
   return (
-    <footer className="px-3 px-md-4 py-2 border-top">
+    <footer className="px-3 px-md-4 py-2 border-top bg-white">
       <nav className="d-flex gap-2 justify-content-end">
         <Pagination
           itemsPerPage={1}

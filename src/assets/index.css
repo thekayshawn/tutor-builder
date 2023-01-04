@@ -90,9 +90,7 @@
 } */
 
 /* The contentbuilder's toolbar. */
-#_cbhtml .is-rte-tool,
 #_cbhtml .is-elementrte-tool,
-.is-ui .is-rte-tool,
 .is-ui .is-elementrte-tool {
   left: 10.5rem !important;
 }
