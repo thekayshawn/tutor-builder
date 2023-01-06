@@ -22,9 +22,10 @@ export default function EditorFooterView({
   onChangePage,
   onRequestFullscreen,
 }: EditorFooterState) {
-  const { bag } = React.useContext(EditorContext);
+  const { state, helpers } = React.useContext(EditorContext);
 
-  const { currentPage, materialPages } = bag;
+  const { currentPage } = helpers;
+  const { materialPages } = state;
 
   return (
     <footer className="px-3 px-md-4 py-2 border-top bg-white">
@@ -40,9 +41,7 @@ export default function EditorFooterView({
         <UncontrolledDropdown direction="up">
           <DropdownToggle
             tag="button"
-            role="tooltip"
-            aria-label="Home"
-            data-microtip-position="top"
+            title="Home"
             className="btn border rounded bg-light fs-6"
           >
             <IconHome />
@@ -80,10 +79,8 @@ export default function EditorFooterView({
         {/* Fullscreen button. */}
         <button
           type="button"
-          role="tooltip"
-          aria-label="Fullscreen"
+          title="Fullscreen"
           onClick={onRequestFullscreen}
-          data-microtip-position="top-left"
           className="btn border rounded bg-light fs-6"
         >
           <IconArrowsMaximize />

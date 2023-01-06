@@ -8,13 +8,13 @@ import "./EditorInterface.css";
 export default function EditorInterface() {
   return (
     <ViewModel>
-      {({ status, ...restState }) =>
-        status === "erred" ? (
+      {({ requestState }) =>
+        requestState.status === "erred" ? (
           <Error500 />
-        ) : status === "loading" ? (
+        ) : requestState.status === "loading" ? (
           <Loader />
         ) : (
-          <View pageContent={restState.pageContent} />
+          <View />
         )
       }
     </ViewModel>

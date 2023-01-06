@@ -49,8 +49,6 @@ export default function ViewerSidebarViewModel({
     status: window.screen.width < MIN_WIDTH_BUILDER ? "idle" : "loading",
   });
 
-  console.log({ width: window.screen.width, identifier: MIN_WIDTH_BUILDER });
-
   // Fetch the pages by ID.
   useLearningMaterialPages({
     id: materialID,

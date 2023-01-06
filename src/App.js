@@ -1,17 +1,18 @@
 import React from "react";
 import Routes from "./Routes";
 import { apiService } from "./service";
-import Loader from "./components/loader";
 import { API_MAIN_URL } from "./config";
+import Loader from "./components/loader";
 import { useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import Error440 from "./components/error/error-440";
 import { getAuthHeaders, isObjectValid } from "./utils";
 import { Error403, Error500 } from "./components/error";
+import { removeAllSearchParams } from "@Core/Helpers/utils";
 
 // Static.
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
-import Error440 from "./components/error/error-440";
-import { removeAllSearchParams } from "@Core/Helpers/utils";
+import "./Presentation/Assets/css/global.css";
 
 function App() {
   const [state, setState] = React.useState("loading");

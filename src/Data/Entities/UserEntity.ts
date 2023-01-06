@@ -9,6 +9,7 @@ export interface User {
   name: string;
   email: string;
   userType: UserType;
+  accessToken: string;
   dob: string;
   phone: string;
   isVerified: boolean;
@@ -29,4 +30,5 @@ export interface RawUser {
   verification_status: 1 | 0;
   timezone: string;
   profile_picture?: string;
+  access_token: string;
 }

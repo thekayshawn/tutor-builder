@@ -1,3 +1,5 @@
+import { ToastContent, ToastOptions } from "react-toastify";
+
 export type RequestState = {
   message?: string;
   status: "idle" | "loading" | "loaded" | "erred";

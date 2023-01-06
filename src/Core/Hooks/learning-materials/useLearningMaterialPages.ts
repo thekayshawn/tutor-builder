@@ -1,3 +1,4 @@
+import useUser from "../useUser";
 import useApiEffect from "../useApiEffect";
 import { isNumber } from "@Core/Helpers/utils";
 import LearningMaterialService from "@Repos/Services/LearningMaterialService";
@@ -45,9 +46,11 @@ export default function useLearningMaterialPages({
   onSuccess,
   onChangeRequestState,
 }: Props) {
+  const user = useUser();
+
   useApiEffect(() => {
-    const service = new LearningMaterialService();
     const matPageAdapter = new LearningMaterialPageAdapter();
+    const service = new LearningMaterialService(user.accessToken);
 
     if (isIdle) return;
 

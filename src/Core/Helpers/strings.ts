@@ -9,8 +9,12 @@ export const messages = {
 };
 
 const strings = {
-  DEFAULT_ERROR_MESSAGE: "Oops 🤫 Something went wrong.",
-  DEFAULT_EMPTY_MESSAGE: "Well 🙂 There's nothing to show here.",
+  DEFAULT_EMPTY_MESSAGE: "No results found",
+  DEFAULT_ERROR_MESSAGE: "Something went wrong",
+  DEFAULT_SUCCESS_MESSAGE: "Operation successful",
+  SAVED: "All changes saved",
+  THRESHOLD_REACHED: (of: string, threshold: number) =>
+    `Can't create more than ${threshold} ${of}, please contact support`,
 };
 
 export default strings;

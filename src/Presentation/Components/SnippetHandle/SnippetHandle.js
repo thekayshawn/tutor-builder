@@ -1,6 +1,5 @@
-import ReactDOM from "react-dom";
 import { useEffect } from "react";
-import { builderConfig } from "../../../Core/Config";
+import { builderConfig } from "@Core/Config";
 
 function SnippetHandle() {
   useEffect(() => {
@@ -25,9 +24,7 @@ function SnippetHandle() {
       snippetHandle.addEventListener("click", () => {
         snippetHandle.setAttribute(
           "data-snippets-shown",
-          snippetHandle.getAttribute("data-snippets-shown") === "true"
-            ? false
-            : true
+          snippetHandle.getAttribute("data-snippets-shown") !== "true"
         );
       });
     }

@@ -12,7 +12,7 @@ type Props = {
 
 export default function EditorFooterViewModel({ children }: Props) {
   const history = useHistory();
-  const { bag } = React.useContext(EditorContext);
+  const { state, helpers } = React.useContext(EditorContext);
 
   function onRequestFullscreen() {
     document.getElementById(EDITOR_ID)?.requestFullscreen();
@@ -22,8 +22,8 @@ export default function EditorFooterViewModel({ children }: Props) {
     history.push(
       getEditorRoute({
         page: newPage,
-        slug: bag.currentSlug,
-        id: bag.selectedMaterialPage?.id,
+        slug: helpers.currentSlug,
+        id: state.selectedMaterialPage?.id,
       })
     );
   }

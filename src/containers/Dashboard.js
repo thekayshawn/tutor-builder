@@ -69,9 +69,9 @@ function Dashboard() {
             event: { preventDefault: () => {} },
             data: {
               content_id: id,
+              thumbnail: null,
               title: "Default title",
               description: "Default description",
-              thumbnail: null,
             },
           });
           return;

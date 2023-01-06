@@ -1,3 +1,4 @@
+import useUser from "../useUser";
 import useApiEffect from "../useApiEffect";
 import strings from "@Core/Helpers/strings";
 import LearningMaterialService from "@Repos/Services/LearningMaterialService";
@@ -12,6 +13,11 @@ import type {
 } from "@Data/Entities/LearningMaterialPageContentEntity";
 
 type Props = {
+  /**
+   * Additional dependencies, other than the default ones.
+   */
+  additionalDeps?: Array<unknown>;
+
   selectedMaterialPage: LearningMaterialPage;
 
   /**
@@ -27,12 +33,15 @@ type Props = {
 
 export default function useLearningMaterialPageContent({
   onSuccess,
+  additionalDeps = [],
   selectedMaterialPage,
   onChangeRequestState,
 }: Props) {
+  const user = useUser();
+
   useApiEffect(() => {
-    const service = new LearningMaterialService();
     const adapter = new LearningMaterialPageContentAdapter();
+    const service = new LearningMaterialService(user.accessToken);
 
     // When a page isn't selected.
     if (!selectedMaterialPage) return;
@@ -54,5 +63,5 @@ export default function useLearningMaterialPageContent({
       onFailure: (message) =>
         onChangeRequestState({ message, status: "erred" }),
     });
-  }, [selectedMaterialPage]);
+  }, [selectedMaterialPage, ...additionalDeps]);
 }

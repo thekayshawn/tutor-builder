@@ -1,18 +1,12 @@
 import * as React from "react";
-import strings from "@Core/Helpers/strings";
-import useApiEffect from "@Core/Hooks/useApiEffect";
 
 // Features.
 import ViewerContext from "../ViewerContext";
-import LearningMaterialService from "@Repos/Services/LearningMaterialService";
 
 // Types.
 import type { RequestState } from "@Data/Types";
-import LearningMaterialPageContentAdapter from "@Data/Adapters/LearningMaterialPageContentAdapter";
-import {
-  LearningMaterialPageContent,
-  RawLearningMaterialPageContent,
-} from "@Data/Entities/LearningMaterialPageContentEntity";
+import { LearningMaterialPageContent } from "@Data/Entities/LearningMaterialPageContentEntity";
+import useLearningMaterialPageContent from "@Core/Hooks/learning-materials/useLearningMaterialPageContent";
 
 type ViewerFrameState = {
   pageContent?: LearningMaterialPageContent;
@@ -46,39 +40,14 @@ export default function ViewerFrameViewModel({ children }: Props): JSX.Element {
   // Can be used to force refresh the view.
   const [refresh, setRefresh] = React.useState<number>(0);
 
-  useApiEffect(() => {
-    // When a material isn't selected.
-    if (!selectedMaterialPage) return;
-
-    // When a material is selected but it has no ID.
-    // This is an error.
-    if (!selectedMaterialPage.id) {
-      setViewState({ status: "erred", message: strings.DEFAULT_ERROR_MESSAGE });
-      return;
-    }
-
-    // Reset the state to loading in order to display the loader between
-    // consecutive page selections.
-    setViewState({ status: "loading" });
-
-    const service = new LearningMaterialService();
-    const contentAdapter = new LearningMaterialPageContentAdapter();
-
-    // Notice the type coercion.
-    service.getPageContent<{ data: RawLearningMaterialPageContent }>({
-      id: selectedMaterialPage.id,
-      onFailure: (message) => {
-        setViewState({ message, status: "erred" });
-      },
-      onSuccess: ({ data }) => {
-        setViewState({
-          ...viewState,
-          status: "loaded",
-          pageContent: contentAdapter.deserialize(data),
-        });
-      },
-    });
-  }, [refresh, selectedMaterialPage]);
+  useLearningMaterialPageContent({
+    additionalDeps: [refresh],
+    selectedMaterialPage: selectedMaterialPage!,
+    onChangeRequestState: (newState) =>
+      setViewState({ ...viewState, ...newState }),
+    onSuccess: (data) =>
+      setViewState({ ...viewState, status: "loaded", pageContent: data }),
+  });
 
   return children({
     ...viewState,

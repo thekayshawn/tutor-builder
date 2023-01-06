@@ -1,42 +1,40 @@
 import * as React from "react";
 import { Button } from "reactstrap";
+import EditorContext from "../EditorContext";
 import { MAX_PAGES_PER_MATERIAL } from "src/env";
 import { messages } from "@Core/Helpers/strings";
 import { IconCirclePlus, IconTrash } from "@tabler/icons";
 
 // Types.
-import type { EditorHeaderState } from "./EditorTypes";
+import type { EditorHeaderState } from "../EditorTypes";
 
 export default function EditorHeader({
-  numOfPages,
   onClickAdd,
   onClickSave,
   onClickRemove,
   onClickSaveAndContinue,
-  className = "",
 }: EditorHeaderState) {
-  const isPageNumThresholdReached = numOfPages <= MAX_PAGES_PER_MATERIAL;
+  const { state } = React.useContext(EditorContext);
+
+  const isPageNumThresholdReached =
+    state.materialPages.length >= MAX_PAGES_PER_MATERIAL;
 
   return (
-    <nav className={`d-flex gap-2 ${className}`}>
+    <nav className="d-flex gap-2">
       <button
-        role="tooltip"
         onClick={onClickAdd}
-        data-microtip-position="bottom"
         disabled={isPageNumThresholdReached}
         className="btn border rounded bg-light fs-5"
-        aria-label={
+        title={
           isPageNumThresholdReached
-            ? "Add a page"
-            : messages.THRESHOLD_BREACHED(MAX_PAGES_PER_MATERIAL, "pages")
+            ? messages.THRESHOLD_BREACHED(MAX_PAGES_PER_MATERIAL, "pages")
+            : "Add a page"
         }
       >
         <IconCirclePlus />
       </button>
       <button
-        role="tooltip"
-        aria-label="Remove this page"
-        data-microtip-position="bottom"
+        title="Remove this page"
         className="btn border rounded bg-light fs-5"
         onClick={() => {
           if (window.confirm("Are you sure about that?")) {

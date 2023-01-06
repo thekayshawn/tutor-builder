@@ -3,10 +3,12 @@ import { RequestState } from "@Data/Types";
 import { useParams } from "react-router-dom";
 import { MIN_WIDTH_BUILDER } from "@Core/env";
 import EditorContext, { defaultEditorState } from "./EditorContext";
+import BuilderControl from "src/components/contentbuilder/buildercontrol";
 import useLearningMaterialPages from "@Core/Hooks/learning-materials/useLearningMaterialPages";
 
 // Types.
 import type { EditorState } from "./EditorTypes";
+import useEditorHandlers from "./useEditorHandlers";
 
 type Children = { requestState: RequestState };
 
@@ -35,6 +37,7 @@ export default function EditorViewModel({ children }: Props): JSX.Element {
     slug: string;
   }>();
 
+  // Search parameters are always strings.
   const parsedPage = parseInt(page);
 
   const [state, setState] = React.useState<EditorState>(defaultEditorState);
@@ -63,11 +66,15 @@ export default function EditorViewModel({ children }: Props): JSX.Element {
   return (
     <EditorContext.Provider
       value={{
+        state,
         setState,
-        bag: {
-          ...state,
+        handlers: useEditorHandlers(),
+        helpers: {
           currentSlug: slug,
           currentPage: parsedPage,
+          ref: {
+            editor: React.createRef<BuilderControl>(),
+          },
         },
       }}
     >

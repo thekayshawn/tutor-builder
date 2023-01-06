@@ -3282,12 +3282,10 @@ nav.site-navigations {
 #_cbhtml #divSnippetList.fromleft.active,
 .is-ui #divSnippetList.fromleft.active {
   left: 83px;
-  top: -6px;
 }
 #_cbhtml #divSnippetList.fromleft.acyives,
 .is-ui #divSnippetList.fromleft.acyives {
   left: 83px;
-  top: -6px;
 }
 #divSnippetList .is-selectbox.snippet-cat img {
   display: none;

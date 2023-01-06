@@ -1,18 +1,16 @@
 import * as React from "react";
 import EditorContext from "../EditorContext";
-import LearningMaterialService from "@Repos/Services/LearningMaterialService";
-import LearningMaterialPageContentAdapter from "@Data/Adapters/LearningMaterialPageContentAdapter";
+import useLearningMaterialPageContent from "@Core/Hooks/learning-materials/useLearningMaterialPageContent";
 
 // Types.
+import type { RequestState } from "@Data/Types";
 import type { EditorInterfaceState } from "../EditorTypes";
-import type { RawLearningMaterialPageContent } from "@Data/Entities/LearningMaterialPageContentEntity";
-import useLearningMaterialPageContent from "@Core/Hooks/learning-materials/useLearningMaterialPageContent";
 
 /**
  * Local props.
  */
 type Props = {
-  children: (_: EditorInterfaceState) => JSX.Element;
+  children: ({ requestState }: { requestState: RequestState }) => JSX.Element;
 };
 
 /**
@@ -24,21 +22,24 @@ type Props = {
 export default function EditorInterfaceViewModel({
   children,
 }: Props): JSX.Element {
-  const { bag } = React.useContext(EditorContext);
+  const { state, helpers } = React.useContext(EditorContext);
 
   // Local state.
-  const [viewState, setViewState] = React.useState<EditorInterfaceState>({
+  const [requestState, setRequestState] = React.useState<RequestState>({
     // A page hasn't been selected or the ID is missing.
     status: "loading",
   });
 
   useLearningMaterialPageContent({
-    selectedMaterialPage: bag.selectedMaterialPage!,
-    onChangeRequestState: (newState) =>
-      setViewState({ ...viewState, ...newState }),
-    onSuccess: (data) =>
-      setViewState({ ...viewState, status: "loaded", pageContent: data }),
+    selectedMaterialPage: state.selectedMaterialPage!,
+    onChangeRequestState: (newState) => setRequestState(newState),
+    onSuccess: (data) => {
+      helpers.ref.pageContent = data;
+      setRequestState({ status: "loaded" });
+    },
   });
 
-  return children(viewState);
+  return children({
+    requestState,
+  });
 }

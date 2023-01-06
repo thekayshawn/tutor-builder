@@ -1,5 +1,5 @@
 import * as React from "react";
-import { DocumentHeadProps } from "../../Data/Types";
+import { DocumentHeadProps } from "@Data/Types";
 
 export default function useDocumentHead({
   title,

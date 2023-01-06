@@ -11,10 +11,14 @@
   box-shadow: none !important;
   top: var(--navbar-height) !important;
   left: var(--editor-left-toolbar-width) !important;
+  border: 1px solid var(--bs-gray-300);
+  border-top: 0;
+  border-left: 0;
 }
 
 @media (min-width: 1200px) {
   .is-rte-tool {
+    border: 0;
     left: 7rem !important;
     top: calc(var(--navbar-height) / 6) !important;
   }
@@ -33,13 +37,24 @@
 
 @media (min-width: 992px) {
   .is-builder {
+    margin: 0 auto !important;
     max-width: 992px !important;
   }
 }
 
 @media (min-width: 1200px) {
   .is-builder {
-    margin: 0 auto !important;
     padding: 1.5rem !important;
+  }
+}
+
+/* Left menu - expanded */
+#divSnippetList {
+  padding-top: var(--editor-top-toolbar-height);
+}
+
+@media (min-width: 1200px) {
+  #divSnippetList {
+    padding-top: 0;
   }
 }

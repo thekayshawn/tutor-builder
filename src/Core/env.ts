@@ -10,8 +10,9 @@ export const URL_DASHBOARD_CONTENT_BUILDER =
 /* -----------------------------------------------------------------------------
  * General Limitations.
  * -------------------------------------------------------------------------- */
-export const MAX_PAGES_PER_MATERIAL =
-  process.env.REACT_APP_MAX_PAGES_PER_MATERIAL || 10;
+export const MAX_PAGES_PER_MATERIAL = parseInt(
+  process.env.REACT_APP_MAX_PAGES_PER_MATERIAL || "10"
+);
 export const MIN_WIDTH_BUILDER = parseInt(
   process.env.REACT_APP_BUILDER_MIN_WIDTH || "557"
 );

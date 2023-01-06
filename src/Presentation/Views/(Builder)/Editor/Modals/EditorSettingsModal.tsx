@@ -37,7 +37,7 @@ export default function EditorSettingsModal(): JSX.Element {
       id="editorSettingsModal"
       title="Modify the currently opened page"
       controlProps={{
-        "aria-label": "Settings",
+        title: "Settings",
       }}
       {...{ isOpen, toggleIsOpen }}
     >
