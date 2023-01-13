@@ -12,7 +12,7 @@ button,
   border: 1px solid var(--bs-gray-300);
 }
 
-:is(button, .focusable):is(:hover, :focus, :focus-within):not(:disabled) {
+:is(button, .focusable):is(:hover, :focus):not(:disabled) {
   outline: 2px solid var(--bs-primary);
 }
 /* Defaults end here. */
@@ -147,3 +147,33 @@ button,
   padding: 0;
 }
 /* React-Toastify ends here. */
+
+/* Object starts here. */
+.object-contain {
+  object-fit: contain;
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+.object-center {
+  object-position: center;
+}
+
+.object-top {
+  object-position: top;
+}
+
+.object-end {
+  object-position: right;
+}
+
+.object-bottom {
+  object-position: bottom;
+}
+
+.object-start {
+  object-position: left;
+}
+/* Object ends here. */

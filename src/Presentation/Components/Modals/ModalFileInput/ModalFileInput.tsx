@@ -1,5 +1,7 @@
 import * as React from "react";
-import { IconPlus } from "@tabler/icons";
+import { IconPencil, IconPlus, IconX } from "@tabler/icons";
+import { Badge, Button } from "reactstrap";
+import IconBadge from "@Presentation/Components/IconBadge/IconBadge";
 
 type Props = {
   /**
@@ -30,24 +32,37 @@ export default function ModalFileInput({
       {...containerProps}
       className={`d-flex flex-column gap-2 ${containerProps?.className}`}
     >
-      <div className="card-title">Thumbnail *</div>
       <label
         htmlFor={id}
-        style={{ backgroundColor: "var(--bs-gray-600)" }}
-        className="focusable w-100 p-4 rounded border-1"
+        aria-label="Select a thumbnail"
+        className="focusable bg-gray-300 w-100 py-5 rounded border-1 position-relative"
       >
-        <IconPlus />
+        {value ? (
+          <>
+            <img
+              aria-hidden="true"
+              src={value as string}
+              alt="Selected Thumbnail"
+              className="position-absolute top-0 start-0 h-100 w-100 object-contain object-center"
+            />
+            <span className="sr-only">Change selected thumbnail</span>
+            <IconBadge
+              icon={IconPencil}
+              title="Change selected thumbnail"
+              className="bg-success border-0 position-absolute rounded-circle top-0 start-100 translate-middle"
+              iconProps={{
+                className:
+                  "text-white position-absolute top-50 start-50 translate-middle",
+              }}
+            />
+          </>
+        ) : (
+          <IconPlus className="position-absolute top-50 start-50 translate-middle" />
+        )}
       </label>
-      {value && (
-        <img
-          alt=""
-          src={value as string}
-          className="w-100 p-4 rounded border-1"
-        />
-      )}
       <input
-        hidden
         {...props}
+        hidden
         id={id}
         type="file"
         onChange={(e) => {

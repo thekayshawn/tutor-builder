@@ -91,7 +91,7 @@ export default class LearningMaterialService {
     onFailure,
   }: {
     rawPage: RawLearningMaterialPage;
-  } & Boolbacks<RawLearningMaterialPage>): void {
+  } & Boolbacks<{ data: RawLearningMaterialPage[] }>): void {
     apiService.post({
       onSuccess,
       onFailure,

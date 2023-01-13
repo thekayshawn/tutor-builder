@@ -1,57 +1,63 @@
 import * as React from "react";
 import EditorContext from "../EditorContext";
+import { messages } from "@Core/Helpers/strings";
+import { MAX_PAGES_PER_MATERIAL } from "@Core/env";
 import betterToast from "@Core/Helpers/betterToast";
 
 // Types.
 import type { EditorHeaderState } from "../EditorTypes";
-import { MAX_PAGES_PER_MATERIAL } from "@Core/env";
-import strings from "@Core/Helpers/strings";
+import type { LearningMaterialPage } from "@Data/Entities/LearningMaterialPageEntity";
 
 type Props = {
   children: (_: EditorHeaderState) => JSX.Element;
 };
 
 export default function EditorHeaderViewModel({ children }: Props) {
-  const { state, helpers, handlers } = React.useContext(EditorContext);
-  const { pageContent } = helpers.ref;
+  const { ref, state, helpers, handlers } = React.useContext(EditorContext);
 
-  function onClickAdd() {
+  function onAdd(page: Omit<LearningMaterialPage, "materialID">) {
     if (state.materialPages.length >= MAX_PAGES_PER_MATERIAL) {
       betterToast.error({
-        description: strings.THRESHOLD_REACHED("pages", MAX_PAGES_PER_MATERIAL),
+        description: messages.THRESHOLD_BREACHED(
+          "pages",
+          MAX_PAGES_PER_MATERIAL
+        ),
       });
       return;
     }
 
-    // TODO: Add new pages
-    // handlers.handlePageAdd();
+    // Add new page
+    handlers.handlePageAdd({
+      ...page,
+      materialID: state.selectedMaterialPage!.materialID,
+    });
   }
 
   /**
    * Listener for the save button.
    * @returns {void}
    */
-  function onClickSave(): void {
+  function onSave(): void {
     // Guard clause.
-    if (!pageContent) {
+    if (!ref!.pageContent!.current) {
       betterToast.error();
       return;
     }
 
     handlers.handlePageSave({
-      ...pageContent,
-      htmlMarkup: helpers.ref.editor.current?.getHTML(),
+      ...ref!.pageContent!.current,
+      htmlMarkup: ref!.editor.current?.getHTML(),
     });
   }
 
-  function onClickRemove() {}
+  function onRemove() {}
 
-  function onClickSaveAndContinue() {}
+  function onSaveAndContinue() {}
 
   return children({
-    onClickAdd,
-    onClickSave,
-    onClickRemove,
-    onClickSaveAndContinue,
+    onAdd,
+    onSave,
+    onRemove,
+    onSaveAndContinue,
   });
 }

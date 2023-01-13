@@ -13,10 +13,11 @@ export type EditorState = {
 export type EditorHelpers = {
   currentSlug: string;
   currentPage: number;
-  ref: {
-    editor: React.RefObject<BuilderControl>;
-    pageContent?: LearningMaterialPageContent;
-  };
+};
+
+export type EditorRef = {
+  editor: React.RefObject<BuilderControl>;
+  pageContent?: React.MutableRefObject<LearningMaterialPageContent | undefined>;
 };
 
 export type EditorHandlers = {
@@ -27,6 +28,7 @@ export type EditorHandlers = {
 };
 
 export type EditorBag = {
+  ref?: EditorRef;
   state: EditorState;
   helpers: EditorHelpers;
   handlers: EditorHandlers;
@@ -57,22 +59,22 @@ export type EditorHeaderState = {
   /**
    * Event listener for the add button's click event.
    */
-  onClickAdd: () => unknown;
+  onAdd: (page: Omit<LearningMaterialPage, "materialID">) => unknown;
 
   /**
    * Event listener for the save button's click event.
    */
-  onClickSave: () => unknown;
+  onSave: () => unknown;
 
   /**
    * Event listener for the remove button's click event.
    */
-  onClickRemove: () => unknown;
+  onRemove: () => unknown;
 
   /**
    * Event listener for the save & continue button's click event.
    */
-  onClickSaveAndContinue: () => unknown;
+  onSaveAndContinue: () => unknown;
 } & React.ComponentPropsWithoutRef<"div">;
 
 // Interface.

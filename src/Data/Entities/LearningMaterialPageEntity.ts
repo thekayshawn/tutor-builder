@@ -15,7 +15,7 @@ export interface LearningMaterialPage {
   /**
    * URL of the page's thumbnail.
    */
-  thumbnail: string;
+  thumbnail?: string;
 }
 
 export interface RawLearningMaterialPage {

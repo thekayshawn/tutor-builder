@@ -4,25 +4,21 @@ import { builderConfig } from "@Core/Config";
 import { SnippetHandle } from "@Presentation/Components";
 import BuilderControl from "src/components/contentbuilder/buildercontrol";
 
-// Types.
-import type { EditorInterfaceState } from "../EditorTypes";
-
 export default function EditorInterfaceView() {
-  const { helpers } = React.useContext(EditorContext);
-  const { ref } = helpers;
+  const { ref } = React.useContext(EditorContext);
 
   return (
     <>
       <SnippetHandle />
       <BuilderControl
+        ref={ref!.editor}
         {...builderConfig}
-        ref={ref.editor}
         base64Handler="/upload"
         imageSelect="images.html"
         largerImageHandler="/upload"
-        initialHtml={ref.pageContent?.htmlMarkup}
         languageFile="/contentbuilder/lang/en.js"
         snippetFile="/assets/minimalist-blocks/content.js"
+        initialHtml={ref!.pageContent!.current?.htmlMarkup}
       />
     </>
   );

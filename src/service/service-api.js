@@ -25,7 +25,7 @@ async function service({ proposal, boolBacks }) {
     if (error.response) {
       // Status code is something but not 200.
       console.error({ error: error.response });
-      onFailure?.({ error: error.response });
+      onFailure?.(error.response);
       return;
     }
 

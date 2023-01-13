@@ -1,5 +1,4 @@
 import * as React from "react";
-import BuilderControl from "src/components/contentbuilder/buildercontrol";
 
 import type {
   EditorBag,
@@ -16,9 +15,6 @@ export const defaultEditorState: EditorState = {
 export const defaultEditorHelpers: EditorHelpers = {
   currentPage: 1,
   currentSlug: "",
-  ref: {
-    editor: React.createRef<BuilderControl>(),
-  },
 };
 
 export const defaultEditorHandlers: EditorHandlers = {

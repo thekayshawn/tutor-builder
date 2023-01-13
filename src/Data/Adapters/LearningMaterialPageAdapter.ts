@@ -7,11 +7,13 @@ import type {
 export default class LearningMaterialPageAdapter {
   serialize(state: LearningMaterialPage): RawLearningMaterialPage {
     return {
-      ...(state.id !== undefined && { id: state.id }),
       title: state.title || "",
       description: state.description || "",
       content_id: state.materialID,
       thumbnail: state.thumbnail || "",
+      // Optional props
+      ...(state.id !== undefined && { id: state.id }),
+      ...(state.thumbnail !== undefined && { thumbnail: state.thumbnail }),
     };
   }
 

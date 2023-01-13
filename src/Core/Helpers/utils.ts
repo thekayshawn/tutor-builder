@@ -81,3 +81,16 @@ export function getFormDataFromObject(object: unknown): FormData {
 
   return formData;
 }
+
+/**
+ * @see https://stackoverflow.com/a/46639837
+ */
+export function getBase64FromFile(file: File) {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    fileReader.onload = () => resolve(fileReader.result);
+    fileReader.onerror = (error) => reject(error);
+  });
+}

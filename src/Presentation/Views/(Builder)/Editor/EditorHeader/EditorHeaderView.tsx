@@ -1,53 +1,52 @@
 import * as React from "react";
 import { Button } from "reactstrap";
+import { IconTrash } from "@tabler/icons";
 import EditorContext from "../EditorContext";
 import { MAX_PAGES_PER_MATERIAL } from "src/env";
 import { messages } from "@Core/Helpers/strings";
-import { IconCirclePlus, IconTrash } from "@tabler/icons";
 
 // Types.
 import type { EditorHeaderState } from "../EditorTypes";
+import EditorAddPageModal from "../Modals/EditorAddPageModal";
 
 export default function EditorHeader({
-  onClickAdd,
-  onClickSave,
-  onClickRemove,
-  onClickSaveAndContinue,
+  onAdd,
+  onSave,
+  onRemove,
+  onSaveAndContinue,
 }: EditorHeaderState) {
   const { state } = React.useContext(EditorContext);
 
   const isPageNumThresholdReached =
     state.materialPages.length >= MAX_PAGES_PER_MATERIAL;
 
+  const addButtonTitle = isPageNumThresholdReached
+    ? messages.THRESHOLD_BREACHED("pages", MAX_PAGES_PER_MATERIAL)
+    : "Add a page";
+
   return (
     <nav className="d-flex gap-2">
-      <button
-        onClick={onClickAdd}
-        disabled={isPageNumThresholdReached}
-        className="btn border rounded bg-light fs-5"
-        title={
-          isPageNumThresholdReached
-            ? messages.THRESHOLD_BREACHED(MAX_PAGES_PER_MATERIAL, "pages")
-            : "Add a page"
-        }
-      >
-        <IconCirclePlus />
-      </button>
+      <EditorAddPageModal
+        onAdd={onAdd}
+        controlProps={{
+          title: addButtonTitle,
+        }}
+      />
       <button
         title="Remove this page"
+        onClick={() => onRemove()}
         className="btn border rounded bg-light fs-5"
-        onClick={() => {
-          if (window.confirm("Are you sure about that?")) {
-            onClickRemove();
-          }
-        }}
       >
         <IconTrash />
       </button>
-      <Button type="button" color="secondary" onClick={onClickSave}>
+      <Button type="button" color="secondary" onClick={() => onSave()}>
         Save
       </Button>
-      <Button type="button" color="secondary" onClick={onClickSaveAndContinue}>
+      <Button
+        type="button"
+        color="secondary"
+        onClick={() => onSaveAndContinue()}
+      >
         Save & Continue
       </Button>
     </nav>

@@ -27,7 +27,7 @@ export default function ModalHeader({
       {...props}
       className={`p-3 w-100 bg-white d-flex align-items-center justify-content-between ${className}`}
     >
-      <CardTitle>{title}</CardTitle>
+      <CardTitle className="mb-0">{title}</CardTitle>
       <button type="button" className="btn fs-5" onClick={() => onClose()}>
         <IconX />
       </button>

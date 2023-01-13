@@ -3,12 +3,15 @@ import { RequestState } from "@Data/Types";
 import { useParams } from "react-router-dom";
 import { MIN_WIDTH_BUILDER } from "@Core/env";
 import EditorContext, { defaultEditorState } from "./EditorContext";
-import BuilderControl from "src/components/contentbuilder/buildercontrol";
 import useLearningMaterialPages from "@Core/Hooks/learning-materials/useLearningMaterialPages";
 
 // Types.
-import type { EditorState } from "./EditorTypes";
+import type { EditorRef, EditorState } from "./EditorTypes";
 import useEditorHandlers from "./useEditorHandlers";
+import BuilderControl from "src/components/contentbuilder/buildercontrol";
+import { LearningMaterialPageContent } from "@Data/Entities/LearningMaterialPageContentEntity";
+import strings from "@Core/Helpers/strings";
+import { isEditorRef } from "./EditorGuards";
 
 type Children = { requestState: RequestState };
 
@@ -42,6 +45,9 @@ export default function EditorViewModel({ children }: Props): JSX.Element {
 
   const [state, setState] = React.useState<EditorState>(defaultEditorState);
 
+  // Handlers.
+  const handlers = useEditorHandlers({ state, setState });
+
   // Local request state.
   const [requestState, setRequestState] = React.useState<RequestState>({
     // The app won't even load for smaller screens.
@@ -63,18 +69,23 @@ export default function EditorViewModel({ children }: Props): JSX.Element {
     onChangeRequestState: (newState) => setRequestState(newState),
   });
 
+  const ref: EditorRef = {
+    editor: React.createRef<BuilderControl>(),
+    pageContent: React.useRef<LearningMaterialPageContent>(),
+  };
+
+  if (!isEditorRef(ref)) throw new Error(strings.DEFAULT_ERROR_MESSAGE);
+
   return (
     <EditorContext.Provider
       value={{
+        ref,
         state,
         setState,
-        handlers: useEditorHandlers(),
+        handlers,
         helpers: {
           currentSlug: slug,
           currentPage: parsedPage,
-          ref: {
-            editor: React.createRef<BuilderControl>(),
-          },
         },
       }}
     >

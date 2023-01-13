@@ -63,7 +63,7 @@ export default function EditorModal({
       </button>
       <Modal {...{ isOpen }} toggle={toggleIsOpen}>
         <ModalHeader {...{ title }} onClose={toggleIsOpen} />
-        <ModalBody>{children}</ModalBody>
+        <ModalBody className="text-end">{children}</ModalBody>
       </Modal>
     </>
   );

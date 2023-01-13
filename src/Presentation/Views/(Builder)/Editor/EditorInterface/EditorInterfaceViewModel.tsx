@@ -4,7 +4,6 @@ import useLearningMaterialPageContent from "@Core/Hooks/learning-materials/useLe
 
 // Types.
 import type { RequestState } from "@Data/Types";
-import type { EditorInterfaceState } from "../EditorTypes";
 
 /**
  * Local props.
@@ -22,7 +21,7 @@ type Props = {
 export default function EditorInterfaceViewModel({
   children,
 }: Props): JSX.Element {
-  const { state, helpers } = React.useContext(EditorContext);
+  const { ref, state } = React.useContext(EditorContext);
 
   // Local state.
   const [requestState, setRequestState] = React.useState<RequestState>({
@@ -34,7 +33,8 @@ export default function EditorInterfaceViewModel({
     selectedMaterialPage: state.selectedMaterialPage!,
     onChangeRequestState: (newState) => setRequestState(newState),
     onSuccess: (data) => {
-      helpers.ref.pageContent = data;
+      // The app stops right at the EditorViewModel is these are absent.
+      ref!.pageContent!.current = data;
       setRequestState({ status: "loaded" });
     },
   });

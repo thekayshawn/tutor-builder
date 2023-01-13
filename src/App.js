@@ -13,6 +13,7 @@ import { removeAllSearchParams } from "@Core/Helpers/utils";
 // Static.
 import "react-toastify/dist/ReactToastify.css";
 import "./Presentation/Assets/css/global.css";
+import ErrorBoundary from "@Presentation/Components/ErrorBoundary";
 
 function App() {
   const [state, setState] = React.useState("loading");
@@ -80,7 +81,7 @@ function App() {
   }, [token, user]);
 
   return (
-    <>
+    <ErrorBoundary>
       <ToastContainer />
       {{
         erred: <Error500 />,
@@ -89,7 +90,7 @@ function App() {
         authenticated: <Routes />,
         unauthenticated: <Error403 />,
       }[state] || <Error500 />}
-    </>
+    </ErrorBoundary>
   );
 }
 

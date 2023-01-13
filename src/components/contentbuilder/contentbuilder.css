@@ -5723,7 +5723,7 @@ input.add_type_question {
 .input-ok.classic-primary:is(:hover, :focus),
 .input-cancel.classic-secondary:is(:hover, :focus),
 .input-ok.classic-secondary:is(:hover, :focus) {
-  outline: 1px dashed black !important;
+  outline: 2px solid var(--bs-primary) !important;
 }
 
 /*** The side-toolbar hides the borders of it's children. ***/
@@ -5764,7 +5764,7 @@ ul > li > .single_placeholder[data-active] img {
   position: absolute;
   height: 10px;
   width: 10px;
-  top: 10px;
+  top: 11px;
   left: 17.5px;
   transform: rotate(45deg);
   border-radius: 3px;
@@ -5774,4 +5774,9 @@ ul > li > .single_placeholder[data-active] img {
 
 #divSnippetHandle[data-snippets-shown="true"]::before {
   transform: rotate(-135deg);
+}
+
+/* There's an additional toolbar at the top when an item is focused in the editor */
+.is-elementrte-tool {
+  display: none !important;
 }
